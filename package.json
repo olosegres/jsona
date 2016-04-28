@@ -1,0 +1,41 @@
+{
+  "name": "jsona",
+  "description": "Two-way transformer from JSON API formatted object into instances of predefined constructor objects. If you use TypeScript, it possible to create custom model classes (describe inside) beforehand and inject it into Deserializer via custom ModelsGateway, using special Deserializer's set-method.",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "typings": "lib/index",
+  "files": [
+    "lib/"
+  ],
+  "devDependencies": {
+    "jest-cli": "*",
+    "typescript": ">=1.6.2",
+    "typings": "^0.8.1"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/ts-preprocessor.js",
+    "testFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.sj-dev.local/~solomatkin/jsona-js.git"
+  },
+  "keywords": [
+    "json-api",
+    "jsonapi",
+    "json"
+  ],
+  "author": "Sergei Solomatkin",
+  "license": "ISC",
+  "dependencies": {}
+}
