@@ -67,7 +67,7 @@ class JsonBuilder {
             let data = [];
             let uniqueIncluded = {};
 
-            for (let i = 0; i <= collectionLength; i++) {
+            for (let i = 0; i < collectionLength; i++) {
                 data.push(
                     this.buildDataByModel(this.collection[i])
                 );
