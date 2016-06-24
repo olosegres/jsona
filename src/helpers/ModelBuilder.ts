@@ -112,7 +112,7 @@ class ModelBuilder {
         }
     }
 
-    buildDataFromIncluded(type: string, id: string | number): IJsonApiData {
+    buildDataFromIncluded(id: string | number, type: string): IJsonApiData {
         var included = this.buildIncludedInObject();
         var dataItem = included[type + id];
 
