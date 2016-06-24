@@ -91,7 +91,7 @@ class ModelBuilder {
                     readyRelations[k] = [];
 
                     var relationItemsLength = relation.data.length;
-                    for (let i = 0; i <= relationItemsLength; i++) {
+                    for (let i = 0; i < relationItemsLength; i++) {
                         let dataItem = this.buildDataFromIncluded(
                             relation.data[i].id,
                             relation.data[i].type
@@ -129,7 +129,7 @@ class ModelBuilder {
 
             if (this.body.included) {
                 let includedLength = this.body.included.length;
-                for (let i = 0; i <= includedLength; i++) {
+                for (let i = 0; i < includedLength; i++) {
                     let item = this.body.included[i];
                     this.includedInObject[item.type + item.id] = item;
                 }
