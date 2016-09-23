@@ -17,7 +17,7 @@ class BaseJsonaModel implements IJsonaModel {
         return this.id;
     }
 
-    getAttributes(): { [attribute: string]: any } {
+    getAttributes(): Object {
         var attributes = {};
 
         var excludeProps = ['type', 'id'];

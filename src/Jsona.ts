@@ -12,6 +12,7 @@ import {
 import JsonBuilder from './helpers/JsonBuilder';
 import ModelBuilder from './helpers/ModelBuilder';
 import SimpleModelsFactory from './helpers/SimpleModelsFactory';
+import isIncludeTree from './helpers/isIncludeTree';
 
 class Jsona {
 
@@ -67,7 +68,7 @@ class Jsona {
     deserialize(body: IJsonApiBody | string) {
 		var modelBuilder = new ModelBuilder();
 
-        if (typeof body !== 'object') {
+        if (typeof body === 'string') {
             modelBuilder.setJsonParsedObject(this.jsonParse(body));
         } else {
             modelBuilder.setJsonParsedObject(body);
@@ -115,6 +116,10 @@ class Jsona {
         }
 
         return stringified;
+    }
+
+    isIncludeTree(some: any): boolean {
+        return isIncludeTree(some);
     }
 }
 

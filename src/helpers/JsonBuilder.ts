@@ -9,6 +9,8 @@ import {
     IJsonaUniqueIncluded
 } from '../JsonaInterfaces';
 
+import isIncludeTree from './isIncludeTree';
+
 class JsonBuilder {
 
     protected item: IJsonaModel;
@@ -156,7 +158,7 @@ class JsonBuilder {
         includeTree: IJsonaIncludeTree
     ): IJsonaUniqueIncluded | {} {
 
-        if (!includeTree || !Object.keys(includeTree).length) {
+        if (!isIncludeTree(includeTree)) {
             return {};
         }
 
@@ -165,21 +167,21 @@ class JsonBuilder {
  
         for (let k in includeTree) {
             if (modelRelationships[k]) {
-                var relation: IJsonaModel | IJsonaModel[] = modelRelationships[k];
+                let relation = modelRelationships[k];
 
                 if (relation instanceof Array) {
-                    let relationItems = relation;
+                    let relationItems: Array<IJsonaModel> = relation;
                     let relationItemsLength = relationItems.length;
 
                     for (let i; i <= relationItemsLength; i++) {
-                        let relationItem = relationItems[i];
+                        let relationItem: IJsonaModel = relationItems[i];
 
                         let includeKey = relationItem.getType() + relationItem.getId();
                         let includedItem = {};
                         includedItem[includeKey] = this.buildDataByModel(relationItem);
                         (<any>Object).assign(included, includedItem);
 
-                        if (typeof includeTree === 'object') {
+                        if (isIncludeTree(includeTree[k])) {
                             (<any>Object).assign(
                                 included,
                                 this.buildIncludedByModel(relationItem, (<IJsonaIncludeTree>includeTree[k]))
@@ -189,10 +191,12 @@ class JsonBuilder {
                 } else {
                     let includeKey = relation.getType() + relation.getId();
                     let includedItem = {};
+                    let relationItem: IJsonaModel = relation;
+
                     includedItem[includeKey] = this.buildDataByModel(relation);
                     (<any>Object).assign(included, includedItem);
 
-                    if (typeof includeTree === 'object') {
+                    if (isIncludeTree(includeTree[k])) {
                         (<any>Object).assign(
                             included,
                             this.buildIncludedByModel(relation, (<IJsonaIncludeTree>includeTree[k]))
