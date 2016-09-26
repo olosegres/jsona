@@ -25,13 +25,13 @@ class BaseJsonaModel implements IJsonaModel {
         var relationships = this.getRelationships();
 
         if (relationships) {
-            excludeProps.concat(Object.getOwnPropertyNames(relationships));
+            excludeProps = excludeProps.concat(Object.getOwnPropertyNames(relationships));
         }
 
         var properties = Object.getOwnPropertyNames(this);
         var propertiesLength = properties.length;
 
-        for (let i = 0; i <= propertiesLength; i++) {
+        for (let i = 0; i < propertiesLength; i++) {
             var attr = properties[i];
             if (this.hasOwnProperty(attr) && excludeProps.indexOf(attr) === -1) {
                 attributes[attr] = this[attr];
