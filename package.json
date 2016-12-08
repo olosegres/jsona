@@ -1,7 +1,7 @@
 {
   "name": "jsona",
   "description": "Two-way transformer from JSON API formatted object into instances of predefined constructor objects. If you use TypeScript, it possible to create custom model classes (describe inside) beforehand and inject it into Deserializer via custom ModelsGateway, using special Deserializer's set-method.",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "main": "lib/index.js",
   "typings": "lib/index",
   "files": [
