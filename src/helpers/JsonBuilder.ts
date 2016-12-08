@@ -17,8 +17,9 @@ class JsonBuilder {
     protected collection: IJsonaModel[];
     protected error: Object;
     protected meta: Object;
-    protected requestedIncludesTree: IJsonaIncludeTree;
     protected requestedFields: IJsonaRequestedFields;
+    protected requestedIncludesTree: IJsonaIncludeTree;
+    protected withAllIncludes: boolean;
 
     setItem(item: IJsonaModel): void {
         this.item = item;
@@ -40,9 +41,12 @@ class JsonBuilder {
         this.requestedFields = requestedFields;
     }
 
-    setRequestedIncludesTree(requestedIncludesTree: IJsonaIncludeTree)
-    {
+    setRequestedIncludesTree(requestedIncludesTree: IJsonaIncludeTree) {
         this.requestedIncludesTree = requestedIncludesTree;
+    }
+
+    setWithAllIncludes(withAllIncludes: boolean) {
+        this.withAllIncludes = withAllIncludes;
     }
 
     buildBody(): IJsonApiBody {
@@ -55,7 +59,6 @@ class JsonBuilder {
 
             body['data'] = this.buildDataByModel(this.item);
 
-
             let includedByModel = this.buildIncludedByModel(
                 this.item,
                 this.requestedIncludesTree
@@ -63,7 +66,6 @@ class JsonBuilder {
             if (Object.keys(includedByModel).length) {
                 (<any>Object).assign(uniqueIncluded, includedByModel);
             }
-
         } else if (!!this.collection) {
             let collectionLength = this.collection.length;
             let data = [];
@@ -156,11 +158,21 @@ class JsonBuilder {
     buildIncludedByModel(
         model: IJsonaModel,
         includeTree: IJsonaIncludeTree
-    ): IJsonaUniqueIncluded | {} {
+    ): IJsonaUniqueIncluded | Object {
 
-        if (!isIncludeTree(includeTree)) {
+        if (this.withAllIncludes) {
+            return this.buildIncludedWithAllRelationships(model);
+        } else if (isIncludeTree(includeTree)) {
+            return this.buildIncludedWithIncludeThree(model, includeTree);
+        } else {
             return {};
         }
+    }
+
+    buildIncludedWithIncludeThree(
+        model: IJsonaModel,
+        includeTree: IJsonaIncludeTree
+    ): IJsonaUniqueIncluded | Object {
 
         var included = {};
         var modelRelationships = model.getRelationships();
@@ -209,6 +221,33 @@ class JsonBuilder {
         return included;
     }
 
+    buildIncludedWithAllRelationships(model: IJsonaModel): IJsonaUniqueIncluded | Object {
+        var modelRelationships = model.getRelationships();
+
+        var included = {};
+
+        Object.keys(modelRelationships).forEach((k: string) => {
+            if (modelRelationships[k] instanceof Array) {
+                modelRelationships[k].forEach((relation: IJsonaModel) => {
+                    var includeKey = relation.getType() + relation.getId();
+
+                    if (included[includeKey] === undefined) {
+                        included[includeKey] = this.buildDataByModel(relation);
+                    }
+                    Object.assign(included, this.buildIncludedWithAllRelationships(relation));
+                });
+            } else {
+                var includeKey = modelRelationships[k].getType() + modelRelationships[k].getId();
+
+                if (included[includeKey] === undefined) {
+                    included[includeKey] = this.buildDataByModel(modelRelationships[k]);
+                }
+                Object.assign(included, this.buildIncludedWithAllRelationships(modelRelationships[k]));
+            }
+        });
+
+        return included;
+    }
 }
 
 export default JsonBuilder;

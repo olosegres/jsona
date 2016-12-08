@@ -58,6 +58,7 @@ export interface IJsonaSerializeParams {
     collection?: IJsonaModel[],
     meta?: Object,
     error?: Object,
-    requestedIncludes?: IJsonaIncludeTree
-    requestedFields?: IJsonaRequestedFields
+    requestedFields?: IJsonaRequestedFields,
+    requestedIncludes?: IJsonaIncludeTree,
+    withAllIncludes?: boolean,
 }

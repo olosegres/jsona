@@ -42,7 +42,7 @@ class Jsona {
      * @param {IJsonaRequestedFields} params.requestedFields - object must describe what attributes of entities should be put
      *                                                         in "data" and "included" parts of JSON.
      * @param {boolean} params.stringify - Stringify results object or not.
-     * @return {IJsonApiBody|string}
+     * @return {IJsonApiBody}
      */
     serialize(params: IJsonaSerializeParams): IJsonApiBody {
         var item: IJsonaModel = params.item;
@@ -50,12 +50,14 @@ class Jsona {
         var meta: Object = params.meta;
         var error: Object = params.error;
         var requestedIncludes: IJsonaIncludeTree = params.requestedIncludes;
+        var withAllIncludes: boolean = params.withAllIncludes;
         var requestedFields: IJsonaRequestedFields = params.requestedFields;
 
 		var jsonBuilder = new JsonBuilder();
 
+        !!requestedFields && jsonBuilder.setRequestedFields(requestedFields);
         !!requestedIncludes && jsonBuilder.setRequestedIncludesTree(requestedIncludes);
-		!!requestedFields && jsonBuilder.setRequestedFields(requestedFields);
+		!!withAllIncludes && jsonBuilder.setWithAllIncludes(withAllIncludes);
 
 		!!item && jsonBuilder.setItem(item);
 		!!collection && jsonBuilder.setCollection(collection);
