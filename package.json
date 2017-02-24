@@ -12,7 +12,7 @@
     "typings": "^0.8.1"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "./node_modules/.bin/tsc"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/ts-preprocessor.js",
