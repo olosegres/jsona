@@ -1,6 +1,6 @@
 {
   "name": "jsona",
-  "description": "Two-way transformer from JSON API formatted object into instances of predefined constructor objects. If you use TypeScript, it possible to create custom model classes (describe inside) beforehand and inject it into Deserializer via custom ModelsGateway, using special Deserializer's set-method.",
+  "description": "Framework agnostic library that provide systemized way to work with JSON API spetification v1.0 in your JavaScript / TypeScript code",
   "version": "0.2.1",
   "main": "lib/index.js",
   "typings": "lib/index",
@@ -30,11 +30,14 @@
     "url": "https://github.com/olosegres/jsona-js"
   },
   "keywords": [
+    "json api",
     "json-api",
     "jsonapi",
-    "json"
+    "jsona",
+    "json",
+    "api"
   ],
   "author": "Sergei Solo",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {}
 }
