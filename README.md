@@ -1,6 +1,8 @@
 # Jsona
 Framework agnostic library that provide systemized way to work with JSON API [v1.0 spetification](http://jsonapi.org/format/1.0/) in your JavaScript / TypeScript code.
 
+[![NPM](https://nodei.co/npm/jsona.png?compact=true)](https://www.npmjs.com/package/jsona/)
+
 ### Why you may need it?
 
 If you use or build API, that specified by *json:api* and:
