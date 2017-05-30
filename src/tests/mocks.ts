@@ -1,0 +1,294 @@
+
+export const country1 = {
+    model: {
+        type: 'country',
+        id: 34,
+        name: 'Spain',
+    },
+    json: {
+        type: 'country',
+        id: 34,
+        attributes: {
+            name: 'Spain',
+        }
+    }
+};
+
+export const country2 = {
+    model: {
+        type: 'country',
+        id: 86,
+        name: 'China',
+    },
+    json: {
+        type: 'country',
+        id: 86,
+        attributes: {
+            name: 'China',
+        }
+    }
+};
+
+export const town2 = {
+    model: {
+        type: 'town',
+        id: 80,
+        name: 'Barcelona',
+        country: country1.model,
+        get relationshipNames() {
+            return ['country'];
+        }
+    },
+    json: {
+        type: 'town',
+        id: 80,
+        attributes: {
+            name: 'Barcelona',
+        },
+        relationships: {
+            country: {
+                data: {
+                    type: 'country',
+                    id: country1.model.id,
+                }
+            }
+        }
+    }
+};
+
+export const town1 = {
+    model: {
+        type: 'town',
+        id: 21,
+        name: 'Shanghai',
+        country: country2.model,
+        get relationshipNames() {
+            return ['country'];
+        }
+    },
+    json: {
+        type: 'town',
+        id: 21,
+        attributes: {
+            name: 'Shanghai',
+        },
+        relationships: {
+            country: {
+                data: {
+                    type: 'country',
+                    id: country2.model.id,
+                }
+            }
+        }
+    }
+};
+
+export const specialty1 = {
+    model: {
+        type: 'specialty',
+        id: '1',
+        title: 'mycategory1'
+    },
+    json: {
+        type: 'specialty',
+        id: '1',
+        attributes: {
+            title: 'mycategory1'
+        }
+    }
+};
+
+export const specialty2 = {
+    model: {
+        type: 'specialty',
+        id: '2',
+        title: 'mycategory2'
+    },
+    json: {
+        type: 'specialty',
+        id: '2',
+        attributes: {
+            title: 'mycategory2'
+        }
+    }
+};
+
+export const user1 = {
+    model: {
+        type: 'user',
+        id: 1,
+        name: 'myName1',
+        active: true,
+        town: town2.model,
+        specialty: [specialty1.model, specialty2.model],
+        get relationshipNames() {
+            return ['town', 'specialty'];
+        }
+    },
+    json: {
+        type: 'user',
+        id: 1,
+        attributes: {
+            name: 'myName1',
+            active: true,
+        },
+        relationships: {
+            town: {
+                data: {
+                    type: 'town',
+                    id: town2.model.id,
+                }
+            },
+            specialty: {
+                data: [{
+                    type: 'specialty',
+                    id: specialty1.model.id
+                }, {
+                    type: 'specialty',
+                    id: specialty2.model.id
+                }]
+            }
+        }
+    },
+    includeNames: {
+        townOnly: ['town']
+    },
+    included: {
+        townOnly: [
+            town2.json
+        ]
+    }
+};
+
+export const user2 = {
+    model: {
+        type: 'user',
+        id: 2,
+        name: 'myName2',
+        active: false,
+        town: town1.model,
+        specialty: [specialty2.model],
+        get relationshipNames() {
+            return ['town', 'specialty'];
+        }
+    },
+    json: {
+        type: 'user',
+        id: 2,
+        attributes: {
+            name: 'myName2',
+            active: false,
+        },
+        relationships: {
+            town: {
+                data: {
+                    type: 'town',
+                    id: town1.model.id,
+                }
+            },
+            specialty: {
+                data: [{
+                    type: 'specialty',
+                    id: specialty2.model.id
+                }]
+            }
+        }
+    },
+    included: {
+        townOnly: [
+            town1.json
+        ]
+    }
+};
+
+export const article1 = {
+    model: {
+        type: 'article',
+        id: '1',
+        likes: 5550,
+        author: user1.model,
+        country: country2.model,
+        get relationshipNames() {
+            return ['author', 'country'];
+        }
+    },
+    json: {
+        type: 'article',
+        id: '1',
+        attributes: {
+            likes: 5550
+        },
+        relationships: {
+            author: {
+                data: {
+                    type: 'user',
+                    id: user1.model.id
+                }
+            },
+            country: {
+                data: {
+                    type: 'country',
+                    id: country2.model.id
+                }
+            }
+        }
+    }
+};
+
+export const article2 = {
+    model: {
+        type: 'article',
+        id: '2',
+        likes: 100,
+        author: user2.model,
+        country: country1.model,
+        get relationshipNames() {
+            return ['author', 'country'];
+        }
+    },
+    json: {
+        type: 'article',
+        id: '2',
+        attributes: {
+            likes: 100
+        },
+        relationships: {
+            author: {
+                data: {
+                    type: 'user',
+                    id: user2.model.id,
+                }
+            },
+            country: {
+                data: {
+                    type: 'country',
+                    id: country1.model.id,
+                }
+            }
+        }
+    },
+    includeNames: [
+        'author.town.contry',
+        'author.specialty',
+        'country'
+    ],
+};
+
+export const includeNames1 = {
+    denormalized: [
+        'articles.author.town.country',
+        'articles.country',
+        'country',
+    ],
+    normalized: {
+        country: null,
+        articles: {
+            author: {
+                town: {
+                    country: null
+                }
+            },
+            country: null
+        }
+    }
+};

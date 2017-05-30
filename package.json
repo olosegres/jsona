@@ -1,34 +1,7 @@
 {
   "name": "jsona",
-  "description": "Framework agnostic library that provide systemized way to work with JSON API spetification v1.0 in your JavaScript / TypeScript code",
+  "description": "Framework agnostic library that provide systemized way to work with JSON API specification v1.0 in your JavaScript / TypeScript code",
   "version": "0.2.3",
-  "main": "lib/index.js",
-  "typings": "lib/index",
-  "files": [
-    "lib/"
-  ],
-  "devDependencies": {
-    "typescript": ">=1.6.2",
-    "typings": "^0.8.1"
-  },
-  "scripts": {
-    "build": "./node_modules/.bin/tsc"
-  },
-  "jest": {
-    "scriptPreprocessor": "<rootDir>/ts-preprocessor.js",
-    "testFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/olosegres/jsona-js"
-  },
   "keywords": [
     "json api",
     "json-api",
@@ -37,7 +10,36 @@
     "json",
     "api"
   ],
-  "author": "Sergei Solo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olosegres/jsona-js"
+  },
+  "bugs": {
+    "url": "https://github.com/olosegres/jsona-js/issues"
+  },
+  "homepage": "https://github.com/olosegres/jsona-js#readme",
+  "author": "Sergei Solo <olosegres@gmail.com>",
   "license": "MIT",
-  "dependencies": {}
+  "main": "lib/index.js",
+  "typings": "lib/index",
+  "files": [
+    "src",
+    "lib"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^4.0.0",
+    "mocha": "^3.4.2",
+    "ts-mocha": "^1.0.3",
+    "typescript": ">=1.6.2",
+    "typings": "^0.8.1"
+  },
+  "scripts": {
+    "clean": "rm lib/*",
+    "compile": "./node_modules/.bin/tsc",
+    "precompile": "npm run clean",
+    "preversion": "npm run compile && npm test",
+    "test": "env NODE_ENV=test ts-mocha src src/**/*.test.ts",
+    "typings": "typings"
+  }
 }
