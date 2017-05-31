@@ -1,15 +1,15 @@
 import {
-    IDeserializePropertiesMapper,
+    IJsonPropertiesMapper,
     TJsonaModel,
     TJsonaRelationships,
     TJsonApiBody,
     TJsonApiData,
-    IJsonaModelBuilder
+    IJsonaModelBuilder,
 } from '../JsonaTypes';
 
 class JsonDeserializer implements IJsonaModelBuilder {
 
-    protected pm: IDeserializePropertiesMapper;
+    protected pm: IJsonPropertiesMapper;
     protected body;
     protected includedInObject;
 
@@ -23,10 +23,6 @@ class JsonDeserializer implements IJsonaModelBuilder {
 
     setJsonParsedObject(body: TJsonApiBody): void {
         this.body = body;
-    }
-
-    getJsonParsedObject(): TJsonApiBody {
-        return this.body;
     }
 
     build(): TJsonaModel | Array<TJsonaModel> {

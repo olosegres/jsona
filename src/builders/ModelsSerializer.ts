@@ -5,23 +5,23 @@ import {
     TJsonaDenormalizedIncludeNames,
     TJsonaNormalizedIncludeNamesTree,
     TJsonaUniqueIncluded,
-    ISerializePropertiesMapper
+    IModelPropertiesMapper
 } from '../JsonaTypes';
 
 import {createIncludeNamesTree} from '../utils';
 
 class ModelsSerializer {
 
-    protected pm: ISerializePropertiesMapper;
+    protected propertiesMapper: IModelPropertiesMapper;
     protected staff: TJsonaModel | Array<TJsonaModel>;
     protected includeNamesTree: TJsonaNormalizedIncludeNamesTree;
 
-    constructor(propertiesMapper) {
-        this.setPropertiesMapper(propertiesMapper);
+    constructor(propertiesMapper?: IModelPropertiesMapper) {
+        propertiesMapper && this.setPropertiesMapper(propertiesMapper);
     }
 
-    setPropertiesMapper(pm) {
-        this.pm = pm;
+    setPropertiesMapper(propertiesMapper: IModelPropertiesMapper) {
+        this.propertiesMapper = propertiesMapper;
     }
 
     setStuff(staff) {
@@ -41,10 +41,17 @@ class ModelsSerializer {
     }
 
     build(): TJsonApiBody {
+        const {staff, propertiesMapper} = this;
+
+        if (!propertiesMapper || typeof propertiesMapper !== 'object') {
+            throw new Error('ModelsSerializer cannot build, propertiesMapper is not set');
+        } else if (!staff || typeof staff !== 'object') {
+            throw new Error('ModelsSerializer cannot build, staff is not set');
+        }
+
         const body: TJsonApiBody = {};
         const included: Array<TJsonApiData> = [];
         const uniqueIncluded: TJsonaUniqueIncluded = {};
-        const {staff} = this;
 
         if (staff && Array.isArray(staff)) {
             const collectionLength = staff.length;
@@ -87,9 +94,9 @@ class ModelsSerializer {
 
     buildDataByModel(model: TJsonaModel) {
         const data = {
-            id: this.pm.getId(model),
-            type: this.pm.getType(model),
-            attributes: this.pm.getAttributes(model),
+            id: this.propertiesMapper.getId(model),
+            type: this.propertiesMapper.getType(model),
+            attributes: this.propertiesMapper.getAttributes(model),
         };
 
         const relationships = this.buildRelationshipsByModel(model);
@@ -102,7 +109,7 @@ class ModelsSerializer {
     }
 
     buildRelationshipsByModel(model: TJsonaModel) {
-        const relations = this.pm.getRelationships(model);
+        const relations = this.propertiesMapper.getRelationships(model);
 
         if (!relations || !Object.keys(relations).length) {
             return;
@@ -119,8 +126,8 @@ class ModelsSerializer {
 
                 for (let i = 0; i < relationLength; i++) {
                     const item = {
-                        id: this.pm.getId(relation[i]),
-                        type: this.pm.getType(relation[i])
+                        id: this.propertiesMapper.getId(relation[i]),
+                        type: this.propertiesMapper.getType(relation[i])
                     };
 
                     if (item.id && item.type) {
@@ -139,8 +146,8 @@ class ModelsSerializer {
                 };
             } else {
                 const item = {
-                    id: this.pm.getId(relation),
-                    type: this.pm.getType(relation)
+                    id: this.propertiesMapper.getId(relation),
+                    type: this.propertiesMapper.getType(relation)
                 };
                 if (item.type) {
                     relationships[k] = {
@@ -167,7 +174,7 @@ class ModelsSerializer {
             return;
         }
 
-        const modelRelationships = this.pm.getRelationships(model);
+        const modelRelationships = this.propertiesMapper.getRelationships(model);
         if (!modelRelationships || !Object.keys(modelRelationships).length) {
             return;
         }
@@ -199,7 +206,7 @@ class ModelsSerializer {
         subIncludeTree: TJsonaNormalizedIncludeNamesTree,
         builtIncluded: TJsonaUniqueIncluded
     ) {
-        const includeKey = this.pm.getType(relationModel) + this.pm.getId(relationModel);
+        const includeKey = this.propertiesMapper.getType(relationModel) + this.propertiesMapper.getId(relationModel);
 
         if (!builtIncluded[includeKey]) {
             // create data by current entity if such included is not yet created

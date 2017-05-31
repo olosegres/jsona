@@ -1,19 +1,17 @@
-export interface TJsonaModelsFactory {
-    getModel(entityType: string): TJsonaModel;
-}
 
-export interface ISerializePropertiesMapper {
+export interface IModelPropertiesMapper {
     getId(model: TJsonaModel): string | number;
     getType(model: TJsonaModel): string;
     getAttributes(model: TJsonaModel): TAnyKeyValueObject;
     getRelationships(model: TJsonaModel): TJsonaRelationships;
 }
 
-export interface IDeserializePropertiesMapper {
+export interface IJsonPropertiesMapper {
     createModel(type: string): TJsonaModel;
     setId(model: TJsonaModel, id: string | number): void;
     setAttributes(model: TJsonaModel, attributes: TAnyKeyValueObject): void;
     setRelationships(model: TJsonaModel, relationships: TJsonaRelationships): void;
+    setRelationshipLinks(parentModel: TJsonaModel, relationName: string, links: IJsonApiRelationLinks): void;
 }
 
 export interface IJsonaModelBuilder {
@@ -41,10 +39,18 @@ export type TJsonApiRelationshipData = {
     id: string|number;
 };
 
+export type TJsonApiRelation = {
+    data: TJsonApiRelationshipData | Array<TJsonApiRelationshipData>
+    links?: IJsonApiRelationLinks
+};
+
+export type IJsonApiRelationLinks = {
+    self: string,
+    related: string
+};
+
 export type TJsonApiRelationships = {
-    [relationName: string]: {
-        data: TJsonApiRelationshipData | Array<TJsonApiRelationshipData>
-    }
+    [relationName: string]: TJsonApiRelation
 };
 
 export type TJsonaUniqueIncluded = {
@@ -82,6 +88,26 @@ export type TJsonaModel = {
     [propertyName: string]: any
 };
 
+export type TJsonaRelationshipBuild = () => TJsonaModel | Array<TJsonaModel>;
 export type TJsonaRelationships = {
-    [relationName: string]: TJsonaModel | Array<TJsonaModel>
+    [relationName: string]: TJsonaRelationshipBuild
 };
+
+export type TReduxObject = {
+    [entityType: string]: {
+        [entityId: string]: TReduxObjectModel
+    }
+};
+
+export type TReduxObjectModel = {
+    attributes?: TAnyKeyValueObject,
+    relationships?: TJsonApiRelationships
+};
+
+export type TReduxObjectRelation = {
+    data: {
+        // '1' or something like '1,12,44' for one-to-many relationships, ['1', '12', '44'] is reserved for future
+        id: string | Array<string>,
+        type: string,
+    }
+}

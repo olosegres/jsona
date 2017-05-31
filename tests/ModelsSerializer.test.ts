@@ -1,45 +1,49 @@
-/// <reference path="../../typings/globals/mocha/index.d.ts" />
+/// <reference path="../typings/globals/mocha/index.d.ts" />
 import * as chai from 'chai';
 import {expect} from 'chai';
-import ModelsSerializer from "../builders/ModelsSerializer";
-import {SerializePropertiesMapper} from "../simplePropertyMappers";
+import ModelsSerializer from "../src/builders/ModelsSerializer";
+import {ModelPropertiesMapper} from "../src/simplePropertyMappers";
 
 import {
     includeNames1,
-    user1,
     user2,
+    user1,
     article1,
     article2,
-    country2,
     country1,
+    country2,
     town2,
     town1,
     specialty1,
     specialty2
 } from './mocks';
 
-chai.config.includeStack = true;
-chai.config.showDiff = false;
 chai.config.truncateThreshold = 0;
 
 describe('ModelsSerializer', () => {
     let builder;
     let propertiesMapper;
 
+    it('should throw Error if jsonPropertiesMapper is not passed', () => {
+        builder = new ModelsSerializer();
+        builder.setStuff(user2.model);
+        expect(builder.build.bind(builder)).to.throw(Error, 'propertiesMapper');
+    });
+
     it('should instantiate without errors', () => {
-        propertiesMapper = new SerializePropertiesMapper();
+        propertiesMapper = new ModelPropertiesMapper();
         builder = new ModelsSerializer(propertiesMapper);
         expect(builder).to.be.an.instanceof(ModelsSerializer);
     });
 
     it('should handle one model in setStuff', () => {
-        builder.setStuff(user1.model);
-        expect(builder.staff).to.be.deep.equal(user1.model);
+        builder.setStuff(user2.model);
+        expect(builder.staff).to.be.deep.equal(user2.model);
     });
 
     it('should handle collection of models in setStuff', () => {
-        builder.setStuff([user1.model, user2.model]);
-        expect(builder.staff).to.be.deep.equal([user1.model, user2.model]);
+        builder.setStuff([user2.model, user1.model]);
+        expect(builder.staff).to.be.deep.equal([user2.model, user1.model]);
     });
 
     it('should setIncludeNames with convertation to TJsonaNormalizedIncludeNamesTree', () => {
@@ -55,18 +59,18 @@ describe('ModelsSerializer', () => {
     it('shoild build correct json with one data-item, without included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
-        builder.setStuff(user1.model);
+        builder.setStuff(user2.model);
         const json = builder.build();
-        expect(json).to.be.deep.equal({data: user1.json});
+        expect(json).to.be.deep.equal({data: user2.json});
     });
 
     it('shoild build correct json with one data-item, with included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
-        builder.setStuff(user1.model);
-        builder.setIncludeNames(user1.includeNames.townOnly);
+        builder.setStuff(user2.model);
+        builder.setIncludeNames(user2.includeNames.townOnly);
         const json = builder.build();
-        expect(json).to.be.deep.equal({data: user1.json, included: user1.included.townOnly});
+        expect(json).to.be.deep.equal({data: user2.json, included: user2.included.townOnly});
     });
 
     it('shoild build correct json with collection of data items, with included', () => {
@@ -87,8 +91,8 @@ describe('ModelsSerializer', () => {
                 article1.json, article2.json
             ],
             included: [ // sorting order make sense
-                country1.json,
                 country2.json,
+                country1.json,
                 specialty1.json,
                 specialty2.json,
                 town1.json,

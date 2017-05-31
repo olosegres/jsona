@@ -1,12 +1,14 @@
 import {
-    ISerializePropertiesMapper,
-    IDeserializePropertiesMapper,
-    TJsonaModel
+    IModelPropertiesMapper,
+    IJsonPropertiesMapper,
+    TAnyKeyValueObject,
+    TJsonaModel,
+    TJsonaRelationships, TJsonaRelationshipBuild, IJsonApiRelationLinks
 } from './JsonaTypes';
 
-const RELATIONSHIP_NAMES_PROP = 'relationshipNames';
+export const RELATIONSHIP_NAMES_PROP = 'relationshipNames';
 
-export class SerializePropertiesMapper implements ISerializePropertiesMapper {
+export class ModelPropertiesMapper implements IModelPropertiesMapper {
 
     getId(model: TJsonaModel) {
         return model.id;
@@ -23,7 +25,7 @@ export class SerializePropertiesMapper implements ISerializePropertiesMapper {
 
             exceptProps.push(...model[RELATIONSHIP_NAMES_PROP]);
 
-        } else if (model[RELATIONSHIP_NAMES_PROP]){
+        } else if (model[RELATIONSHIP_NAMES_PROP]) {
             console.warn(
                 `Can't getAttributes correctly, '${RELATIONSHIP_NAMES_PROP}' property of ${model.type}-${model.id} model
                 isn't array of relationship names`,
@@ -48,7 +50,8 @@ export class SerializePropertiesMapper implements ISerializePropertiesMapper {
             return;
         } else if (relationshipNames && !Array.isArray(relationshipNames)) {
             console.warn(
-                `Can't getRelationships correctly, '${RELATIONSHIP_NAMES_PROP}' property of ${model.type}-${model.id} model
+                `Can't getRelationships correctly,
+                '${RELATIONSHIP_NAMES_PROP}' property of ${model.type}-${model.id} model
                 isn't array of relationship names`,
                 model[RELATIONSHIP_NAMES_PROP]
             );
@@ -63,7 +66,7 @@ export class SerializePropertiesMapper implements ISerializePropertiesMapper {
     }
 }
 
-export class DeserializePropertiesMapper implements IDeserializePropertiesMapper {
+export class JsonPropertiesMapper implements IJsonPropertiesMapper {
 
     createModel(type: string): TJsonaModel {
         return {type};
@@ -73,15 +76,38 @@ export class DeserializePropertiesMapper implements IDeserializePropertiesMapper
         model.id = id;
     }
 
-    setAttributes(model: TJsonaModel, attributes: Object) {
+    setAttributes(model: TJsonaModel, attributes: TAnyKeyValueObject) {
         Object.keys(attributes).forEach((propName) => {
             model[propName] = attributes[propName];
         });
     }
 
-    setRelationships(model: TJsonaModel, relationships: Object) {
+    setRelationships(model: TJsonaModel, relationships: TJsonaRelationships) {
+        const relationsCache = {};
+
         Object.keys(relationships).forEach((propName) => {
-            model[propName] = relationships[propName];
+            if (typeof relationships[propName] === 'function') {
+                const buildRelation = <TJsonaRelationshipBuild> relationships[propName];
+                const cacheProp = `${propName}`;
+                Object.defineProperty(
+                    model,
+                    propName,
+                    {
+                        enumerable: true,
+                        set: (value) => {
+                            relationsCache[cacheProp] = value;
+                        },
+                        get: () => {
+                            if (relationsCache.hasOwnProperty(cacheProp) === false) {
+                                relationsCache[cacheProp] = buildRelation();
+                            }
+                            return relationsCache[cacheProp];
+                        },
+                    },
+                );
+            } else {
+                model[propName] = relationships[propName];
+            }
         });
 
         const newNames = Object.keys(relationships);
@@ -92,5 +118,9 @@ export class DeserializePropertiesMapper implements IDeserializePropertiesMapper
         } else {
             model[RELATIONSHIP_NAMES_PROP] = newNames;
         }
+    }
+
+    setRelationshipLinks(parentModel: TJsonaModel, relationName: string, links: IJsonApiRelationLinks) {
+        // inherit your IJsonPropertiesMapper and overload this method, if you want to handle links
     }
 }
