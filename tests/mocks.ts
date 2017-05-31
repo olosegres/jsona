@@ -1,49 +1,48 @@
+import {RELATIONSHIP_NAMES_PROP} from '../src/simplePropertyMappers';
 
-export const country1 = {
+export const country2 = {
     model: {
         type: 'country',
-        id: 34,
+        id: '34',
         name: 'Spain',
     },
     json: {
         type: 'country',
-        id: 34,
+        id: '34',
         attributes: {
             name: 'Spain',
         }
     }
 };
 
-export const country2 = {
+export const country1 = {
     model: {
         type: 'country',
-        id: 86,
+        id: '86',
         name: 'China',
     },
     json: {
         type: 'country',
-        id: 86,
+        id: '86',
         attributes: {
             name: 'China',
         }
     }
 };
 
-export const town2 = {
+export const town1 = {
     model: {
         type: 'town',
-        id: 80,
-        name: 'Barcelona',
+        id: '21',
+        name: 'Shanghai',
         country: country1.model,
-        get relationshipNames() {
-            return ['country'];
-        }
+        [RELATIONSHIP_NAMES_PROP]: ['country']
     },
     json: {
         type: 'town',
-        id: 80,
+        id: '21',
         attributes: {
-            name: 'Barcelona',
+            name: 'Shanghai',
         },
         relationships: {
             country: {
@@ -56,21 +55,19 @@ export const town2 = {
     }
 };
 
-export const town1 = {
+export const town2 = {
     model: {
         type: 'town',
-        id: 21,
-        name: 'Shanghai',
+        id: '80',
+        name: 'Barcelona',
         country: country2.model,
-        get relationshipNames() {
-            return ['country'];
-        }
+        [RELATIONSHIP_NAMES_PROP]: ['country']
     },
     json: {
         type: 'town',
-        id: 21,
+        id: '80',
         attributes: {
-            name: 'Shanghai',
+            name: 'Barcelona',
         },
         relationships: {
             country: {
@@ -116,20 +113,57 @@ export const specialty2 = {
 export const user1 = {
     model: {
         type: 'user',
-        id: 1,
+        id: '1',
         name: 'myName1',
-        active: true,
-        town: town2.model,
-        specialty: [specialty1.model, specialty2.model],
-        get relationshipNames() {
-            return ['town', 'specialty'];
-        }
+        active: false,
+        town: town1.model,
+        specialty: [specialty1.model],
+        [RELATIONSHIP_NAMES_PROP]: ['town', 'specialty']
     },
     json: {
         type: 'user',
-        id: 1,
+        id: '1',
         attributes: {
             name: 'myName1',
+            active: false,
+        },
+        relationships: {
+            town: {
+                data: {
+                    type: 'town',
+                    id: town1.model.id,
+                }
+            },
+            specialty: {
+                data: [{
+                    type: 'specialty',
+                    id: specialty1.model.id
+                }]
+            }
+        }
+    },
+    included: {
+        townOnly: [
+            town1.json
+        ]
+    }
+};
+
+export const user2 = {
+    model: {
+        type: 'user',
+        id: '2',
+        name: 'myName2',
+        active: true,
+        town: town2.model,
+        specialty: [specialty1.model, specialty2.model],
+        [RELATIONSHIP_NAMES_PROP]: ['town', 'specialty']
+    },
+    json: {
+        type: 'user',
+        id: '2',
+        attributes: {
+            name: 'myName2',
             active: true,
         },
         relationships: {
@@ -160,57 +194,14 @@ export const user1 = {
     }
 };
 
-export const user2 = {
-    model: {
-        type: 'user',
-        id: 2,
-        name: 'myName2',
-        active: false,
-        town: town1.model,
-        specialty: [specialty2.model],
-        get relationshipNames() {
-            return ['town', 'specialty'];
-        }
-    },
-    json: {
-        type: 'user',
-        id: 2,
-        attributes: {
-            name: 'myName2',
-            active: false,
-        },
-        relationships: {
-            town: {
-                data: {
-                    type: 'town',
-                    id: town1.model.id,
-                }
-            },
-            specialty: {
-                data: [{
-                    type: 'specialty',
-                    id: specialty2.model.id
-                }]
-            }
-        }
-    },
-    included: {
-        townOnly: [
-            town1.json
-        ]
-    }
-};
-
 export const article1 = {
     model: {
         type: 'article',
         id: '1',
         likes: 5550,
         author: user1.model,
-        country: country2.model,
-        get relationshipNames() {
-            return ['author', 'country'];
-        }
+        country: country1.model,
+        [RELATIONSHIP_NAMES_PROP]: ['author', 'country']
     },
     json: {
         type: 'article',
@@ -228,7 +219,7 @@ export const article1 = {
             country: {
                 data: {
                     type: 'country',
-                    id: country2.model.id
+                    id: country1.model.id
                 }
             }
         }
@@ -241,10 +232,8 @@ export const article2 = {
         id: '2',
         likes: 100,
         author: user2.model,
-        country: country1.model,
-        get relationshipNames() {
-            return ['author', 'country'];
-        }
+        country: country2.model,
+        [RELATIONSHIP_NAMES_PROP]: ['author', 'country']
     },
     json: {
         type: 'article',
@@ -262,7 +251,7 @@ export const article2 = {
             country: {
                 data: {
                     type: 'country',
-                    id: country1.model.id,
+                    id: country2.model.id,
                 }
             }
         }
@@ -289,6 +278,72 @@ export const includeNames1 = {
                 }
             },
             country: null
+        }
+    }
+};
+
+export const reduxObject1 = {
+    "article": {
+        "1": {
+            "id": "1",
+            "attributes": {"likes": 5550},
+            "relationships": {
+                "author": {"data": {"id": '1', "type": "user"}},
+                "country": {"data": {"id": '86', "type": "country"}}
+            }
+        },
+        "2": {
+            "id": "2",
+            "attributes": {"likes": 100},
+            "relationships": {
+                "author": {"data": {"id": '2', "type": "user"}},
+                "country": {"data": {"id": '34', "type": "country"}}
+            }
+        }
+    },
+    "country": {
+        "34": {"id": '34', "attributes": {"name": "Spain"}},
+        "86": {"id": '86', "attributes": {"name": "China"}}},
+    "specialty": {
+        "1": {"id": "1", "attributes": {"title": "mycategory1"}},
+        "2": {"id": "2", "attributes": {"title": "mycategory2"}}
+    },
+    "town": {
+        "21": {
+            "id": '21',
+            "attributes": {"name": "Shanghai"},
+            "relationships": {"country": {"data": {"id": '86', "type": "country"}}}
+        },
+        "80": {
+            "id": '80',
+            "attributes": {"name": "Barcelona"},
+            "relationships": {"country": {"data": {"id": '34', "type": "country"}}}
+        }
+    },
+    "user": {
+        "1": {
+            "id": '1',
+            "attributes": {"name": "myName1", "active": false},
+            "relationships": {
+                "town": {"data": {"id": '21', "type": "town"}},
+                "specialty": {
+                    "data": [{"id": "1", "type": "specialty"}]
+                }
+            }
+        },
+        "2": {
+            "id": '2',
+            "attributes": {"name": "myName2", "active": true},
+            "relationships": {
+                "town": {
+                    "data": {"id": '80', "type": "town"}},
+                "specialty": {
+                    "data": [
+                        {"id": "1", "type": "specialty"},
+                        {"id": "2", "type": "specialty"}
+                    ]
+                }
+            }
         }
     }
 };

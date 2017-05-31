@@ -1,32 +1,38 @@
 import {
-    ISerializePropertiesMapper,
-    IDeserializePropertiesMapper,
+    IModelPropertiesMapper,
+    IJsonPropertiesMapper,
     TJsonaDenormalizedIncludeNames,
     TJsonaNormalizedIncludeNamesTree,
     TJsonaModel,
-    TJsonApiBody
+    TJsonApiBody,
+    TReduxObject
 } from './JsonaTypes';
 
 import {jsonParse} from './utils';
 import ModelsSerializer from './builders/ModelsSerializer';
 import JsonDeserializer from './builders/JsonDeserializer';
+import ReduxObjectDenormalizer from './builders/ReduxObjectDenormalizer';
 
 import {
-    SerializePropertiesMapper,
-    DeserializePropertiesMapper
+    ModelPropertiesMapper,
+    JsonPropertiesMapper
 } from './simplePropertyMappers';
 
 class Jsona {
 
-    public serializePropertiesMapper: ISerializePropertiesMapper;
-    public deserializePropertiesMapper: IDeserializePropertiesMapper;
+    public modelPropertiesMapper: IModelPropertiesMapper = new ModelPropertiesMapper();
+    public jsonPropertiesMapper: IJsonPropertiesMapper = new JsonPropertiesMapper();
 
-    constructor({
-        serializePropertiesMapper = new SerializePropertiesMapper(),
-        deserializePropertiesMapper = new DeserializePropertiesMapper()
+    constructor(params?: {
+        modelPropertiesMapper: IModelPropertiesMapper,
+        jsonPropertiesMapper: IJsonPropertiesMapper
     }) {
-        this.serializePropertiesMapper = serializePropertiesMapper;
-        this.deserializePropertiesMapper = deserializePropertiesMapper;
+        if (params && params.modelPropertiesMapper) {
+            this.modelPropertiesMapper = params.modelPropertiesMapper;
+        }
+        if (params && params.jsonPropertiesMapper) {
+            this.jsonPropertiesMapper = params.jsonPropertiesMapper;
+        }
     }
 
     /**
@@ -42,11 +48,8 @@ class Jsona {
         if (!stuff) {
             throw new Error('Jsona can not serialize, stuff is not passed');
         }
-        if (!this.serializePropertiesMapper) {
-            throw new Error('Jsona can not serialize, serializePropertiesMapper is not set');
-        }
 
-        const jsonBuilder = new ModelsSerializer(this.serializePropertiesMapper);
+        const jsonBuilder = new ModelsSerializer(this.modelPropertiesMapper);
 
         jsonBuilder.setStuff(stuff);
 
@@ -65,16 +68,52 @@ class Jsona {
         if (!body) {
             throw new Error('Jsona can not deserialize, body is not passed');
         }
-        if (!this.deserializePropertiesMapper) {
-            throw new Error('Jsona can not deserialize, deserializePropertiesMapper is not set');
-        }
 
-        const modelBuilder = new JsonDeserializer(this.deserializePropertiesMapper);
+        const modelBuilder = new JsonDeserializer(this.jsonPropertiesMapper);
 
         if (typeof body === 'string') {
             modelBuilder.setJsonParsedObject(jsonParse(body));
         } else {
             modelBuilder.setJsonParsedObject(body);
+        }
+
+        return modelBuilder.build();
+    }
+
+    /**
+     * denormalizeReduxObject
+     * Creates Jsona model(s) from ReduxObject, that creates by json-api-normalizer
+     * https://github.com/yury-dymov/json-api-normalizer
+     *
+     */
+    denormalizeReduxObject(
+        {reduxObject, entityType, entityIds, returnBuilderInRelations = false}: {
+            reduxObject: TReduxObject,
+            entityType: string,
+            entityIds?: string | Array<string>,
+            returnBuilderInRelations: boolean,
+        }
+    ): null | TJsonaModel | Array<TJsonaModel> {
+
+        if (!reduxObject) {
+            throw new Error('Jsona can not denormalize ReduxObject, incorrect reduxObject passed');
+        }
+        if (!entityType) {
+            throw new Error('Jsona can not denormalize ReduxObject, entityType is not passed');
+        }
+
+        if (!reduxObject[entityType]) {
+            return null;
+        }
+
+        const modelBuilder = new ReduxObjectDenormalizer(this.jsonPropertiesMapper);
+
+        modelBuilder.setReduxObject(reduxObject);
+        modelBuilder.setEntityType(entityType);
+        modelBuilder.setReturnBuilderInRelations(returnBuilderInRelations);
+
+        if (entityIds) {
+            modelBuilder.setEntityIds(entityIds);
         }
 
         return modelBuilder.build();

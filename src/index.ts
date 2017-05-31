@@ -3,16 +3,16 @@ import ModelsSerializer from './builders/ModelsSerializer';
 import JsonDeserializer from './builders/JsonDeserializer';
 
 import {
-    SerializePropertiesMapper,
-    DeserializePropertiesMapper
+    ModelPropertiesMapper,
+    JsonPropertiesMapper
 } from './simplePropertyMappers';
 
 export {
     Jsona,
     ModelsSerializer,
     JsonDeserializer,
-    SerializePropertiesMapper,
-    DeserializePropertiesMapper,
+    ModelPropertiesMapper,
+    JsonPropertiesMapper,
 };
 
 export default Jsona;
