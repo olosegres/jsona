@@ -3,7 +3,7 @@ Framework agnostic library that provide data formatters to simplify work with JS
 
 [![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/) [![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
 
-*NOTE:* This README describes 1.x.x version. You can read [README for old versions 0.2.x here](https://github.com/olosegres/jsona/README_0_2.md)
+*NOTE:* This README describes 1.x.x version. You can read [README for old versions 0.2.x here](README_0_2.md)
 
 ### What it gives?
 - converter from json to simplified objects (some denormalized structure)
