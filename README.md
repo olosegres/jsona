@@ -109,7 +109,7 @@ console.log(newJson); // if there is such town and country in reduxObject, it wi
 } */
 ```
 
-*NOTE:* You can control process of building this objects, just use your own [propertyMappers](src/simplePropertyMappers.js) when Jsona instantiates.
+*NOTE:* You can control process of building this objects, just use your own [propertyMappers](src/simplePropertyMappers.ts) when Jsona instantiates.
 So, it may be easier to use, if you will create a proxy module in your project, something like this:
 ```javascript
 import Jsona from 'jsona';
