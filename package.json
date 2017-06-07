@@ -35,7 +35,7 @@
     "typings": "^0.8.1"
   },
   "scripts": {
-    "clean": "rm lib/*",
+    "clean": "rm -rf ./lib/*",
     "compile": "./node_modules/.bin/tsc",
     "precompile": "npm run clean",
     "preversion": "npm run compile && npm test",

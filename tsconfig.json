@@ -8,6 +8,6 @@
         "outDir": "lib/"
     },
     "files": [
-        "./src"
+        "./src/index"
     ]
 }
