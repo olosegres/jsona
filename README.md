@@ -95,7 +95,7 @@ console.log(newJson); // will output:
 
 ```javascript
 const reduxObject = reduxStore.entities; // depends on where you store it
-const model = dataFormatter.denormalizeReduxObject({reduxObject, 'town', '123');
+const model = dataFormatter.denormalizeReduxObject({reduxObject, entityType: 'town', entityIds: '123'});
 console.log(newJson); // if there is such town and country in reduxObject, it will output:
 /* {
     type: 'town',
@@ -109,7 +109,7 @@ console.log(newJson); // if there is such town and country in reduxObject, it wi
 } */
 ```
 
-*NOTE:* You can control process of building this objects, just use your own [propertyMappers](https://github.com/olosegres/jsona/src/simplePropertyMappers.js) when Jsona instantiates.
+*NOTE:* You can control process of building this objects, just use your own [propertyMappers](src/simplePropertyMappers.js) when Jsona instantiates.
 So, it may be easier to use, if you will create a proxy module in your project, something like this:
 ```javascript
 import Jsona from 'jsona';
