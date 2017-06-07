@@ -16,7 +16,7 @@ You need to instantiate Jsona ones, then use it's public methods to convert data
 const dataFormatter = new Jsona();
 ```
 
-##### deserialize - creates simplified object(s) from json
+#### deserialize - creates simplified object(s) from json
 ```javascript
 const json = {
     data: {
@@ -57,7 +57,7 @@ console.log(model); // will output:
 } */
 ```
 
-##### serialize - creates json from simplified object(s)
+#### serialize - creates json from simplified object(s)
 ```javascript
 const newJson = dataFormatter.serialize({
     stuff: model,
@@ -90,7 +90,7 @@ console.log(newJson); // will output:
 }*/
 ```
 
-##### denormalizeReduxObject - creates simplified object(s) from reduxObject
+#### denormalizeReduxObject - creates simplified object(s) from reduxObject
 "reduxObject" - result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer)
 
 ```javascript
