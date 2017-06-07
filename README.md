@@ -1,7 +1,7 @@
 # Jsona
 Framework agnostic library that provide data formatters to simplify work with JSON API [v1.0 specification](http://jsonapi.org/format/1.0/).
 
-[![NPM](https://nodei.co/npm/jsona.png?compact=true)](https://www.npmjs.com/package/jsona/)
+[![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/) [![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
 
 *NOTE:* This README describes 1.x.x version. You can read [README for old versions 0.2.x here](https://github.com/olosegres/jsona/README_0_2.md)
 
