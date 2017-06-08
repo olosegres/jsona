@@ -1,7 +1,7 @@
 {
   "name": "jsona",
   "description": "Framework agnostic library that provide systemized way to work with JSON API specification v1.0 in your JavaScript / TypeScript code",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "keywords": [
     "json-api",
     "jsonapi",
