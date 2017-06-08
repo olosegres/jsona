@@ -57,24 +57,29 @@ class ReduxObjectDenormalizer implements IJsonaModelBuilder {
 
         let {ids} = this;
 
-        if (typeof ids === 'string') {
-            return this.buildModel(entityType, ids);
-        }
-
         if (!ids) {
             ids = Object.keys(reduxObject[entityType]);
         }
 
-        const models = [];
+        if (Array.isArray(ids)) {
 
-        ids.forEach((id) => {
-            const model = this.buildModel(entityType, id);
-            if (model) {
-                models.push(model);
+            if (!ids.length) {
+                return null;
             }
-        });
 
-        return models;
+            const models = [];
+
+            ids.forEach((id) => {
+                const model = this.buildModel(entityType, id);
+                if (model) {
+                    models.push(model);
+                }
+            });
+
+            return models;
+        }
+
+        return this.buildModel(entityType, ids);
     }
 
     buildModel(type: string, id: string | number): null | TJsonaModel {

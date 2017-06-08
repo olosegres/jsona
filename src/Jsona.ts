@@ -113,7 +113,9 @@ class Jsona {
         modelBuilder.setReturnBuilderInRelations(returnBuilderInRelations);
 
         if (entityIds) {
-            modelBuilder.setEntityIds(entityIds);
+            modelBuilder.setEntityIds(
+                Array.isArray(entityIds) ? entityIds : entityIds.toString()
+            );
         }
 
         return modelBuilder.build();

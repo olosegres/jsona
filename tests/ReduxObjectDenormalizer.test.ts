@@ -68,6 +68,13 @@ describe('ReduxObjectDenormalizer', () => {
             expect(builder.build()).to.be.equal(null);
         });
 
+        it('should return null if there is empty object for some type in ReduxObject', () => {
+            builder = new ReduxObjectDenormalizer(propertiesMapper);
+            builder.setReduxObject({town: {}});
+            builder.setEntityType('town');
+            expect(builder.build()).to.be.equal(null);
+        });
+
         it('should return one model', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
