@@ -7,7 +7,7 @@ Framework agnostic library that provide data formatters to simplify work with JS
 
 ### What it gives?
 - converter from json to simplified objects (some denormalized structure)
-- converter from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer)
+- converter from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer))
 - converter from simplified objects to json (json in according with JSON API specification)
 
 ### How to use

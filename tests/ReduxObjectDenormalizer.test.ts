@@ -93,6 +93,21 @@ describe('ReduxObjectDenormalizer', () => {
         });
     });
 
+
+    describe('buildModel', () => {
+        it('should return null if no such type in reduxObject', () => {
+            builder.setPropertiesMapper(propertiesMapper);
+            builder.setReduxObject({});
+            expect(builder.buildModel('user', '123')).to.be.equal(null);
+        });
+
+        it('should return null if no such id in reduxObject', () => {
+            builder.setPropertiesMapper(propertiesMapper);
+            builder.setReduxObject({user: {}});
+            expect(builder.buildModel('user', '123')).to.be.equal(null);
+        });
+    });
+
     describe('buildRelationships', () => {
         it('should return null', () => {
             const model = {};

@@ -79,6 +79,11 @@ class ReduxObjectDenormalizer implements IJsonaModelBuilder {
 
     buildModel(type: string, id: string | number): null | TJsonaModel {
         const {reduxObject} = this;
+
+        if (!reduxObject[type]) {
+            return null;
+        }
+
         const reduxObjectModel: TReduxObjectModel = reduxObject[type][id];
 
         if (!reduxObjectModel) {
