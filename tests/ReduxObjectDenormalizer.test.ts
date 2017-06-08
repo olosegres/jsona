@@ -6,7 +6,7 @@ import {JsonPropertiesMapper} from "../src/simplePropertyMappers";
 
 import {
     reduxObject1,
-    town1,
+    article1,
     country2,
     specialty1,
     specialty2,
@@ -75,12 +75,13 @@ describe('ReduxObjectDenormalizer', () => {
             expect(builder.build()).to.be.equal(null);
         });
 
-        it('should return one model', () => {
+        it('should return one model with correct number type of id', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
-            builder.setEntityType('town');
-            builder.setEntityIds('21');
-            expect(builder.build()).to.be.deep.equal(town1.model);
+            builder.setEntityType('article');
+            builder.setEntityIds('1');
+            builder.setReturnBuilderInRelations(false);
+            expect(builder.build()).to.be.deep.equal(article1.model);
         });
 
         it('should return collection of models', () => {

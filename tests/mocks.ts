@@ -197,7 +197,7 @@ export const user2 = {
 export const article1 = {
     model: {
         type: 'article',
-        id: '1',
+        id: 1,
         likes: 5550,
         author: user1.model,
         country: country1.model,
@@ -205,7 +205,7 @@ export const article1 = {
     },
     json: {
         type: 'article',
-        id: '1',
+        id: 1,
         attributes: {
             likes: 5550
         },
@@ -229,7 +229,7 @@ export const article1 = {
 export const article2 = {
     model: {
         type: 'article',
-        id: '2',
+        id: 2,
         likes: 100,
         author: user2.model,
         country: country2.model,
@@ -237,7 +237,7 @@ export const article2 = {
     },
     json: {
         type: 'article',
-        id: '2',
+        id: 2,
         attributes: {
             likes: 100
         },
@@ -285,7 +285,7 @@ export const includeNames1 = {
 export const reduxObject1 = {
     "article": {
         "1": {
-            "id": "1",
+            "id": 1,
             "attributes": {"likes": 5550},
             "relationships": {
                 "author": {"data": {"id": '1', "type": "user"}},
@@ -293,7 +293,7 @@ export const reduxObject1 = {
             }
         },
         "2": {
-            "id": "2",
+            "id": 2,
             "attributes": {"likes": 100},
             "relationships": {
                 "author": {"data": {"id": '2', "type": "user"}},

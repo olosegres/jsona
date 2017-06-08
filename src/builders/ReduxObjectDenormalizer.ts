@@ -97,7 +97,7 @@ class ReduxObjectDenormalizer implements IJsonaModelBuilder {
 
         const model = this.propertiesMapper.createModel(type);
 
-        this.propertiesMapper.setId(model, id);
+        this.propertiesMapper.setId(model, reduxObjectModel.id);
         this.propertiesMapper.setAttributes(model, reduxObjectModel.attributes);
 
         const relationships = this.buildRelationships(model, reduxObjectModel.relationships);

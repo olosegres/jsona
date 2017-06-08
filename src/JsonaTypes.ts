@@ -100,6 +100,7 @@ export type TReduxObject = {
 };
 
 export type TReduxObjectModel = {
+    id: number | string,
     attributes?: TAnyKeyValueObject,
     relationships?: TJsonApiRelationships
 };

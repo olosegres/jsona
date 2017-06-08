@@ -59,9 +59,9 @@ describe('ModelsSerializer', () => {
     it('shoild build correct json with one data-item, without included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
-        builder.setStuff(user2.model);
+        builder.setStuff(article1.model);
         const json = builder.build();
-        expect(json).to.be.deep.equal({data: user2.json});
+        expect(json).to.be.deep.equal({data: article1.json});
     });
 
     it('shoild build correct json with one data-item, with included', () => {
