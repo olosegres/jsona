@@ -1,16 +1,27 @@
 # Jsona
-Framework agnostic library that provide data formatters to simplify work with JSON API [v1.0 specification](http://jsonapi.org/format/1.0/).
+Framework agnostic, cutomizeble library that provide data formatters to simplify work with JSON API [v1.0 specification](http://jsonapi.org/format/1.0/).
 
 [![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/) [![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
 
-*NOTE:* This README describes 1.x.x version. You can read [README for old versions 0.2.x here](README_0_2.md)
+### What problem does it solve?
+When you work with API standartinized to [json:api specification](http://jsonapi.org/format/1.0/), you're dealing with a special and optimized JSON data format in the request and response body.
+You can get data of several entities that are related to each other from request, but you'll receive it in array (included).
+You may need to send modified data back to server.
 
-### What it gives?
-- converter from json to simplified objects (some denormalized structure)
-- converter from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer))
-- converter from simplified objects to json (json in according with JSON API specification)
+This may puzzle you with the following questions:
+* How to get necessary entity from `included` array many times more inconvenient and optimal?
+* How to describe data from server, working with typings (TypeScript, Flow)?
+* How to send JSON to the server without manually assembling JSON in accordance with specification?
+
+Jsona solves this problems by providing:
+* converter from JSON to simplified objects (some denormalized structure)
+* converter from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer))
+* converter from simplified objects to JSON (in according with [json:api specification](http://jsonapi.org/format/1.0/))
+
+*NOTE:* This README describes latest stable version. You can read [README for old versions 0.2.x here](README_0_2.md)
 
 ### How to use
+
 You need to instantiate Jsona ones, then use it's public methods to convert data.
 ```
 const dataFormatter = new Jsona();
@@ -47,11 +58,11 @@ const model = dataFormatter.deserialize(json);
 console.log(model); // will output:
 /* {
     type: 'town',
-    id: '21',
-    name: 'Shanghai',
+    id: '123',
+    name: 'Barcelona',
     country: {
         type: 'country',
-        id: '34',
+        id: '32',
         name: 'Spain'
     }
 } */
@@ -99,8 +110,8 @@ const model = dataFormatter.denormalizeReduxObject({reduxObject, entityType: 'to
 console.log(newJson); // if there is such town and country in reduxObject, it will output:
 /* {
     type: 'town',
-    id: '21',
-    name: 'Shanghai',
+    id: '123',
+    name: 'Barcelona',
     country: {
         type: 'country',
         id: '34',
@@ -109,8 +120,12 @@ console.log(newJson); // if there is such town and country in reduxObject, it wi
 } */
 ```
 
-*NOTE:* You can control process of building this objects, just use your own [propertyMappers](src/simplePropertyMappers.ts) when Jsona instantiates.
-So, it may be easier to use, if you will create a proxy module in your project, something like this:
+### Customize
+You can control process of building this objects, just use your own [propertyMappers](src/simplePropertyMappers.ts) when Jsona instantiates.
+
+With [IJsonPropertiesMapper](src/JsonaTypes.ts) you can implement your way of creation simplified objects (data models) from JSON, with [IModelPropertiesMapper](src/JsonaTypes.ts) implement how to give back values from data model to JSON.
+
+Example of passing your own [propertyMappers](src/simplePropertyMappers.ts) to Jsona:
 ```javascript
 import Jsona from 'jsona';
 import {MyModelPropertiesMapper, MyJsonPropertiesMapper} from 'myPropertyMappers';
