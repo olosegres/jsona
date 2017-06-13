@@ -9,14 +9,15 @@ You can get data of several entities that are related to each other from request
 You may need to send modified data back to server.
 
 This may puzzle you with the following questions:
+
 * How to get necessary entity from `included` array many times more inconvenient and optimal?
 * How to describe data from server, working with typings (TypeScript, Flow)?
 * How to send JSON to the server without manually assembling JSON in accordance with specification?
 
 Jsona solves this problems by providing:
-* converter from JSON to simplified objects (some denormalized structure)
-* converter from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer))
+* converter from JSON to simplified objects (some denormalized structure, wich is easy to typify)
 * converter from simplified objects to JSON (in according with [json:api specification](http://jsonapi.org/format/1.0/))
+* converter from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer))
 
 *NOTE:* This README describes latest stable version. You can read [README for old versions 0.2.x here](README_0_2.md)
 
@@ -54,8 +55,8 @@ const json = {
     }]
 };
 
-const model = dataFormatter.deserialize(json);
-console.log(model); // will output:
+const town = dataFormatter.deserialize(json);
+console.log(town); // will output:
 /* {
     type: 'town',
     id: '123',
@@ -64,15 +65,16 @@ console.log(model); // will output:
         type: 'country',
         id: '32',
         name: 'Spain'
-    }
+    },
+    relationshipNames: ['country']
 } */
 ```
 
 #### serialize - creates json from simplified object(s)
 ```javascript
 const newJson = dataFormatter.serialize({
-    stuff: model,
-    includeNames: 'country'
+    stuff: town, // can handle array
+    includeNames: ['country']
 });
 console.log(newJson); // will output:
 /* {
@@ -106,8 +108,8 @@ console.log(newJson); // will output:
 
 ```javascript
 const reduxObject = reduxStore.entities; // depends on where you store it
-const model = dataFormatter.denormalizeReduxObject({reduxObject, entityType: 'town', entityIds: '123'});
-console.log(newJson); // if there is such town and country in reduxObject, it will output:
+const town = dataFormatter.denormalizeReduxObject({reduxObject, entityType: 'town', entityIds: '123'});
+console.log(town); // if there is such town and country in reduxObject, it will output:
 /* {
     type: 'town',
     id: '123',
@@ -116,14 +118,17 @@ console.log(newJson); // if there is such town and country in reduxObject, it wi
         type: 'country',
         id: '34',
         name: 'Spain'
-    }
+    },
+    relationshipNames: ['country']
 } */
 ```
 
 ### Customize
-You can control process of building this objects, just use your own [propertyMappers](src/simplePropertyMappers.ts) when Jsona instantiates.
+You can control process of building simplified objects, just use your own [propertyMappers](src/simplePropertyMappers.ts) when Jsona instantiates.
 
 With [IJsonPropertiesMapper](src/JsonaTypes.ts) you can implement your way of creation simplified objects (data models) from JSON, with [IModelPropertiesMapper](src/JsonaTypes.ts) implement how to give back values from data model to JSON.
+
+It gives unlimited possibilities to integrate Jsona with react, redux, angular2
 
 Example of passing your own [propertyMappers](src/simplePropertyMappers.ts) to Jsona:
 ```javascript
