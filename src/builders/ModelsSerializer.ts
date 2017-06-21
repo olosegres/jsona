@@ -99,6 +99,11 @@ class ModelsSerializer {
             attributes: this.propertiesMapper.getAttributes(model),
         };
 
+        if (typeof data.type !== 'string' || !data.type) {
+            console.warn('ModelsSerializer cannot buildDataByModel, type is not set or incorrect', model);
+            throw new Error('ModelsSerializer cannot buildDataByModel, type is not set or incorrect');
+        }
+
         const relationships = this.buildRelationshipsByModel(model);
 
         if (relationships && Object.keys(relationships).length) {
