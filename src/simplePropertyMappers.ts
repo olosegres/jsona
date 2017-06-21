@@ -60,7 +60,9 @@ export class ModelPropertiesMapper implements IModelPropertiesMapper {
 
         const relationships = {};
         relationshipNames.forEach((relationName) => {
-            relationships[relationName] = model[relationName];
+            if (model[relationName] !== undefined) {
+                relationships[relationName] = model[relationName];
+            }
         });
         return relationships;
     }
