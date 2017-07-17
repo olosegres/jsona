@@ -34,31 +34,37 @@ class JsonDeserializer implements IJsonaModelBuilder {
             const collectionLength = data.length;
 
             for (let i = 0; i < collectionLength; i++) {
-                const model = this.buildModelByData(data[i]);
+                if (data[i]) {
+                    const model = this.buildModelByData(data[i]);
 
-                if (model) {
-                    staff.push(model);
+                    if (model) {
+                        staff.push(model);
+                    }
                 }
             }
-        } else {
-            staff = this.buildModelByData(this.body.data);
+        } else if (data) {
+            staff = this.buildModelByData(data);
         }
 
         return staff;
     }
 
     buildModelByData(data: TJsonApiData): TJsonaModel {
-
         const model = this.pm.createModel(data.type);
 
-        this.pm.setId(model, data.id);
-        this.pm.setAttributes(model, data.attributes);
+        if (model) {
+            this.pm.setId(model, data.id);
 
-        const relationships: null | TJsonaRelationships = this.buildRelationsByData(data);
+            if (data.attributes) {
+                this.pm.setAttributes(model, data.attributes);
+            }
 
-        if (relationships) {
-            this.pm.setRelationships(model, relationships);
-        } 
+            const relationships: null | TJsonaRelationships = this.buildRelationsByData(data);
+
+            if (relationships) {
+                this.pm.setRelationships(model, relationships);
+            }
+        }
 
         return model;
     }

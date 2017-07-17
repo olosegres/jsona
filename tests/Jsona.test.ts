@@ -10,6 +10,7 @@ import {
     user2,
     specialty1,
     specialty2,
+    country1,
     country2,
     reduxObject1
 } from './mocks';
@@ -39,6 +40,26 @@ describe('Jsona', () => {
             const jsonBody = jsona.serialize({stuff: user2.model, includeNames: ['specialty', 'town.country']});
             expect(jsonBody.data).to.be.deep.equal(user2.json);
             expect(jsonBody.included).to.be.deep.equal([country2.json, specialty1.json, specialty2.json, town2.json]);
+        });
+    });
+
+    describe('deserialize', () => {
+        it('should throw Error if body is not passed', () => {
+            expect(jsona.serialize.bind(jsona, null)).to.throw(Error);
+            expect(jsona.serialize.bind(jsona, undefined)).to.throw(Error);
+        });
+
+        it('should deserialize item without included', () => {
+            const userModel = jsona.deserialize({data: user2.json});
+            expect(userModel).to.be.deep.equal(user2.modelWithoutIncluded);
+        });
+
+        it('should deserialize collection with included', () => {
+            const townsCollection = jsona.deserialize({
+                data: [town1.json, town2.json],
+                included: [country1.json, country2.json]
+            });
+            expect(townsCollection).to.be.deep.equal([town1.model, town2.model]);
         });
     });
 

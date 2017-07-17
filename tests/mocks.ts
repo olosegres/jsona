@@ -159,6 +159,24 @@ export const user2 = {
         specialty: [specialty1.model, specialty2.model],
         [RELATIONSHIP_NAMES_PROP]: ['town', 'specialty']
     },
+    modelWithoutIncluded: {
+        type: 'user',
+        id: '2',
+        name: 'myName2',
+        active: true,
+        town: {
+            id: town2.model.id,
+            type: town2.model.type,
+        },
+        specialty: [{
+            id: specialty1.model.id,
+            type: specialty1.model.type,
+        }, {
+            id: specialty2.model.id,
+            type: specialty2.model.type,
+        }],
+        [RELATIONSHIP_NAMES_PROP]: ['town', 'specialty']
+    },
     json: {
         type: 'user',
         id: '2',
