@@ -1,7 +1,10 @@
 # Jsona
 Framework agnostic, cutomizeble library that provide data formatters to simplify work with JSON API [v1.0 specification](http://jsonapi.org/format/1.0/).
 
-[![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/) [![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
+[![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/)
+[![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
+[![dependencies](https://img.shields.io/gemnasium/mathiasbynens/he.svg)](https://www.npmjs.com/package/jsona/)
+[![downloads](https://img.shields.io/npm/dm/jsona.svg)](https://www.npmjs.com/package/jsona/)
 
 ### What problem does it solve?
 When you work with API standartinized to [json:api specification](http://jsonapi.org/format/1.0/), you're dealing with a special and optimized JSON data format in the request and response body.
