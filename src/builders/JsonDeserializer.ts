@@ -12,6 +12,7 @@ class JsonDeserializer implements IJsonaModelBuilder {
     protected pm: IJsonPropertiesMapper;
     protected body;
     protected includedInObject;
+    protected cachedModels = {};
 
     constructor(propertiesMapper) {
         this.setPropertiesMapper(propertiesMapper);
@@ -50,19 +51,29 @@ class JsonDeserializer implements IJsonaModelBuilder {
     }
 
     buildModelByData(data: TJsonApiData): TJsonaModel {
-        const model = this.pm.createModel(data.type);
 
-        if (model) {
-            this.pm.setId(model, data.id);
+        // checks for built model in cachedModels is a protection from creating models on recursive relationships
+        const entityKey = `${data.type}-${data.id}`;
+        let model = this.cachedModels[entityKey];
 
-            if (data.attributes) {
-                this.pm.setAttributes(model, data.attributes);
-            }
+        if (!model) {
+            model = this.pm.createModel(data.type);
 
-            const relationships: null | TJsonaRelationships = this.buildRelationsByData(data);
+            if (model) {
+                this.cachedModels[entityKey] = model;
 
-            if (relationships) {
-                this.pm.setRelationships(model, relationships);
+                this.pm.setId(model, data.id);
+
+                if (data.attributes) {
+                    this.pm.setAttributes(model, data.attributes);
+                }
+
+                const relationships: null | TJsonaRelationships = this.buildRelationsByData(data);
+
+                if (relationships) {
+                    this.pm.setRelationships(model, relationships);
+                }
+
             }
         }
 

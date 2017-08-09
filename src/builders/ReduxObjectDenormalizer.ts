@@ -16,6 +16,7 @@ class ReduxObjectDenormalizer implements IJsonaModelBuilder {
     protected entityType: string;
     protected ids?: string | Array<string>;
     protected returnBuilderInRelations: boolean;
+    protected cachedModels = {};
 
     constructor(propertiesMapper) {
         this.setPropertiesMapper(propertiesMapper);
@@ -95,15 +96,28 @@ class ReduxObjectDenormalizer implements IJsonaModelBuilder {
             return null;
         }
 
-        const model = this.propertiesMapper.createModel(type);
+        // checks for built model in cachedModels is a protection from creating models on recursive relationships
+        const entityKey = `${type}-${id}`;
+        let model = this.cachedModels[entityKey];
 
-        this.propertiesMapper.setId(model, reduxObjectModel.id);
-        this.propertiesMapper.setAttributes(model, reduxObjectModel.attributes);
+        if (!model) {
+            model = this.propertiesMapper.createModel(type);
 
-        const relationships = this.buildRelationships(model, reduxObjectModel.relationships);
+            if (model) {
+                this.cachedModels[entityKey] = model;
 
-        if (relationships) {
-            this.propertiesMapper.setRelationships(model, relationships)
+                this.propertiesMapper.setId(model, reduxObjectModel.id);
+
+                if (reduxObjectModel.attributes) {
+                    this.propertiesMapper.setAttributes(model, reduxObjectModel.attributes);
+                }
+
+                const relationships = this.buildRelationships(model, reduxObjectModel.relationships);
+
+                if (relationships) {
+                    this.propertiesMapper.setRelationships(model, relationships)
+                }
+            }
         }
 
         return model;

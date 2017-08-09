@@ -12,7 +12,7 @@ import {
     specialty2,
     country1,
     country2,
-    reduxObject1
+    reduxObject1, circular, reduxObjectWithCircular
 } from './mocks';
 
 chai.config.showDiff = true;
@@ -60,6 +60,11 @@ describe('Jsona', () => {
                 included: [country1.json, country2.json]
             });
             expect(townsCollection).to.be.deep.equal([town1.model, town2.model]);
+        });
+
+        it('should deserialize json with circular relationships', () => {
+            const recursiveItem = jsona.deserialize(circular.json);
+            expect(recursiveItem).to.be.deep.equal(circular.model);
         });
     });
 
@@ -115,6 +120,17 @@ describe('Jsona', () => {
             });
             expect(models).to.be.an('array');
             expect(models).to.be.deep.equal([user1.model, user2.model]);
+        });
+
+
+        it('should denormalize json with circular relationships', () => {
+            const model = jsona.denormalizeReduxObject({
+                reduxObject: reduxObjectWithCircular,
+                returnBuilderInRelations: false,
+                entityType: 'model',
+                entityIds: '1'
+            });
+            expect(model).to.be.deep.equal(circular.model);
         });
 
     });

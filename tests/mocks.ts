@@ -281,6 +281,53 @@ export const article2 = {
     ],
 };
 
+const circularModel = {
+    type: 'model',
+    id: '1',
+    relationshipNames: ['simpleRelation'],
+};
+
+const circularSubmodel = {
+    type: 'subModel',
+    id: '1',
+    relationshipNames: ['circularRelation'],
+};
+
+circularModel.simpleRelation = circularSubmodel;
+circularSubmodel.circularRelation = circularModel;
+
+export const circular = {
+    model: circularModel,
+    json: {
+        "data": {
+            "type": "model",
+            "id": "1",
+            "relationships": {
+                "simpleRelation": {
+                    "data": {
+                        "type": "subModel",
+                        "id": "1"
+                    }
+                },
+            }
+        },
+        "included": [
+            {
+                "type": "subModel",
+                "id": "1",
+                "relationships": {
+                    "circularRelation": {
+                        "data": {
+                            "type": "model",
+                            "id": "1"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+};
+
 export const includeNames1 = {
     denormalized: [
         'articles.author.town.country',
@@ -364,4 +411,66 @@ export const reduxObject1 = {
             }
         }
     }
+};
+
+
+export const circular = {
+    model: circularModel,
+    json: {
+        "data": {
+            "type": "model",
+            "id": "1",
+            "relationships": {
+                "simpleRelation": {
+                    "data": {
+                        "type": "subModel",
+                        "id": "1"
+                    }
+                },
+            }
+        },
+        "included": [
+            {
+                "type": "subModel",
+                "id": "1",
+                "relationships": {
+                    "circularRelation": {
+                        "data": {
+                            "type": "model",
+                            "id": "1"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+};
+
+export const reduxObjectWithCircular = {
+    model: {
+        '1': {
+            "id": "1",
+            "relationships": {
+                "simpleRelation": {
+                    "data": {
+                        "type": "subModel",
+                        "id": "1"
+                    }
+                },
+            }
+        }
+    },
+    subModel: {
+        '1': {
+            "id": "1",
+            "relationships": {
+                "circularRelation": {
+                    "data": {
+                        "type": "model",
+                        "id": "1"
+                    }
+                },
+            }
+        }
+    },
 };
