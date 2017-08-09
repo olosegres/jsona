@@ -7,9 +7,9 @@ Framework agnostic, cutomizeble library that provide data formatters to simplify
 [![downloads](https://img.shields.io/npm/dm/jsona.svg)](https://www.npmjs.com/package/jsona/)
 
 ### What problem does it solve?
-When you work with API standartinized to [json:api specification](http://jsonapi.org/format/1.0/), you're dealing with a special and optimized JSON data format in the request and response body.
-You can get data of several entities that are related to each other from request, but you'll receive it in array (included).
-You may need to send modified data back to server.
+When you work with API standardized to [json:api specification](http://jsonapi.org/format/1.0/), you're dealing with a special and optimized JSON data format in the request and response body.
+You can get data of several entities that are related to each other, but you'll receive it in array (included).
+You may need to send modified back to server (or new data) in accordance with specification.
 
 This may puzzle you with the following questions:
 
