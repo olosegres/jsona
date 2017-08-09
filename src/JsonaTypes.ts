@@ -88,9 +88,9 @@ export type TJsonaModel = {
     [propertyName: string]: any
 };
 
-export type TJsonaRelationshipBuild = () => TJsonaModel | Array<TJsonaModel>;
+export type TJsonaRelationshipBuild = () => (TJsonaModel | Array<TJsonaModel>);
 export type TJsonaRelationships = {
-    [relationName: string]: TJsonaRelationshipBuild
+    [relationName: string]: TJsonaRelationshipBuild | TJsonaModel | Array<TJsonaModel>
 };
 
 export type TReduxObject = {
