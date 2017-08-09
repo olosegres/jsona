@@ -68,6 +68,30 @@ export class ModelPropertiesMapper implements IModelPropertiesMapper {
     }
 }
 
+export function defineRelationGetter(
+    model,
+    relationName,
+    buildRelation: TJsonaRelationshipBuild
+) {
+    let builtRelation;
+    Object.defineProperty(
+        model,
+        relationName,
+        {
+            enumerable: true,
+            set: (value) => {
+                builtRelation = value;
+            },
+            get: () => {
+                if (typeof builtRelation === 'undefined') {
+                    builtRelation = buildRelation();
+                }
+                return builtRelation;
+            },
+        },
+    );
+}
+
 export class JsonPropertiesMapper implements IJsonPropertiesMapper {
 
     createModel(type: string): TJsonaModel {
@@ -85,28 +109,10 @@ export class JsonPropertiesMapper implements IJsonPropertiesMapper {
     }
 
     setRelationships(model: TJsonaModel, relationships: TJsonaRelationships) {
-        const relationsCache = {};
 
         Object.keys(relationships).forEach((propName) => {
             if (typeof relationships[propName] === 'function') {
-                const buildRelation = <TJsonaRelationshipBuild> relationships[propName];
-                const cacheProp = `${propName}`;
-                Object.defineProperty(
-                    model,
-                    propName,
-                    {
-                        enumerable: true,
-                        set: (value) => {
-                            relationsCache[cacheProp] = value;
-                        },
-                        get: () => {
-                            if (relationsCache.hasOwnProperty(cacheProp) === false) {
-                                relationsCache[cacheProp] = buildRelation();
-                            }
-                            return relationsCache[cacheProp];
-                        },
-                    },
-                );
+                defineRelationGetter(model, propName, <TJsonaRelationshipBuild> relationships[propName]);
             } else {
                 model[propName] = relationships[propName];
             }
