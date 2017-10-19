@@ -79,6 +79,8 @@ class ModelsSerializer {
                 this.includeNamesTree,
                 uniqueIncluded
             );
+        } else if (staff === null) {
+            body['data'] = null;
         }
 
         if (Object.keys(uniqueIncluded).length) {
@@ -92,7 +94,7 @@ class ModelsSerializer {
         return body;
     }
 
-    buildDataByModel(model: TJsonaModel) {
+    buildDataByModel(model: TJsonaModel | null): TJsonApiData {
         const data = {
             id: this.propertiesMapper.getId(model),
             type: this.propertiesMapper.getType(model),
@@ -149,11 +151,12 @@ class ModelsSerializer {
                 relationships[k] = {
                     data: relationshipData
                 };
-            } else {
+            } else if (relation) {
                 const item = {
                     id: this.propertiesMapper.getId(relation),
                     type: this.propertiesMapper.getType(relation)
                 };
+
                 if (item.type) {
                     relationships[k] = {
                         data: item
@@ -164,6 +167,10 @@ class ModelsSerializer {
                         relation
                     );
                 }
+            } else {
+                relationships[k] = {
+                    data: relation
+                };
             }
         });
 
