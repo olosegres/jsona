@@ -10,12 +10,13 @@ import {
     user1,
     article1,
     article2,
+    articleWithoutAuthor,
     country1,
     country2,
     town2,
     town1,
     specialty1,
-    specialty2
+    specialty2,
 } from './mocks';
 
 chai.config.truncateThreshold = 0;
@@ -56,7 +57,7 @@ describe('ModelsSerializer', () => {
         expect(builder.includeNamesTree).to.be.deep.equal(includeNames1.normalized);
     });
 
-    it('shoild build correct json with one data-item, without included', () => {
+    it('should build correct json with one data-item, without included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
         builder.setStuff(article1.model);
@@ -64,7 +65,7 @@ describe('ModelsSerializer', () => {
         expect(json).to.be.deep.equal({data: article1.json});
     });
 
-    it('shoild build correct json with one data-item, with included', () => {
+    it('should build correct json with one data-item, with included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
         builder.setStuff(user2.model);
@@ -73,7 +74,7 @@ describe('ModelsSerializer', () => {
         expect(json).to.be.deep.equal({data: user2.json, included: user2.included.townOnly});
     });
 
-    it('shoild build correct json with collection of data items, with included', () => {
+    it('should build correct json with collection of data items, with included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
         builder.setStuff([article1.model, article2.model]);
@@ -102,5 +103,14 @@ describe('ModelsSerializer', () => {
             ]
         });
 
+    });
+
+    it('should build json with null data for nulled relation', () => {
+        builder = new ModelsSerializer(propertiesMapper);
+
+        builder.setStuff(articleWithoutAuthor.model);
+        builder.setIncludeNames(articleWithoutAuthor.includeNames);
+        const json = builder.build();
+        expect(json).to.be.deep.equal({ data: articleWithoutAuthor.json });
     });
 });

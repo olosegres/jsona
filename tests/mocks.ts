@@ -281,6 +281,31 @@ export const article2 = {
     ],
 };
 
+export const articleWithoutAuthor = {
+    model: {
+        type: 'article',
+        id: 3,
+        likes: 0,
+        author: null,
+        [RELATIONSHIP_NAMES_PROP]: ['author']
+    },
+    json: {
+        type: 'article',
+        id: 3,
+        attributes: {
+            likes: 0,
+        },
+        relationships: {
+            author: {
+                data: null,
+            },
+        },
+    },
+    includeNames: [
+        'author'
+    ],
+};
+
 const circularModel = {
     type: 'model',
     id: '1',
