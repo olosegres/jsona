@@ -92,7 +92,9 @@ class ModelsSerializer {
         return body;
     }
 
-    buildDataByModel(model: TJsonaModel) {
+    buildDataByModel(model: TJsonaModel | null) {
+        if (!model) return null;
+
         const data = {
             id: this.propertiesMapper.getId(model),
             type: this.propertiesMapper.getType(model),
@@ -150,11 +152,12 @@ class ModelsSerializer {
                     data: relationshipData
                 };
             } else {
-                const item = {
+                const item = relation ? {
                     id: this.propertiesMapper.getId(relation),
                     type: this.propertiesMapper.getType(relation)
-                };
-                if (item.type) {
+                } : null;
+
+                if (!item || item.type) {
                     relationships[k] = {
                         data: item
                     };
