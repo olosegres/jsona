@@ -133,6 +133,23 @@ describe('Jsona', () => {
             expect(model).to.be.deep.equal(circular.model);
         });
 
+        it('should denormalize model with relationships', () => {
+            const model1 = jsona.denormalizeReduxObject({
+                reduxObject: reduxObject1,
+                returnBuilderInRelations: false,
+                entityType: 'town',
+                entityIds: '21'
+            });
+            const model2 = jsona.denormalizeReduxObject({
+                reduxObject: reduxObject1,
+                returnBuilderInRelations: true,
+                entityType: 'town',
+                entityIds: '21'
+            });
+            expect(model1.country).to.be.deep.equal(country1.model);
+            expect(model2.country).to.be.deep.equal(country1.model);
+        });
+
     });
 
 });

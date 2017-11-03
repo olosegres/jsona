@@ -73,20 +73,15 @@ export function defineRelationGetter(
     relationName,
     buildRelation: TJsonaRelationshipBuild
 ) {
-    let builtRelation;
     Object.defineProperty(
         model,
         relationName,
         {
             enumerable: true,
-            set: (value) => {
-                builtRelation = value;
-            },
+            configurable: true,
             get: () => {
-                if (typeof builtRelation === 'undefined') {
-                    builtRelation = buildRelation();
-                }
-                return builtRelation;
+                delete model[relationName];
+                return model[relationName] = buildRelation();
             },
         },
     );
