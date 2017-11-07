@@ -150,6 +150,17 @@ describe('Jsona', () => {
             expect(model2.country).to.be.deep.equal(country1.model);
         });
 
+        it('should allow to set relationships before denormalization', () => {
+            const model = jsona.denormalizeReduxObject({
+                reduxObject: reduxObject1,
+                returnBuilderInRelations: true,
+                entityType: 'town',
+                entityIds: '21'
+            });
+            model.country = country1.model;
+            expect(model.country).to.be.deep.equal(country1.model);
+        });
+
     });
 
 });

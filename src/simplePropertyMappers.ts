@@ -79,6 +79,10 @@ export function defineRelationGetter(
         {
             enumerable: true,
             configurable: true,
+            set: (value) => {
+                delete model[relationName];
+                model[relationName] = value;
+            },
             get: () => {
                 delete model[relationName];
                 return model[relationName] = buildRelation();
