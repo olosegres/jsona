@@ -43,14 +43,13 @@
     "mocha": "^3.4.2",
     "ts-mocha": "^1.0.3",
     "typescript": ">=2.0.0",
-    "typings": "^0.8.1"
+    "@types/mocha": "^2.2.44"
   },
   "scripts": {
     "clean": "rm -rf ./lib/*",
     "compile": "./node_modules/.bin/tsc",
     "precompile": "npm run clean",
     "preversion": "npm run compile && npm test",
-    "test": "env NODE_ENV=test ts-mocha ./**/*.test.ts",
-    "typings": "typings"
+    "test": "env NODE_ENV=test ts-mocha ./**/*.test.ts"
   }
 }
