@@ -1,4 +1,3 @@
-/// <reference path="../typings/globals/mocha/index.d.ts" />
 import * as chai from 'chai';
 import {expect} from 'chai';
 import ModelsSerializer from "../src/builders/ModelsSerializer";
