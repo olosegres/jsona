@@ -42,7 +42,7 @@ class Jsona {
     serialize(
         {stuff, includeNames}: {
             stuff: TJsonaModel | Array<TJsonaModel>,
-            includeNames: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree
+            includeNames?: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree
         }
     ): TJsonApiBody {
         if (!stuff) {
