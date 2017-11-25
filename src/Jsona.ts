@@ -91,7 +91,7 @@ class Jsona {
             reduxObject: TReduxObject,
             entityType: string,
             entityIds?: string | Array<string>,
-            returnBuilderInRelations: boolean,
+            returnBuilderInRelations?: boolean,
         }
     ): null | TJsonaModel | Array<TJsonaModel> {
 
