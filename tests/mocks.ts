@@ -318,8 +318,8 @@ const circularSubmodel = {
     relationshipNames: ['circularRelation'],
 };
 
-circularModel.simpleRelation = circularSubmodel;
-circularSubmodel.circularRelation = circularModel;
+circularModel['simpleRelation'] = circularSubmodel;
+circularSubmodel['circularRelation'] = circularModel;
 
 export const circular = {
     model: circularModel,
@@ -436,39 +436,6 @@ export const reduxObject1 = {
             }
         }
     }
-};
-
-
-export const circular = {
-    model: circularModel,
-    json: {
-        "data": {
-            "type": "model",
-            "id": "1",
-            "relationships": {
-                "simpleRelation": {
-                    "data": {
-                        "type": "subModel",
-                        "id": "1"
-                    }
-                },
-            }
-        },
-        "included": [
-            {
-                "type": "subModel",
-                "id": "1",
-                "relationships": {
-                    "circularRelation": {
-                        "data": {
-                            "type": "model",
-                            "id": "1"
-                        }
-                    }
-                }
-            }
-        ]
-    },
 };
 
 export const reduxObjectWithCircular = {
