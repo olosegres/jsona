@@ -18,10 +18,10 @@ chai.config.showDiff = true;
 chai.config.truncateThreshold = 0;
 
 describe('Jsona', () => {
-    let jsona;
+    const jsona = new Jsona();
 
     it('should instantiate with fallback property mappers', () => {
-        jsona = new Jsona();
+        let jsona = new Jsona();
     });
 
     describe('serialize', () => {
@@ -145,8 +145,8 @@ describe('Jsona', () => {
                 entityType: 'town',
                 entityIds: '21'
             });
-            expect(model1.country).to.be.deep.equal(country1.model);
-            expect(model2.country).to.be.deep.equal(country1.model);
+            expect(model1['country']).to.be.deep.equal(country1.model);
+            expect(model2['country']).to.be.deep.equal(country1.model);
         });
 
         it('should allow to set relationships before denormalization', () => {
@@ -156,8 +156,8 @@ describe('Jsona', () => {
                 entityType: 'town',
                 entityIds: '21'
             });
-            model.country = country1.model;
-            expect(model.country).to.be.deep.equal(country1.model);
+            model['country']= country1.model;
+            expect(model['country']).to.be.deep.equal(country1.model);
         });
 
     });
