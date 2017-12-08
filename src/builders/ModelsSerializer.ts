@@ -15,6 +15,7 @@ class ModelsSerializer {
     protected propertiesMapper: IModelPropertiesMapper;
     protected staff: TJsonaModel | Array<TJsonaModel>;
     protected includeNamesTree: TJsonaNormalizedIncludeNamesTree;
+    protected type: string;
 
     constructor(propertiesMapper?: IModelPropertiesMapper) {
         propertiesMapper && this.setPropertiesMapper(propertiesMapper);
@@ -26,6 +27,10 @@ class ModelsSerializer {
 
     setStuff(staff) {
         this.staff = staff;
+    }
+
+    setType(type: string) {
+        this.type = type;
     }
 
     setIncludeNames(includeNames: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree) {
@@ -41,7 +46,7 @@ class ModelsSerializer {
     }
 
     build(): TJsonApiBody {
-        const {staff, propertiesMapper} = this;
+        const {staff, propertiesMapper, type} = this;
 
         if (!propertiesMapper || typeof propertiesMapper !== 'object') {
             throw new Error('ModelsSerializer cannot build, propertiesMapper is not set');
@@ -100,6 +105,10 @@ class ModelsSerializer {
             type: this.propertiesMapper.getType(model),
             attributes: this.propertiesMapper.getAttributes(model),
         };
+
+        if (!data.type && this.type) {
+            data.type = this.type
+        }
 
         if (typeof data.type !== 'string' || !data.type) {
             console.warn('ModelsSerializer cannot buildDataByModel, type is not set or incorrect', model);

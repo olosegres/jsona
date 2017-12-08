@@ -3,15 +3,15 @@ import {expect} from 'chai';
 import Jsona from '../src';
 
 import {
-    town1,
-    town2,
-    user1,
-    user2,
-    specialty1,
-    specialty2,
-    country1,
-    country2,
-    reduxObject1, circular, reduxObjectWithCircular
+  town1,
+  town2,
+  user1,
+  user2,
+  specialty1,
+  specialty2,
+  country1,
+  country2,
+  reduxObject1, circular, reduxObjectWithCircular, town1WithoutType
 } from './mocks';
 
 chai.config.showDiff = true;
@@ -40,6 +40,11 @@ describe('Jsona', () => {
             expect(jsonBody.data).to.be.deep.equal(user2.json);
             expect(jsonBody.included).to.be.deep.equal([country2.json, specialty1.json, specialty2.json, town2.json]);
         });
+        it('should serialize model without type', () => {
+            const jsonBody = jsona.serialize({stuff: town1WithoutType.model, type: 'town'});
+            expect(jsonBody.data).to.be.deep.equal(town1WithoutType.json);
+            expect(jsonBody.included).to.be.equal(undefined);
+        })
     });
 
     describe('deserialize', () => {

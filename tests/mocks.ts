@@ -55,6 +55,30 @@ export const town1 = {
     }
 };
 
+export const town1WithoutType = {
+  model: {
+    id: '21',
+    name: 'Shanghai',
+    country: country1.model,
+    [RELATIONSHIP_NAMES_PROP]: ['country']
+  },
+  json: {
+    type: 'town',
+    id: '21',
+    attributes: {
+      name: 'Shanghai',
+    },
+    relationships: {
+      country: {
+        data: {
+          type: 'country',
+          id: country1.model.id,
+        }
+      }
+    }
+  }
+};
+
 export const town2 = {
     model: {
         type: 'town',
