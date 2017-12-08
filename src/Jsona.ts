@@ -40,9 +40,10 @@ class Jsona {
      * Creates JSON, compatible with json:api specification from Jsona model(s).
      */
     serialize(
-        {stuff, includeNames}: {
+        {stuff, includeNames, type}: {
             stuff: TJsonaModel | Array<TJsonaModel>,
-            includeNames?: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree
+            includeNames?: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree,
+            type?: string
         }
     ): TJsonApiBody {
         if (!stuff) {
@@ -52,6 +53,7 @@ class Jsona {
         const jsonBuilder = new ModelsSerializer(this.modelPropertiesMapper);
 
         jsonBuilder.setStuff(stuff);
+        jsonBuilder.setType(type);
 
         if (includeNames) {
             jsonBuilder.setIncludeNames(includeNames);
