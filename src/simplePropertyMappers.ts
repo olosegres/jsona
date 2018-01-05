@@ -107,6 +107,10 @@ export class JsonPropertiesMapper implements IJsonPropertiesMapper {
         });
     }
 
+    setMeta(model: TJsonaModel, meta: TAnyKeyValueObject) {
+        model.meta = meta;
+    }
+
     setRelationships(model: TJsonaModel, relationships: TJsonaRelationships) {
 
         Object.keys(relationships).forEach((propName) => {

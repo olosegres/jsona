@@ -68,6 +68,10 @@ class JsonDeserializer implements IJsonaModelBuilder {
                     this.pm.setAttributes(model, data.attributes);
                 }
 
+                if (data.meta) {
+                    this.pm.setMeta(model, data.meta);
+                }
+
                 const relationships: null | TJsonaRelationships = this.buildRelationsByData(data);
 
                 if (relationships) {
