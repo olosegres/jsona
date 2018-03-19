@@ -72,7 +72,11 @@ class JsonDeserializer implements IJsonaModelBuilder {
                     this.pm.setMeta(model, data.meta);
                 }
 
-                const relationships: null | TJsonaRelationships = this.buildRelationsByData(data);
+                if (data.links && this.pm.setLinks) {
+                    this.pm.setLinks(model, data.links);
+                }
+
+                const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
 
                 if (relationships) {
                     this.pm.setRelationships(model, relationships);
@@ -84,7 +88,7 @@ class JsonDeserializer implements IJsonaModelBuilder {
         return model;
     }
 
-    buildRelationsByData(data: TJsonApiData): TJsonaRelationships | null {
+    buildRelationsByData(data: TJsonApiData, model: TJsonaModel): TJsonaRelationships | null {
         const readyRelations = {};
 
         if (data.relationships) {
@@ -107,6 +111,20 @@ class JsonDeserializer implements IJsonaModelBuilder {
                 } else if (relation.data) {
                     let dataItem = this.buildDataFromIncluded(relation.data.id, relation.data.type);
                     readyRelations[k] = this.buildModelByData(dataItem);
+                }
+
+                if (relation.links) {
+                    const {setRelationshipLinks} = this.pm;
+                    if (setRelationshipLinks) { // support was added in patch release
+                        setRelationshipLinks(model, k, relation.links);
+                    }
+                }
+
+                if (relation.meta) {
+                    const {setRelationshipMeta} = this.pm;
+                    if (setRelationshipMeta) { // support was added in patch release
+                        setRelationshipMeta(model, k, relation.meta);
+                    }
                 }
             }
         }

@@ -150,6 +150,13 @@ class ReduxObjectDenormalizer implements IJsonaModelBuilder {
             if (relation && relation.links) {
                 this.propertiesMapper.setRelationshipLinks(model, relationName, relation.links);
             }
+
+            if (relation && relation.meta) {
+                const {setRelationshipMeta} = this.propertiesMapper;
+                if (setRelationshipMeta) { // support was added in patch release
+                    setRelationshipMeta(model, relationName, relation.meta);
+                }
+            }
         });
 
         return Object.keys(relations).length ? relations : null;

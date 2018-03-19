@@ -3,7 +3,7 @@ import {
     IJsonPropertiesMapper,
     TAnyKeyValueObject,
     TJsonaModel,
-    TJsonaRelationships, TJsonaRelationshipBuild, IJsonApiRelationLinks
+    TJsonaRelationships, TJsonaRelationshipBuild, TJsonApiLinks
 } from './JsonaTypes';
 
 export const RELATIONSHIP_NAMES_PROP = 'relationshipNames';
@@ -111,6 +111,10 @@ export class JsonPropertiesMapper implements IJsonPropertiesMapper {
         model.meta = meta;
     }
 
+    setLinks(model: TJsonaModel, links: TJsonApiLinks) {
+        model.links = links;
+    }
+
     setRelationships(model: TJsonaModel, relationships: TJsonaRelationships) {
 
         Object.keys(relationships).forEach((propName) => {
@@ -131,7 +135,11 @@ export class JsonPropertiesMapper implements IJsonPropertiesMapper {
         }
     }
 
-    setRelationshipLinks(parentModel: TJsonaModel, relationName: string, links: IJsonApiRelationLinks) {
-        // inherit your IJsonPropertiesMapper and overload this method, if you want to handle links
+    setRelationshipLinks(parentModel: TJsonaModel, relationName: string, links: TJsonApiLinks) {
+        // inherit your IJsonPropertiesMapper and overload this method, if you want to handle relationship links
+    }
+
+    setRelationshipMeta(parentModel: TJsonaModel, relationName: string, links: TAnyKeyValueObject) {
+        // inherit your IJsonPropertiesMapper and overload this method, if you want to handle relationship meta
     }
 }

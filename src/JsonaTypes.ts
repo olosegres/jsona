@@ -11,8 +11,10 @@ export interface IJsonPropertiesMapper {
     setId(model: TJsonaModel, id: string | number): void;
     setAttributes(model: TJsonaModel, attributes: TAnyKeyValueObject): void;
     setMeta(model: TJsonaModel, meta: TAnyKeyValueObject): void;
+    setLinks(model: TJsonaModel, links: TAnyKeyValueObject): void;
     setRelationships(model: TJsonaModel, relationships: TJsonaRelationships): void;
-    setRelationshipLinks(parentModel: TJsonaModel, relationName: string, links: IJsonApiRelationLinks): void;
+    setRelationshipLinks(parentModel: TJsonaModel, relationName: string, links: TJsonApiLinks): void;
+    setRelationshipMeta(parentModel: TJsonaModel, relationName: string, meta: TAnyKeyValueObject): void;
 }
 
 export interface IJsonaModelBuilder {
@@ -33,6 +35,7 @@ export type TJsonApiData = {
     id?: string|number;
     attributes?: TAnyKeyValueObject;
     meta?: TAnyKeyValueObject;
+    links?: TJsonApiLinks;
     relationships?: TJsonApiRelationships;
 };
 
@@ -43,10 +46,11 @@ export type TJsonApiRelationshipData = {
 
 export type TJsonApiRelation = {
     data: TJsonApiRelationshipData | Array<TJsonApiRelationshipData>
-    links?: IJsonApiRelationLinks
+    links?: TJsonApiLinks
+    meta?: TAnyKeyValueObject
 };
 
-export type IJsonApiRelationLinks = {
+export type TJsonApiLinks = {
     self: string,
     related: string
 };
