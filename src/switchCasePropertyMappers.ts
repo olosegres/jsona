@@ -3,16 +3,11 @@ import {
     IJsonPropertiesMapper,
     TAnyKeyValueObject,
     TJsonaModel, TJsonaRelationships,
+    SwitchCaseModelMapperOptionsType,
+    SwitchCaseJsonMapperOptionsType,
 } from './JsonaTypes';
 import {ModelPropertiesMapper, JsonPropertiesMapper} from './';
-
 import {RELATIONSHIP_NAMES_PROP} from "./simplePropertyMappers";
-
-type ModelMapperOptionsType = {
-    kebabizeAttributes?: boolean,
-    kebabizeRelationships?: boolean,
-    kebabizeType?: boolean,
-};
 
 export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IModelPropertiesMapper {
 
@@ -20,7 +15,7 @@ export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IMod
     kebabizeRelationships: boolean;
     kebabizeType: boolean;
 
-    constructor(options?: ModelMapperOptionsType) {
+    constructor(options?: SwitchCaseModelMapperOptionsType) {
         super();
 
         const {
@@ -75,19 +70,13 @@ export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IMod
     }
 }
 
-type JsonMapperOptionsType = {
-    camelizeAttributes?: boolean,
-    camelizeRelationships?: boolean,
-    camelizeType?: boolean,
-};
-
 export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonPropertiesMapper {
 
     camelizeAttributes: boolean;
     camelizeRelationships: boolean;
     camelizeType: boolean;
 
-    constructor(options?: JsonMapperOptionsType) {
+    constructor(options?: SwitchCaseJsonMapperOptionsType) {
         super();
 
         const {
