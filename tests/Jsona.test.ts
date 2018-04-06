@@ -11,7 +11,10 @@ import {
     specialty2,
     country1,
     country2,
-    reduxObject1, circular, reduxObjectWithCircular
+    reduxObject1,
+    circular,
+    reduxObjectWithCircular,
+    withoutRootIdsMock,
 } from './mocks';
 
 chai.config.showDiff = true;
@@ -64,6 +67,11 @@ describe('Jsona', () => {
         it('should deserialize json with circular relationships', () => {
             const recursiveItem = jsona.deserialize(circular.json);
             expect(recursiveItem).to.be.deep.equal(circular.model);
+        });
+
+        it('should deserialize json with data without root ids', () => {
+            const collectionWhithoutRootIds = jsona.deserialize({data: withoutRootIdsMock.json});
+            expect(collectionWhithoutRootIds).to.be.deep.equal(withoutRootIdsMock.collection);
         });
     });
 

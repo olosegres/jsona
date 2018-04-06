@@ -7,6 +7,14 @@ import {
     IJsonaModelBuilder,
 } from '../JsonaTypes';
 
+function createEntityKey(data: TJsonApiData) {
+    if (data.type && data.id) {
+        return `${data.type}-${data.id}`;
+    }
+
+    return '';
+}
+
 class JsonDeserializer implements IJsonaModelBuilder {
 
     protected pm: IJsonPropertiesMapper;
@@ -52,36 +60,44 @@ class JsonDeserializer implements IJsonaModelBuilder {
 
     buildModelByData(data: TJsonApiData): TJsonaModel {
 
-        // checks for built model in cachedModels is a protection from creating models on recursive relationships
-        const entityKey = `${data.type}-${data.id}`;
-        let model = this.cachedModels[entityKey];
+        const entityKey = createEntityKey(data);
 
-        if (!model) {
-            model = this.pm.createModel(data.type);
+        let model;
+
+        if (entityKey) {
+            // checks for built model in cachedModels is a protection from creating models on recursive relationships
+            model = this.cachedModels[entityKey];
 
             if (model) {
+                return model;
+            }
+        }
+
+        model = this.pm.createModel(data.type);
+
+        if (model) {
+            if (entityKey) {
                 this.cachedModels[entityKey] = model;
+            }
 
-                this.pm.setId(model, data.id);
+            this.pm.setId(model, data.id);
 
-                if (data.attributes) {
-                    this.pm.setAttributes(model, data.attributes);
-                }
+            if (data.attributes) {
+                this.pm.setAttributes(model, data.attributes);
+            }
 
-                if (data.meta && this.pm.setMeta) {
-                    this.pm.setMeta(model, data.meta);
-                }
+            if (data.meta && this.pm.setMeta) {
+                this.pm.setMeta(model, data.meta);
+            }
 
-                if (data.links && this.pm.setLinks) {
-                    this.pm.setLinks(model, data.links);
-                }
+            if (data.links && this.pm.setLinks) {
+                this.pm.setLinks(model, data.links);
+            }
 
-                const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
+            const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
 
-                if (relationships) {
-                    this.pm.setRelationships(model, relationships);
-                }
-
+            if (relationships) {
+                this.pm.setRelationships(model, relationships);
             }
         }
 

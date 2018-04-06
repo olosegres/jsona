@@ -466,3 +466,68 @@ export const reduxObjectWithCircular = {
         }
     },
 };
+
+
+export const withoutRootIdsMock = {
+
+    json: [{
+        "type": "language-knowledges",
+        "relationships": {
+            "sourceLanguage": {
+                "data": {
+                    "type": "source-languages",
+                    "id": "11"
+                }
+            },
+            "workArea": {
+                "data": {
+                    "type": "work-areas",
+                    "id": "22"
+                }
+            }
+        }
+    }, {
+        "type": "language-knowledges",
+        "relationships": {
+            "sourceLanguage": {
+                "data": {
+                    "type": "source-languages",
+                    "id": "22"
+                }
+            },
+            "workArea": {
+                "data": {
+                    "type": "work-areas",
+                    "id": "22"
+                }
+            }
+        }
+    }],
+
+    collection: [{
+        type: 'language-knowledges',
+        id: undefined,
+        sourceLanguage: {
+            type: 'source-languages',
+            id: '11'
+        },
+        workArea: {
+            type: 'work-areas',
+            id: '22'
+        },
+        relationshipNames: [ 'sourceLanguage', 'workArea' ]
+    }, {
+        type: 'language-knowledges',
+        id: undefined,
+        sourceLanguage: {
+            type: 'source-languages',
+            id: '22'
+        },
+        workArea: {
+            type: 'work-areas',
+            id: '22'
+        },
+        relationshipNames: [ 'sourceLanguage', 'workArea' ]
+    }],
+
+};
