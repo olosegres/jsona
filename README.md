@@ -3,7 +3,7 @@ Framework agnostic, cutomizeble library that provide data formatters to simplify
 
 [![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/)
 [![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
-[![dependencies](https://img.shields.io/gemnasium/mathiasbynens/he.svg)](https://www.npmjs.com/package/jsona/)
+[![dependencies](https://camo.githubusercontent.com/cdc54d1641f5e11e246a2707063ecad092c96d11/68747470733a2f2f64617669642d646d2e6f72672f6477796c2f657374612e737667)](https://www.npmjs.com/package/jsona/)
 [![downloads](https://img.shields.io/npm/dm/jsona.svg)](https://www.npmjs.com/package/jsona/)
 
 ### What problem does it solve?
