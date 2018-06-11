@@ -20,6 +20,7 @@ class JsonDeserializer implements IJsonaModelBuilder {
     protected pm: IJsonPropertiesMapper;
     protected body;
     protected includedInObject;
+    protected dataInObject;
     protected cachedModels = {};
 
     constructor(propertiesMapper) {
@@ -64,7 +65,7 @@ class JsonDeserializer implements IJsonaModelBuilder {
 
         let model;
 
-        if (entityKey) {
+        if (entityKey && Object.keys(data).length === 2) {
             // checks for built model in cachedModels is a protection from creating models on recursive relationships
             model = this.cachedModels[entityKey];
 
@@ -115,18 +116,28 @@ class JsonDeserializer implements IJsonaModelBuilder {
                     readyRelations[k] = [];
 
                     const relationItemsLength = relation.data.length;
+                    let relationItem;
+
                     for (let i = 0; i < relationItemsLength; i++) {
-                        let dataItem = this.buildDataFromIncluded(
-                            relation.data[i].id,
-                            relation.data[i].type
+                        relationItem = relation.data[i];
+
+                        if (!relationItem) {
+                            return;
+                        }
+
+                        let dataItem = this.buildDataFromIncludedOrData(
+                            relationItem.id,
+                            relationItem.type
                         );
                         readyRelations[k].push(
                             this.buildModelByData(dataItem)
                         );
                     }
                 } else if (relation.data) {
-                    let dataItem = this.buildDataFromIncluded(relation.data.id, relation.data.type);
+                    let dataItem = this.buildDataFromIncludedOrData(relation.data.id, relation.data.type);
                     readyRelations[k] = this.buildModelByData(dataItem);
+                } else if (relation.data === null) {
+                    readyRelations[k] = null;
                 }
 
                 if (relation.links) {
@@ -152,7 +163,7 @@ class JsonDeserializer implements IJsonaModelBuilder {
         return null;
     }
 
-    buildDataFromIncluded(id: string | number, type: string): TJsonApiData {
+    buildDataFromIncludedOrData(id: string | number, type: string): TJsonApiData {
         const included = this.buildIncludedInObject();
         const dataItem = included[type + id];
 
@@ -178,6 +189,7 @@ class JsonDeserializer implements IJsonaModelBuilder {
 
         return this.includedInObject;
     }
+
 }
 
 export default JsonDeserializer;

@@ -15,6 +15,7 @@ import {
     circular,
     reduxObjectWithCircular,
     withoutRootIdsMock,
+    withNullRelationsMock,
 } from './mocks';
 
 chai.config.showDiff = true;
@@ -43,6 +44,11 @@ describe('Jsona', () => {
             expect(jsonBody.data).to.be.deep.equal(user2.json);
             expect(jsonBody.included).to.be.deep.equal([country2.json, specialty1.json, specialty2.json, town2.json]);
         });
+
+        it('should build json and save null relationships', () => {
+            const jsonBody = jsona.serialize({stuff: withNullRelationsMock.collection});
+            expect(jsonBody.data).to.be.deep.equal(withNullRelationsMock.json);
+        });
     });
 
     describe('deserialize', () => {
@@ -70,8 +76,13 @@ describe('Jsona', () => {
         });
 
         it('should deserialize json with data without root ids', () => {
-            const collectionWhithoutRootIds = jsona.deserialize({data: withoutRootIdsMock.json});
-            expect(collectionWhithoutRootIds).to.be.deep.equal(withoutRootIdsMock.collection);
+            const collectionWithoutRootIds = jsona.deserialize({data: withoutRootIdsMock.json});
+            expect(collectionWithoutRootIds).to.be.deep.equal(withoutRootIdsMock.collection);
+        });
+
+        it('should deserialize json and save null relationships', () => {
+            const collectionWithNullRelations = jsona.deserialize({data: withNullRelationsMock.json});
+            expect(collectionWithNullRelations).to.be.deep.equal(withNullRelationsMock.collection);
         });
     });
 

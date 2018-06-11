@@ -531,3 +531,55 @@ export const withoutRootIdsMock = {
     }],
 
 };
+
+export const withNullRelationsMock = {
+
+    json: [{
+        "type": "category",
+        "id": "3",
+        "attributes": {
+            "slug": "ya"
+        },
+        "relationships": {
+            "parent": {
+                "data": {
+                    "type": "category",
+                    "id": "0"
+                }
+            }
+        }
+    }, {
+        "type": "category",
+        "id": "0",
+        "attributes": {
+            "slug": "home"
+        },
+        "relationships": {
+            "parent": {
+                "data": null
+            }
+        }
+    }],
+
+    collection: [{
+        "type": "category",
+        "id": "3",
+        "slug": "ya",
+        "parent": {
+            "type": "category",
+            "id": "0"
+        },
+        "relationshipNames": [
+            "parent"
+        ]
+    }, {
+        "type": "category",
+        "id": "0",
+        "slug": "home",
+        "parent": null,
+        "relationshipNames": [
+            "parent"
+        ]
+    }],
+
+};
