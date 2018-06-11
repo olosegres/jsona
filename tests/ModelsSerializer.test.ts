@@ -38,12 +38,12 @@ describe('ModelsSerializer', () => {
 
     it('should handle one model in setStuff', () => {
         builder.setStuff(user2.model);
-        expect(builder.staff).to.be.deep.equal(user2.model);
+        expect(builder.stuff).to.be.deep.equal(user2.model);
     });
 
     it('should handle collection of models in setStuff', () => {
         builder.setStuff([user2.model, user1.model]);
-        expect(builder.staff).to.be.deep.equal([user2.model, user1.model]);
+        expect(builder.stuff).to.be.deep.equal([user2.model, user1.model]);
     });
 
     it('should setIncludeNames with convertation to TJsonaNormalizedIncludeNamesTree', () => {

@@ -13,7 +13,7 @@ import {createIncludeNamesTree} from '../utils';
 class ModelsSerializer {
 
     protected propertiesMapper: IModelPropertiesMapper;
-    protected staff: TJsonaModel | Array<TJsonaModel>;
+    protected stuff: TJsonaModel | Array<TJsonaModel>;
     protected includeNamesTree: TJsonaNormalizedIncludeNamesTree;
 
     constructor(propertiesMapper?: IModelPropertiesMapper) {
@@ -24,8 +24,8 @@ class ModelsSerializer {
         this.propertiesMapper = propertiesMapper;
     }
 
-    setStuff(staff) {
-        this.staff = staff;
+    setStuff(stuff) {
+        this.stuff = stuff;
     }
 
     setIncludeNames(includeNames: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree) {
@@ -41,29 +41,29 @@ class ModelsSerializer {
     }
 
     build(): TJsonApiBody {
-        const {staff, propertiesMapper} = this;
+        const {stuff, propertiesMapper} = this;
 
         if (!propertiesMapper || typeof propertiesMapper !== 'object') {
             throw new Error('ModelsSerializer cannot build, propertiesMapper is not set');
-        } else if (!staff || typeof staff !== 'object') {
-            throw new Error('ModelsSerializer cannot build, staff is not set');
+        } else if (!stuff || typeof stuff !== 'object') {
+            throw new Error('ModelsSerializer cannot build, stuff is not set');
         }
 
         const body: TJsonApiBody = {};
         const included: Array<TJsonApiData> = [];
         const uniqueIncluded: TJsonaUniqueIncluded = {};
 
-        if (staff && Array.isArray(staff)) {
-            const collectionLength = staff.length;
+        if (stuff && Array.isArray(stuff)) {
+            const collectionLength = stuff.length;
             const data = [];
 
             for (let i = 0; i < collectionLength; i++) {
                 data.push(
-                    this.buildDataByModel(staff[i])
+                    this.buildDataByModel(stuff[i])
                 );
 
                 this.buildIncludedByModel(
-                    staff[i],
+                    stuff[i],
                     this.includeNamesTree,
                     uniqueIncluded
                 );
@@ -71,15 +71,15 @@ class ModelsSerializer {
 
             body['data'] = data;
 
-        } else if (staff) {
-            body['data'] = this.buildDataByModel(staff);
+        } else if (stuff) {
+            body['data'] = this.buildDataByModel(stuff);
 
             this.buildIncludedByModel(
-                staff,
+                stuff,
                 this.includeNamesTree,
                 uniqueIncluded
             );
-        } else if (staff === null) {
+        } else if (stuff === null) {
             body['data'] = null;
         }
 

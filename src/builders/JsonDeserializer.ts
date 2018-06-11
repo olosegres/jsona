@@ -37,10 +37,10 @@ class JsonDeserializer implements IJsonaModelBuilder {
 
     build(): TJsonaModel | Array<TJsonaModel> {
         const {data} = this.body;
-        let staff;
+        let stuff;
 
         if (Array.isArray(data)) {
-            staff = [];
+            stuff = [];
             const collectionLength = data.length;
 
             for (let i = 0; i < collectionLength; i++) {
@@ -48,15 +48,15 @@ class JsonDeserializer implements IJsonaModelBuilder {
                     const model = this.buildModelByData(data[i]);
 
                     if (model) {
-                        staff.push(model);
+                        stuff.push(model);
                     }
                 }
             }
         } else if (data) {
-            staff = this.buildModelByData(data);
+            stuff = this.buildModelByData(data);
         }
 
-        return staff;
+        return stuff;
     }
 
     buildModelByData(data: TJsonApiData): TJsonaModel {
