@@ -130,25 +130,21 @@ class ModelsSerializer {
             if (Array.isArray(relation)) {
                 const relationshipData = [];
                 const relationLength = relation.length;
-                const uniqueRelationKeys = [];
 
                 for (let i = 0; i < relationLength; i++) {
-                    const id = this.propertiesMapper.getId(relation[i]);
-                    const type = this.propertiesMapper.getType(relation[i]);
-                    const itemKey = type + id;
-                    const item = {id, type};
+                    const item = {
+                        id: this.propertiesMapper.getId(relation[i]),
+                        type: this.propertiesMapper.getType(relation[i])
+                    };
 
-                    if (uniqueRelationKeys.indexOf(itemKey) !== -1) {
-                        console.warn(`Duplicate relation model found`, { model, relations });
-                    } else if (!item.id || !item.type) {
+                    if (item.id && item.type) {
+                        relationshipData.push(item);
+                    } else {
                         console.error(
                             `Can't create data item[${i}] for relationship ${k},
                             it doesn't have 'id' or 'type', it was skipped`,
                             relation[i]
                         );
-                    } else {
-                        uniqueRelationKeys.push(itemKey);
-                        relationshipData.push(item);
                     }
                 }
 
