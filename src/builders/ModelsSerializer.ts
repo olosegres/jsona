@@ -50,7 +50,6 @@ class ModelsSerializer {
         }
 
         const body: TJsonApiBody = {};
-        const included: Array<TJsonApiData> = [];
         const uniqueIncluded: TJsonaUniqueIncluded = {};
 
         if (stuff && Array.isArray(stuff)) {
@@ -85,7 +84,7 @@ class ModelsSerializer {
 
         if (Object.keys(uniqueIncluded).length) {
             body['included'] = [];
-            const includeUniqueKeys = Object.keys(uniqueIncluded).sort();
+            const includeUniqueKeys = Object.keys(uniqueIncluded);
             includeUniqueKeys.forEach((k) => {
                 body['included'].push(uniqueIncluded[k]);
             });

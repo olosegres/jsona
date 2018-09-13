@@ -42,7 +42,7 @@ describe('Jsona', () => {
         it('should build json with collection, with included', () => {
             const jsonBody = jsona.serialize({stuff: user2.model, includeNames: ['specialty', 'town.country']});
             expect(jsonBody.data).to.be.deep.equal(user2.json);
-            expect(jsonBody.included).to.be.deep.equal([country2.json, specialty1.json, specialty2.json, town2.json]);
+            expect(jsonBody.included).to.be.deep.equal([specialty1.json, specialty2.json, town2.json, country2.json]);
         });
 
         it('should build json and save null relationships', () => {

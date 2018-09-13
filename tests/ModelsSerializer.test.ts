@@ -91,14 +91,14 @@ describe('ModelsSerializer', () => {
                 article1.json, article2.json
             ],
             included: [ // sorting order make sense
-                country2.json,
-                country1.json,
-                specialty1.json,
-                specialty2.json,
-                town1.json,
-                town2.json,
                 user1.json,
+                town1.json,
+                specialty1.json,
+                country1.json,
                 user2.json,
+                town2.json,
+                specialty2.json,
+                country2.json,
             ]
         });
 
