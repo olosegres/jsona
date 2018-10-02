@@ -171,14 +171,12 @@ class ReduxObjectDenormalizer implements IJsonaModelBuilder {
 
             data.forEach((dataItem) => {
                 const model = this.buildModel(dataItem.type, dataItem.id);
-                if (model) {
-                    relationModels.push(model);
-                }
+                relationModels.push(model || dataItem);
             });
 
             return relationModels;
         } else if (data.id && data.type) {
-            return this.buildModel(data.type, data.id);
+            return this.buildModel(data.type, data.id) || data;
         }
 
         return null;
