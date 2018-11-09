@@ -21,6 +21,7 @@ class JsonDeserializer implements IJsonaModelBuilder {
     protected body;
     protected includedInObject;
     protected cachedModels = {};
+    protected fullCachedModels = {};
 
     constructor(propertiesMapper) {
         this.setPropertiesMapper(propertiesMapper);
@@ -61,26 +62,29 @@ class JsonDeserializer implements IJsonaModelBuilder {
     buildModelByData(data: TJsonApiData): TJsonaModel {
         const entityKey = createEntityKey(data);
 
-        let model;
-
-        const onlyTypeIdInData = Object.keys(data).length === 2 && data.type && data.id;
-
-        if (entityKey && onlyTypeIdInData) {
+        if (entityKey) {
             // checks for built model in cachedModels is a protection from creating models on recursive relationships
-            // NOTE: onlyTypeIdInData need for prevent return empty, cached model (for collections with recursive relations)
+            // if data have attributes key cache will be overwritten
             // https://github.com/olosegres/jsona/issues/17
-            model = this.cachedModels[entityKey];
 
-            if (model) {
-                return model;
+            if (this.fullCachedModels[entityKey]) {
+              return this.fullCachedModels[entityKey]
+            }
+
+            if (this.cachedModels[entityKey] && !data.attributes) {
+              return this.cachedModels[entityKey]
             }
         }
 
-        model = this.pm.createModel(data.type);
+        let model = this.pm.createModel(data.type);
 
         if (model) {
             if (entityKey) {
+              if (data.attributes) {
+                this.fullCachedModels[entityKey] = model
+              } else {
                 this.cachedModels[entityKey] = model;
+              }
             }
 
             this.pm.setId(model, data.id);
