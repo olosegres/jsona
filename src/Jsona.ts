@@ -5,7 +5,8 @@ import {
     TJsonaNormalizedIncludeNamesTree,
     TJsonaModel,
     TJsonApiBody,
-    TReduxObject
+    TReduxObject,
+    IDeserializeCacheConstructor,
 } from './JsonaTypes';
 
 import {jsonParse} from './utils';
@@ -18,20 +19,27 @@ import {
     JsonPropertiesMapper
 } from './simplePropertyMappers';
 
+import { DeserializeCache } from './cache';
+
 class Jsona {
 
     public modelPropertiesMapper: IModelPropertiesMapper = new ModelPropertiesMapper();
     public jsonPropertiesMapper: IJsonPropertiesMapper = new JsonPropertiesMapper();
+    public DeserializeCache: IDeserializeCacheConstructor = DeserializeCache;
 
     constructor(params?: {
-        modelPropertiesMapper: IModelPropertiesMapper,
-        jsonPropertiesMapper: IJsonPropertiesMapper
+        modelPropertiesMapper?: IModelPropertiesMapper,
+        jsonPropertiesMapper?: IJsonPropertiesMapper,
+        DeserializeCache?: IDeserializeCacheConstructor,
     }) {
         if (params && params.modelPropertiesMapper) {
             this.modelPropertiesMapper = params.modelPropertiesMapper;
         }
         if (params && params.jsonPropertiesMapper) {
             this.jsonPropertiesMapper = params.jsonPropertiesMapper;
+        }
+        if (params && params.DeserializeCache) {
+            this.DeserializeCache = params.DeserializeCache;
         }
     }
 
@@ -69,7 +77,8 @@ class Jsona {
             throw new Error('Jsona can not deserialize, body is not passed');
         }
 
-        const modelBuilder = new JsonDeserializer(this.jsonPropertiesMapper);
+        const deserializeCache = new this.DeserializeCache();
+        const modelBuilder = new JsonDeserializer(this.jsonPropertiesMapper, deserializeCache);
 
         if (typeof body === 'string') {
             modelBuilder.setJsonParsedObject(jsonParse(body));

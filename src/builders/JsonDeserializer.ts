@@ -5,6 +5,7 @@ import {
     TJsonApiBody,
     TJsonApiData,
     IJsonaModelBuilder,
+    IDeserializeCache,
 } from '../JsonaTypes';
 
 function createEntityKey(data: TJsonApiData) {
@@ -18,12 +19,18 @@ function createEntityKey(data: TJsonApiData) {
 class JsonDeserializer implements IJsonaModelBuilder {
 
     protected pm: IJsonPropertiesMapper;
+    protected dc: IDeserializeCache;
     protected body;
     protected includedInObject;
     protected cachedModels = {};
 
-    constructor(propertiesMapper) {
+    constructor(propertiesMapper, deserializeCache) {
         this.setPropertiesMapper(propertiesMapper);
+        this.setDeserializeCache(deserializeCache);
+    }
+
+    setDeserializeCache(dc): void {
+        this.dc = dc;
     }
 
     setPropertiesMapper(pm): void {
@@ -59,30 +66,17 @@ class JsonDeserializer implements IJsonaModelBuilder {
     }
 
     buildModelByData(data: TJsonApiData): TJsonaModel {
-        const entityKey = createEntityKey(data);
+        const cachedModel = this.dc.getCachedModel(data);
 
-        let model;
-
-        const onlyTypeIdInData = Object.keys(data).length === 2 && data.type && data.id;
-
-        if (entityKey && onlyTypeIdInData) {
-            // checks for built model in cachedModels is a protection from creating models on recursive relationships
-            // NOTE: onlyTypeIdInData need for prevent return empty, cached model (for collections with recursive relations)
-            // https://github.com/olosegres/jsona/issues/17
-            model = this.cachedModels[entityKey];
-
-            if (model) {
-                return model;
-            }
+        if (cachedModel) {
+            return cachedModel;
         }
 
-        model = this.pm.createModel(data.type);
+        const model = this.pm.createModel(data.type);
+
+        this.dc.handleModel(model, data); // should be called before this.pm.setRelationships(model, relationships);
 
         if (model) {
-            if (entityKey) {
-                this.cachedModels[entityKey] = model;
-            }
-
             this.pm.setId(model, data.id);
 
             if (data.attributes) {

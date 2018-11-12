@@ -21,6 +21,16 @@ export interface IJsonaModelBuilder {
     build(): TJsonaModel | Array<TJsonaModel>;
 }
 
+export interface IDeserializeCache {
+    getCachedModel(data: TJsonApiData): TJsonaModel | null;
+    handleModel(model: TJsonaModel, data: TJsonApiData): void;
+    createCacheKey(data: TJsonApiData): string;
+}
+
+export interface IDeserializeCacheConstructor {
+    new(): IDeserializeCache;
+}
+
 export type TAnyKeyValueObject = {
     [key: string]: any
 };
