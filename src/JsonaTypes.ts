@@ -130,12 +130,14 @@ export type TReduxObjectRelation = {
 }
 
 export type SwitchCaseModelMapperOptionsType = {
-    kebabizeAttributes?: boolean,
-    kebabizeRelationships?: boolean,
-    kebabizeType?: boolean,
+    switchAttributes?: boolean,
+    switchRelationships?: boolean,
+    switchType?: boolean,
+    switchChar?: string,
 };
 export type SwitchCaseJsonMapperOptionsType = {
     camelizeAttributes?: boolean,
     camelizeRelationships?: boolean,
     camelizeType?: boolean,
+    switchChar?: string,
 };
