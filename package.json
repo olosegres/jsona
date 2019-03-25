@@ -1,7 +1,7 @@
 {
   "name": "jsona",
   "description": "Provide data formatters (data model builder & json builder) to work with JSON API specification v1.0 in your JavaScript / TypeScript code",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "keywords": [
     "json-api",
     "jsonapi",
