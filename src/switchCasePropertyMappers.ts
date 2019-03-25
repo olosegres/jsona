@@ -11,44 +11,47 @@ import {RELATIONSHIP_NAMES_PROP} from "./simplePropertyMappers";
 
 export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IModelPropertiesMapper {
 
-    kebabizeAttributes: boolean;
-    kebabizeRelationships: boolean;
-    kebabizeType: boolean;
+    switchAttributes: boolean;
+    switchRelationships: boolean;
+    switchType: boolean;
+    switchChar: string;
 
     constructor(options?: SwitchCaseModelMapperOptionsType) {
         super();
 
         const {
-            kebabizeAttributes = true,
-            kebabizeRelationships = true,
-            kebabizeType = true,
+            switchAttributes = true,
+            switchRelationships = true,
+            switchType = true,
+            switchChar = '-',
         } = options || {};
 
-        this.kebabizeAttributes = kebabizeAttributes;
-        this.kebabizeRelationships = kebabizeRelationships;
-        this.kebabizeType = kebabizeType;
+        this.switchAttributes = switchAttributes;
+        this.switchRelationships = switchRelationships;
+        this.switchType = switchType;
+        this.switchChar = switchChar;
     }
 
     getType(model: TJsonaModel) {
         const type = super.getType(model);
 
-        if (!this.kebabizeType || !type) {
+        if (!this.switchType || !type) {
             return type;
         }
 
-        return type.replace(/([a-z][A-Z0-9])/g, function (g) { return g[0] + '-' + g[1].toLowerCase() });
+        return type.replace(/([a-z][A-Z0-9])/g, g => g[0] + this.switchChar + g[1].toLowerCase());
     }
 
     getAttributes(model: TJsonaModel) {
         const camelCasedAttributes = super.getAttributes(model);
 
-        if (!this.kebabizeAttributes || !camelCasedAttributes) {
+        if (!this.switchAttributes || !camelCasedAttributes) {
             return camelCasedAttributes;
         }
 
         const kebabAttributes = {};
         Object.keys(camelCasedAttributes).forEach((name) => {
-            const kebabName = name.replace(/([a-z][A-Z0-9])/g, function (g) { return g[0] + '-' + g[1].toLowerCase() });
+            const kebabName = name.replace(/([a-z][A-Z0-9])/g, g => g[0] + this.switchChar + g[1].toLowerCase());
             kebabAttributes[kebabName] = camelCasedAttributes[name];
         });
         return kebabAttributes;
@@ -57,13 +60,13 @@ export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IMod
     getRelationships(model: TJsonaModel) {
         const camelCasedRelationships = super.getRelationships(model);
 
-        if (!this.kebabizeRelationships || !camelCasedRelationships) {
+        if (!this.switchRelationships || !camelCasedRelationships) {
             return camelCasedRelationships;
         }
 
         const kebabRelationships = {};
         Object.keys(camelCasedRelationships).forEach((name) => {
-            const kebabName = name.replace(/([a-z][A-Z0-9])/g, function (g) { return g[0] + '-' + g[1].toLowerCase() });
+            const kebabName = name.replace(/([a-z][A-Z0-9])/g, g => g[0] + this.switchChar + g[1].toLowerCase());
             kebabRelationships[kebabName] = camelCasedRelationships[name];
         });
         return kebabRelationships;
@@ -75,6 +78,7 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
     camelizeAttributes: boolean;
     camelizeRelationships: boolean;
     camelizeType: boolean;
+    switchChar: string;
 
     constructor(options?: SwitchCaseJsonMapperOptionsType) {
         super();
@@ -83,11 +87,13 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
             camelizeAttributes = true,
             camelizeRelationships = true,
             camelizeType = true,
+            switchChar = '-'
         } = options || {};
 
         this.camelizeAttributes = camelizeAttributes;
         this.camelizeRelationships = camelizeRelationships;
         this.camelizeType = camelizeType;
+        this.switchChar = switchChar;
     }
 
     createModel(type: string): TJsonaModel {
@@ -95,7 +101,8 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
             return {type};
         }
 
-        const camelizedType = type.replace(/-([a-z0-9])/g, function (g) { return g[1].toUpperCase(); });
+        const regex = new RegExp(`${this.switchChar}([a-z0-9])`, 'g');
+        const camelizedType = type.replace(regex, g => g[1].toUpperCase());
         return {type: camelizedType};
     }
 
@@ -105,7 +112,8 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
         }
 
         Object.keys(attributes).forEach((propName) => {
-            const camelName = propName.replace(/-([a-z0-9])/g, function (g) { return g[1].toUpperCase(); });
+            const regex = new RegExp(`${this.switchChar}([a-z0-9])`, 'g');
+            const camelName = propName.replace(regex, g => g[1].toUpperCase());
             model[camelName] = attributes[propName];
         });
     }
@@ -120,7 +128,8 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
 
         // then change relationship names case if needed
         model[RELATIONSHIP_NAMES_PROP].forEach((kebabName, i) => {
-            const camelName = kebabName.replace(/-([a-z]|[0-9])/g, function (g) { return g[1].toUpperCase(); });
+            const regex = new RegExp(`${this.switchChar}([a-z0-9])`, 'g');
+            const camelName = kebabName.replace(regex, g => g[1].toUpperCase());
             if (camelName !== kebabName) {
                 model[camelName] = model[kebabName];
                 delete model[kebabName];
