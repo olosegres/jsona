@@ -27,7 +27,8 @@ Jsona solves this problems by providing:
 ### How to use
 
 You need to instantiate Jsona ones, then use it's public methods to convert data.
-```
+```javascript
+import Jsona from 'jsona';
 const dataFormatter = new Jsona();
 ```
 
@@ -143,6 +144,8 @@ export default const dataFormatter = new Jsona({
     jsonPropertiesMapper: MyJsonPropertiesMapper
 });
 ```
+
+Also, there is built-in [switchCasePropertyMappers](src/switchCasePropertyMappers.ts), that you can use if need to automatically transform property names from kebab, snake, camel case and back. 
 
 ### License
 Jsona, examples provided in this repository and in the documentation are [MIT licensed](./LICENSE).
