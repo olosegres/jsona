@@ -139,5 +139,6 @@ export type SwitchCaseJsonMapperOptionsType = {
     camelizeAttributes?: boolean,
     camelizeRelationships?: boolean,
     camelizeType?: boolean,
+    camelizeMeta?: boolean,
     switchChar?: string,
 };

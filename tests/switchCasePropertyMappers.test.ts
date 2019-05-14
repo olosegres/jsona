@@ -284,6 +284,45 @@ describe('switchCasePropertyMappers', () => {
             const model = <TestModelType>dataFormatter.deserialize(textJson);
             expect(model.relation1.kebabAttr1).to.be.true;
         });
+
+
+        it(`should transform kebabized json's meta names to camel case`, () => {
+            propertiesMapper = new SwitchCaseJsonMapper({ camelizeMeta: true });
+            const model = { meta: {} };
+            const testMeta = {
+                fooBar: 1,
+                'bar-foo': 2,
+                foo: 3,
+                foo_bar: 5,
+                'foo-234': 234,
+            };
+            propertiesMapper.setMeta(model, testMeta);
+
+            expect(model.meta['fooBar']).to.be.equal(1);
+            expect(model.meta['barFoo']).to.be.equal(2);
+            expect(model.meta['foo']).to.be.equal(3);
+            expect(model.meta['foo_bar']).to.be.equal(5);
+            expect(model.meta['foo234']).to.be.equal(234);
+        });
+
+        it(`should not transform kebabized json's meta names to camel case`, () => {
+            propertiesMapper = new SwitchCaseJsonMapper();
+            const model = { meta: {} };
+            const testMeta = {
+                fooBar: 1,
+                'bar-foo': 2,
+                foo: 3,
+                foo_bar: 5,
+                'foo-234': 234,
+            };
+            propertiesMapper.setMeta(model, testMeta);
+
+            expect(model.meta['fooBar']).to.be.equal(1);
+            expect(model.meta['bar-foo']).to.be.equal(2);
+            expect(model.meta['foo']).to.be.equal(3);
+            expect(model.meta['foo_bar']).to.be.equal(5);
+            expect(model.meta['foo-234']).to.be.equal(234);
+        });
     });
 
 });

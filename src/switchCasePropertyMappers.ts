@@ -78,6 +78,7 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
     camelizeAttributes: boolean;
     camelizeRelationships: boolean;
     camelizeType: boolean;
+    camelizeMeta: boolean;
     switchChar: string;
 
     constructor(options?: SwitchCaseJsonMapperOptionsType) {
@@ -87,12 +88,14 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
             camelizeAttributes = true,
             camelizeRelationships = true,
             camelizeType = true,
+            camelizeMeta = false,
             switchChar = '-'
         } = options || {};
 
         this.camelizeAttributes = camelizeAttributes;
         this.camelizeRelationships = camelizeRelationships;
         this.camelizeType = camelizeType;
+        this.camelizeMeta = camelizeMeta;
         this.switchChar = switchChar;
     }
 
@@ -115,6 +118,20 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
             const regex = new RegExp(`${this.switchChar}([a-z0-9])`, 'g');
             const camelName = propName.replace(regex, g => g[1].toUpperCase());
             model[camelName] = attributes[propName];
+        });
+    }
+
+    setMeta(model: TJsonaModel, meta: TAnyKeyValueObject) {
+        if (!this.camelizeMeta) {
+            return super.setMeta(model, meta);
+        }
+
+        model.meta = {};
+
+        Object.keys(meta).forEach((propName) => {
+            const regex = new RegExp(`${this.switchChar}([a-z0-9])`, 'g');
+            const camelName = propName.replace(regex, g => g[1].toUpperCase());
+            model.meta[camelName] = meta[propName];
         });
     }
 
