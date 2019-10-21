@@ -24,6 +24,18 @@ Jsona solves this problems by providing:
 
 *NOTE:* This README describes latest stable version. You can read [README for old versions 0.2.x here](README_0_2.md)
 
+### Installation
+
+```
+npm install jsona
+```
+or
+
+```
+yarn add jsona
+```
+
+
 ### How to use
 
 You need to instantiate Jsona ones, then use it's public methods to convert data.
@@ -39,13 +51,13 @@ const json = {
           type: 'town',
           id: '123',
           attributes: {
-              name: 'Barcelona',
+              name: 'Barcelona'
           },
           relationships: {
               country: {
                   data: {
                       type: 'country',
-                      id: '32',
+                      id: '32'
                   }
               }
           }
@@ -54,7 +66,7 @@ const json = {
         type: 'country',
         id: '32',
         attributes: {
-            name: 'Spain',
+            name: 'Spain'
         }
     }]
 };
@@ -76,28 +88,64 @@ console.log(town); // will output:
 
 #### serialize - creates json from simplified object(s)
 ```javascript
+const user = {
+    type: 'user',
+    id: 1,
+    categories: [{ type: 'category', id: '1', name: 'First category' }],
+    town: {
+        type: 'town',
+        id: '123',
+        name: 'Barcelona',
+        country: {
+            type: 'country',
+            id: '32',
+            name: 'Spain'
+        },
+        relationshipNames: ['country']
+    },
+    relationshipNames: ['categories', 'town']
+};
+
 const newJson = dataFormatter.serialize({
-    stuff: town, // can handle array
-    includeNames: ['country']
+    stuff: user, // can handle array
+    includeNames: ['categories', 'town.country'] // can include deep relations via dot
 });
+
 console.log(newJson); // will output:
 /* {
     data: {
-          type: 'town',
-          id: '123',
-          attributes: {
-              name: 'Barcelona',
-          },
-          relationships: {
-              country: {
-                  data: {
-                      type: 'country',
-                      id: '32',
-                  }
-              }
-          }
+        type: 'user',
+        id: 1,
+        relationships: {
+            categories: {
+                data: [{ type: 'category', id: '1' }]
+            },
+            town: {
+                data: { type: 'town', id: '123' }
+            }
+        }
     },
     included: [{
+        type: 'category',
+        id: '1',
+        attributes: {
+            name: 'First category',
+        }
+    }, {
+        type: 'town',
+        id: '123',
+        attributes: {
+             name: 'Barcelona',
+        },
+        relationships: {
+             country: {
+                 data: {
+                     type: 'country',
+                     id: '32',
+                 }
+             }
+        }
+    }, {
         type: 'country',
         id: '32',
         attributes: {
