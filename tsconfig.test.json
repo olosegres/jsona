@@ -4,6 +4,7 @@
     "./tests/**.ts"
   ],
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "lib": ["es6"]
   }
 }
