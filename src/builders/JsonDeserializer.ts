@@ -51,7 +51,7 @@ class JsonDeserializer implements IJsonaModelBuilder {
 
             for (let i = 0; i < collectionLength; i++) {
                 if (data[i]) {
-                    const model = this.buildModelByData(data[i]);
+                    const model = this.buildModelByData(data[i], true);
 
                     if (model) {
                         stuff.push(model);
@@ -59,17 +59,19 @@ class JsonDeserializer implements IJsonaModelBuilder {
                 }
             }
         } else if (data) {
-            stuff = this.buildModelByData(data);
+            stuff = this.buildModelByData(data, true);
         }
 
         return stuff;
     }
 
-    buildModelByData(data: TJsonApiData): TJsonaModel {
-        const cachedModel = this.dc.getCachedModel(data);
+    buildModelByData(data: TJsonApiData, noCache: boolean = false): TJsonaModel {
+        if (!noCache) {
+            const cachedModel = this.dc.getCachedModel(data);
 
-        if (cachedModel) {
-            return cachedModel;
+            if (cachedModel) {
+                return cachedModel;
+            }
         }
 
         const model = this.pm.createModel(data.type);

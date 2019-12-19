@@ -353,6 +353,99 @@ export const circular = {
     },
 };
 
+const duplicateModels = [
+     {
+        type: 'model',
+        id: '1',
+        'relationshipNames': [
+            'simpleRelation'
+        ],
+        simpleRelation: {
+            'type': 'subModel',
+            'id': '1',
+            'relationshipNames': [
+                'simpleRelation2'
+            ],
+            simpleRelation2: [
+                {
+                    type: 'model',
+                    id: '2',
+                },
+            ]
+        }
+    },
+    {
+        type: 'model',
+        id: '2',
+        'relationshipNames': [
+            'simpleRelation'
+        ],
+    },
+];
+
+duplicateModels[0]['simpleRelation']['simpleRelation2'].unshift(duplicateModels[0]);
+duplicateModels[1]['simpleRelation'] = duplicateModels[0]['simpleRelation'];
+
+export const duplicate = {
+    collection: duplicateModels,
+    json: {
+        'data': [
+            {
+                'type': 'model',
+                'id': '1',
+                'relationships': {
+                    'simpleRelation': {
+                        'data': {
+                            'type': 'subModel',
+                            'id': '1'
+                        }
+                    },
+                }
+            },
+            {
+                'type': 'model',
+                'id': '2',
+                'relationships': {
+                    'simpleRelation': {
+                        'data': {
+                            'type': 'subModel',
+                            'id': '1'
+                        }
+                    },
+                }
+            }
+        ],
+        'included': [
+            {
+                'type': 'subModel',
+                'id': '1',
+                'relationships': {
+                    'simpleRelation2': {
+                        'data': [
+                            {
+                                'type': 'model',
+                                'id': '1'
+                            },
+                            {
+                                'type': 'model',
+                                'id': '2'
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                'type': 'model',
+                'id': '1',
+            },
+            {
+                'type': 'model',
+                'id': '2',
+            }
+        ]
+    },
+};
+
 export const includeNames1 = {
     denormalized: [
         'articles.author.town.country',
