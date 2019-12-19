@@ -48,24 +48,34 @@ class JsonDeserializer implements IJsonaModelBuilder {
         if (Array.isArray(data)) {
             stuff = [];
             const collectionLength = data.length;
+            const indices = [];
 
             for (let i = 0; i < collectionLength; i++) {
                 if (data[i]) {
-                    const model = this.buildModelByData(data[i]);
+                    const model = this.buildModelByData(data[i], false);
 
                     if (model) {
                         stuff.push(model);
+                        indices.push(i);
                     }
                 }
             }
+
+            for (let i = 0; i < stuff.length; i++) {
+                const relationships: null | TJsonaRelationships = this.buildRelationsByData(data[indices[i]], stuff[i]);
+
+                if (relationships) {
+                    this.pm.setRelationships(stuff[i], relationships);
+                }
+            }
         } else if (data) {
-            stuff = this.buildModelByData(data);
+            stuff = this.buildModelByData(data, true);
         }
 
         return stuff;
     }
 
-    buildModelByData(data: TJsonApiData): TJsonaModel {
+    buildModelByData(data: TJsonApiData, doRelations: boolean): TJsonaModel {
         const cachedModel = this.dc.getCachedModel(data);
 
         if (cachedModel) {
@@ -91,10 +101,12 @@ class JsonDeserializer implements IJsonaModelBuilder {
                 this.pm.setLinks(model, data.links);
             }
 
-            const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
+            if (doRelations) {
+                const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
 
-            if (relationships) {
-                this.pm.setRelationships(model, relationships);
+                if (relationships) {
+                    this.pm.setRelationships(model, relationships);
+                }
             }
         }
 
@@ -126,12 +138,12 @@ class JsonDeserializer implements IJsonaModelBuilder {
                             relationItem.type
                         );
                         readyRelations[k].push(
-                            this.buildModelByData(dataItem)
+                            this.buildModelByData(dataItem, true)
                         );
                     }
                 } else if (relation.data) {
                     let dataItem = this.buildDataFromIncludedOrData(relation.data.id, relation.data.type);
-                    readyRelations[k] = this.buildModelByData(dataItem);
+                    readyRelations[k] = this.buildModelByData(dataItem, true);
                 } else if (relation.data === null) {
                     readyRelations[k] = null;
                 }
