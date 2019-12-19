@@ -13,6 +13,7 @@ import {
     country2,
     reduxObject1,
     circular,
+    duplicate,
     reduxObjectWithCircular,
     withoutRootIdsMock,
     withNullRelationsMock,
@@ -73,6 +74,11 @@ describe('Jsona', () => {
         it('should deserialize json with circular relationships', () => {
             const recursiveItem = jsona.deserialize(circular.json);
             expect(recursiveItem).to.be.deep.equal(circular.model);
+        });
+
+        it('should deserialize json with duplicate relationships', () => {
+            const duplicateItem = jsona.deserialize(duplicate.json);
+            expect(duplicateItem).to.be.deep.equal(duplicate.model);
         });
 
         it('should deserialize json with data without root ids', () => {

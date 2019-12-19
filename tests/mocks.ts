@@ -353,6 +353,98 @@ export const circular = {
     },
 };
 
+const duplicateModels = [
+    {
+        type: 'model',
+        id: '1',
+        'relationshipNames': [
+            'simpleRelation'
+        ],
+    },
+    {
+        type: 'model',
+        id: '2',
+        'relationshipNames': [
+            'simpleRelation'
+        ],
+    },
+];
+
+const duplicateSubModel = {
+    'type': 'subModel',
+    'id': '1',
+    'relationshipNames': [
+        'simpleRelation2'
+    ],
+};
+
+duplicateModels[0]['simpleRelation'] = duplicateSubModel;
+duplicateModels[1]['simpleRelation'] = duplicateSubModel;
+duplicateSubModel['simpleRelation2'] = [
+  duplicateModels[0],
+  duplicateModels[1],
+];
+
+export const duplicate = {
+    model: duplicateModels,
+    json: {
+        'data': [
+            {
+                'type': 'model',
+                'id': '1',
+                'relationships': {
+                    'simpleRelation': {
+                        'data': {
+                            'type': 'subModel',
+                            'id': '1'
+                        }
+                    },
+                }
+            },
+            {
+                'type': 'model',
+                'id': '2',
+                'relationships': {
+                    'simpleRelation': {
+                        'data': {
+                            'type': 'subModel',
+                            'id': '1'
+                        }
+                    },
+                }
+            }
+        ],
+        'included': [
+            {
+                'type': 'subModel',
+                'id': '1',
+                'relationships': {
+                    'simpleRelation2': {
+                        'data': [
+                            {
+                                'type': 'model',
+                                'id': '1'
+                            },
+                            {
+                                'type': 'model',
+                                'id': '2'
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                'type': 'model',
+                'id': '1',
+            },
+            {
+                'type': 'model',
+                'id': '2',
+            }
+        ]
+    },
+};
+
 export const includeNames1 = {
     denormalized: [
         'articles.author.town.country',
@@ -567,7 +659,12 @@ export const withNullRelationsMock = {
         "slug": "ya",
         "parent": {
             "type": "category",
-            "id": "0"
+            "id": "0",
+            "slug": "home",
+            "parent": null,
+            "relationshipNames": [
+                "parent"
+            ]
         },
         "relationshipNames": [
             "parent"
