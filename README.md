@@ -176,6 +176,8 @@ console.log(town); // if there is such town and country in reduxObject, it will 
 ```
 
 ### Customize
+
+#### Build process and property names
 You can control process of building simplified objects, just use your own [propertyMappers](src/simplePropertyMappers.ts) when Jsona instantiates.
 
 With [IJsonPropertiesMapper](src/JsonaTypes.ts) you can implement your way of creation simplified objects (data models) from JSON, with [IModelPropertiesMapper](src/JsonaTypes.ts) implement how to give back values from data model to JSON.
@@ -192,8 +194,19 @@ export default const dataFormatter = new Jsona({
     jsonPropertiesMapper: MyJsonPropertiesMapper
 });
 ```
-
 Also, there is built-in [switchCasePropertyMappers](src/switchCasePropertyMappers.ts), that you can use if need to automatically transform property names from kebab, snake, camel case and back. 
+
+#### Cache
+For faster creation of simplified objects from json, it uses a cache for already processed json-entity, see [DeserializeCache](src/cache.ts) that uses by default.
+It possible to provide your own [IDeserializeCache](src/JsonaTypes.ts) manager:
+```javascript
+import Jsona from 'jsona';
+import {MyOwnDeserializeCache} from './index';
+
+export default const dataFormatter = new Jsona({
+    DeserializeCache: MyOwnDeserializeCache
+});
+```
 
 ### License
 Jsona, examples provided in this repository and in the documentation are [MIT licensed](./LICENSE).
