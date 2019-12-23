@@ -77,7 +77,7 @@ describe('Jsona', () => {
         });
 
         it('should deserialize json with duplicate relationships', () => {
-            const duplicateItem = jsona.deserialize(duplicate.json);
+            const duplicateItem = jsona.deserialize(duplicate.json, { preferNestedDataFromData: true });
             expect(duplicateItem).to.be.deep.equal(duplicate.model);
         });
 

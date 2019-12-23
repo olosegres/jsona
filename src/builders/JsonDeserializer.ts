@@ -8,25 +8,26 @@ import {
     IDeserializeCache,
 } from '../JsonaTypes';
 
-function createEntityKey(data: TJsonApiData) {
-    if (data.type && data.id) {
-        return `${data.type}-${data.id}`;
-    }
-
-    return '';
-}
-
 class JsonDeserializer implements IJsonaModelBuilder {
 
     protected pm: IJsonPropertiesMapper;
     protected dc: IDeserializeCache;
     protected body;
+    protected dataInObject;
+    protected preferNestedDataFromData = false;
     protected includedInObject;
-    protected cachedModels = {};
 
-    constructor(propertiesMapper, deserializeCache) {
+    constructor(propertiesMapper, deserializeCache, options) {
         this.setPropertiesMapper(propertiesMapper);
         this.setDeserializeCache(deserializeCache);
+
+        if (!options) {
+            return;
+        }
+
+        if (options.preferNestedDataFromData) {
+            this.preferNestedDataFromData = true;
+        }
     }
 
     setDeserializeCache(dc): void {
@@ -48,34 +49,24 @@ class JsonDeserializer implements IJsonaModelBuilder {
         if (Array.isArray(data)) {
             stuff = [];
             const collectionLength = data.length;
-            const indices = [];
 
             for (let i = 0; i < collectionLength; i++) {
                 if (data[i]) {
-                    const model = this.buildModelByData(data[i], false);
+                    const model = this.buildModelByData(data[i]);
 
                     if (model) {
                         stuff.push(model);
-                        indices.push(i);
                     }
                 }
             }
-
-            for (let i = 0; i < stuff.length; i++) {
-                const relationships: null | TJsonaRelationships = this.buildRelationsByData(data[indices[i]], stuff[i]);
-
-                if (relationships) {
-                    this.pm.setRelationships(stuff[i], relationships);
-                }
-            }
         } else if (data) {
-            stuff = this.buildModelByData(data, true);
+            stuff = this.buildModelByData(data);
         }
 
         return stuff;
     }
 
-    buildModelByData(data: TJsonApiData, doRelations: boolean): TJsonaModel {
+    buildModelByData(data: TJsonApiData): TJsonaModel {
         const cachedModel = this.dc.getCachedModel(data);
 
         if (cachedModel) {
@@ -101,12 +92,10 @@ class JsonDeserializer implements IJsonaModelBuilder {
                 this.pm.setLinks(model, data.links);
             }
 
-            if (doRelations) {
-                const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
+            const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
 
-                if (relationships) {
-                    this.pm.setRelationships(model, relationships);
-                }
+            if (relationships) {
+                this.pm.setRelationships(model, relationships);
             }
         }
 
@@ -138,12 +127,12 @@ class JsonDeserializer implements IJsonaModelBuilder {
                             relationItem.type
                         );
                         readyRelations[k].push(
-                            this.buildModelByData(dataItem, true)
+                            this.buildModelByData(dataItem)
                         );
                     }
                 } else if (relation.data) {
                     let dataItem = this.buildDataFromIncludedOrData(relation.data.id, relation.data.type);
-                    readyRelations[k] = this.buildModelByData(dataItem, true);
+                    readyRelations[k] = this.buildModelByData(dataItem);
                 } else if (relation.data === null) {
                     readyRelations[k] = null;
                 }
@@ -172,14 +161,53 @@ class JsonDeserializer implements IJsonaModelBuilder {
     }
 
     buildDataFromIncludedOrData(id: string | number, type: string): TJsonApiData {
-        const included = this.buildIncludedInObject();
-        const dataItem = included[type + id];
 
-        if (dataItem) {
-            return dataItem;
-        } else {
-            return { id: id, type: type };
+        if (this.preferNestedDataFromData) {
+            const dataObject = this.buildDataInObject();
+            const dataItemFromData = dataObject[type + id];
+
+            if (dataItemFromData) {
+                return dataItemFromData;
+            }
         }
+
+        const includedObject = this.buildIncludedInObject();
+        const dataItemFromIncluded = includedObject[type + id];
+
+        if (dataItemFromIncluded) {
+            return dataItemFromIncluded;
+        }
+
+        if (!this.preferNestedDataFromData) {
+            const dataObject = this.buildDataInObject();
+            const dataItemFromData = dataObject[type + id];
+
+            if (dataItemFromData) {
+                return dataItemFromData;
+            }
+        }
+
+        return { id: id, type: type };
+    }
+
+    buildDataInObject(): { [key: string]: TJsonApiData } {
+        if (!this.dataInObject) {
+            this.dataInObject = {};
+
+            const { data } = this.body;
+            const dataLength = data.length;
+
+            if (data && dataLength) {
+                for (let i = 0; i < dataLength; i++) {
+                    let item = data[i];
+                    this.dataInObject[item.type + item.id] = item;
+                }
+            } else if (data) {
+                this.dataInObject[data.type + data.id] = data;
+            }
+        }
+
+        return this.dataInObject;
     }
 
     buildIncludedInObject(): { [key: string]: TJsonApiData } {

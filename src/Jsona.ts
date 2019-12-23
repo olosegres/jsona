@@ -7,6 +7,7 @@ import {
     TJsonApiBody,
     TReduxObject,
     IDeserializeCacheConstructor,
+    TDeserializeOptions,
 } from './JsonaTypes';
 
 import {jsonParse} from './utils';
@@ -72,13 +73,13 @@ class Jsona {
      * deserialize
      * Creates Jsona model(s) from JSON, compatible with json:api specification.
      */
-    deserialize(body: TJsonApiBody | string): TJsonaModel | Array<TJsonaModel> {
+    deserialize(body: TJsonApiBody | string, options?: TDeserializeOptions): TJsonaModel | Array<TJsonaModel> {
         if (!body) {
             throw new Error('Jsona can not deserialize, body is not passed');
         }
 
         const deserializeCache = new this.DeserializeCache();
-        const modelBuilder = new JsonDeserializer(this.jsonPropertiesMapper, deserializeCache);
+        const modelBuilder = new JsonDeserializer(this.jsonPropertiesMapper, deserializeCache, options);
 
         if (typeof body === 'string') {
             modelBuilder.setJsonParsedObject(jsonParse(body));

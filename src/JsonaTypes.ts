@@ -31,6 +31,10 @@ export interface IDeserializeCacheConstructor {
     new(): IDeserializeCache;
 }
 
+export type TDeserializeOptions = {
+    preferNestedDataFromData?: boolean,
+}
+
 export type TAnyKeyValueObject = {
     [key: string]: any
 };
