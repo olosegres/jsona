@@ -19,6 +19,10 @@
     "json api json",
     "json",
     "redux-object",
+    "rest",
+    "rest api",
+    "graphql",
+    "graphql alternative",
     "json-api-normalizer"
   ],
   "repository": {
