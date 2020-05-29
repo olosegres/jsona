@@ -51,7 +51,7 @@ export interface IModelsSerializer {
 }
 
 export interface IModelsSerializerConstructor {
-    new(propertiesMapper?: IModelPropertiesMapper);
+    new(propertiesMapper?: IModelPropertiesMapper): IModelsSerializer;
 }
 
 export type TDeserializeOptions = {
