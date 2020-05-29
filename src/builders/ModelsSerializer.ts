@@ -5,12 +5,13 @@ import {
     TJsonaDenormalizedIncludeNames,
     TJsonaNormalizedIncludeNamesTree,
     TJsonaUniqueIncluded,
-    IModelPropertiesMapper
+    IModelPropertiesMapper,
+    IModelsSerializer
 } from '../JsonaTypes';
 
 import {createIncludeNamesTree} from '../utils';
 
-class ModelsSerializer {
+export class ModelsSerializer implements IModelsSerializer {
 
     protected propertiesMapper: IModelPropertiesMapper;
     protected stuff: TJsonaModel | Array<TJsonaModel>;

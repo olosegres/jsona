@@ -31,6 +31,29 @@ export interface IDeserializeCacheConstructor {
     new(): IDeserializeCache;
 }
 
+export interface IModelsSerializer {
+    setPropertiesMapper(propertiesMapper: IModelPropertiesMapper);
+    setStuff(stuff);
+    setIncludeNames(includeNames: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree);
+    build(): TJsonApiBody;
+    buildDataByModel(model: TJsonaModel | null): TJsonApiData;
+    buildRelationshipsByModel(model: TJsonaModel);
+    buildIncludedByModel(
+        model: TJsonaModel,
+        includeTree: TJsonaNormalizedIncludeNamesTree,
+        builtIncluded: TJsonaUniqueIncluded
+    ): void;
+    buildIncludedItem(
+        relationModel: TJsonaModel,
+        subIncludeTree: TJsonaNormalizedIncludeNamesTree,
+        builtIncluded: TJsonaUniqueIncluded
+    );
+}
+
+export interface IModelsSerializerConstructor {
+    new(propertiesMapper?: IModelPropertiesMapper);
+}
+
 export type TDeserializeOptions = {
     preferNestedDataFromData?: boolean,
 }
