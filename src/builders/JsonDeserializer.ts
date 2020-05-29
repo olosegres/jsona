@@ -4,11 +4,11 @@ import {
     TJsonaRelationships,
     TJsonApiBody,
     TJsonApiData,
-    IJsonaModelBuilder,
+    IJsonaDeserializer,
     IDeserializeCache,
 } from '../JsonaTypes';
 
-class JsonDeserializer implements IJsonaModelBuilder {
+class JsonDeserializer implements IJsonaDeserializer {
 
     protected pm: IJsonPropertiesMapper;
     protected dc: IDeserializeCache;

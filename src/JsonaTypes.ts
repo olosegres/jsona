@@ -31,6 +31,21 @@ export interface IDeserializeCacheConstructor {
     new(): IDeserializeCache;
 }
 
+export interface IJsonaDeserializer extends IJsonaModelBuilder {
+    setDeserializeCache(dc: IDeserializeCache): void;
+    setPropertiesMapper(pm: IJsonPropertiesMapper): void;
+    setJsonParsedObject(body: TJsonApiBody): void;
+    buildModelByData(data: TJsonApiData): TJsonaModel;
+    buildRelationsByData(data: TJsonApiData, model: TJsonaModel): TJsonaRelationships | null;
+    buildDataFromIncludedOrData(id: string | number, type: string): TJsonApiData;
+    buildDataInObject(): { [key: string]: TJsonApiData };
+    buildIncludedInObject(): { [key: string]: TJsonApiData };
+}
+
+export interface IJsonDeserializerConstructor {
+    new(propertiesMapper: IJsonPropertiesMapper, deserializeCache: IDeserializeCache, options);
+}
+
 export interface IModelsSerializer {
     setPropertiesMapper(propertiesMapper: IModelPropertiesMapper);
     setStuff(stuff);

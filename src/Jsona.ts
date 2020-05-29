@@ -1,6 +1,7 @@
 import {
     IModelPropertiesMapper,
     IModelsSerializerConstructor,
+    IJsonDeserializerConstructor,
     IJsonPropertiesMapper,
     TJsonaDenormalizedIncludeNames,
     TJsonaNormalizedIncludeNamesTree,
@@ -29,12 +30,14 @@ class Jsona {
     public jsonPropertiesMapper: IJsonPropertiesMapper = new JsonPropertiesMapper();
     public DeserializeCache: IDeserializeCacheConstructor = DeserializeCache;
     public ModelsSerializer: IModelsSerializerConstructor = ModelsSerializer;
+    public JsonDeserializer: IJsonDeserializerConstructor = JsonDeserializer;
 
     constructor(params?: {
         modelPropertiesMapper?: IModelPropertiesMapper,
         jsonPropertiesMapper?: IJsonPropertiesMapper,
         DeserializeCache?: IDeserializeCacheConstructor,
-        ModelsSerializer?: IModelsSerializerConstructor
+        ModelsSerializer?: IModelsSerializerConstructor,
+        JsonDeserializer?: IJsonDeserializerConstructor
     }) {
         if (params && params.modelPropertiesMapper) {
             this.modelPropertiesMapper = params.modelPropertiesMapper;
@@ -47,6 +50,9 @@ class Jsona {
         }
         if (params && params.ModelsSerializer) {
             this.ModelsSerializer = params.ModelsSerializer;
+        }
+        if (params && params.JsonDeserializer) {
+            this.JsonDeserializer = params.JsonDeserializer;
         }
     }
 
@@ -85,7 +91,7 @@ class Jsona {
         }
 
         const deserializeCache = new this.DeserializeCache();
-        const modelBuilder = new JsonDeserializer(this.jsonPropertiesMapper, deserializeCache, options);
+        const modelBuilder = new this.JsonDeserializer(this.jsonPropertiesMapper, deserializeCache, options);
 
         if (typeof body === 'string') {
             modelBuilder.setJsonParsedObject(jsonParse(body));
