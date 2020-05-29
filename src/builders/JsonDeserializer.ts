@@ -8,7 +8,7 @@ import {
     IDeserializeCache,
 } from '../JsonaTypes';
 
-class JsonDeserializer implements IJsonaDeserializer {
+export class JsonDeserializer implements IJsonaDeserializer {
 
     protected pm: IJsonPropertiesMapper;
     protected dc: IDeserializeCache;

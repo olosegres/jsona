@@ -37,7 +37,7 @@ class Jsona {
         jsonPropertiesMapper?: IJsonPropertiesMapper,
         DeserializeCache?: IDeserializeCacheConstructor,
         ModelsSerializer?: IModelsSerializerConstructor,
-        JsonDeserializer?: IJsonDeserializerConstructor
+        JsonDeserializer?: IJsonDeserializerConstructor,
     }) {
         if (params && params.modelPropertiesMapper) {
             this.modelPropertiesMapper = params.modelPropertiesMapper;
