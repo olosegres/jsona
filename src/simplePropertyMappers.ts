@@ -3,7 +3,7 @@ import {
     IJsonPropertiesMapper,
     TAnyKeyValueObject,
     TJsonaModel,
-    TJsonaRelationships, TJsonaRelationshipBuild, TJsonApiLinks
+    TJsonaRelationships, TJsonaRelationshipBuild, TJsonApiLinks, TRelationMeta
 } from './JsonaTypes';
 
 export const RELATIONSHIP_NAMES_PROP = 'relationshipNames';
@@ -113,6 +113,10 @@ export class JsonPropertiesMapper implements IJsonPropertiesMapper {
 
     setLinks(model: TJsonaModel, links: TJsonApiLinks) {
         model.links = links;
+    }
+
+    setRelationMeta(model: TJsonaModel, relationMeta: TRelationMeta) {
+        model.relationMeta = relationMeta;
     }
 
     setRelationships(model: TJsonaModel, relationships: TJsonaRelationships) {

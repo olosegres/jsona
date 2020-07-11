@@ -5,7 +5,7 @@ import {
     TJsonApiBody,
     TJsonApiData,
     IJsonaDeserializer,
-    IDeserializeCache,
+    IDeserializeCache, TRelationMeta,
 } from '../JsonaTypes';
 
 export class JsonDeserializer implements IJsonaDeserializer {
@@ -66,7 +66,7 @@ export class JsonDeserializer implements IJsonaDeserializer {
         return stuff;
     }
 
-    buildModelByData(data: TJsonApiData): TJsonaModel {
+    buildModelByData(data: TJsonApiData, payload: TRelationMeta = {}): TJsonaModel {
         const cachedModel = this.dc.getCachedModel(data);
 
         if (cachedModel) {
@@ -92,6 +92,10 @@ export class JsonDeserializer implements IJsonaDeserializer {
                 this.pm.setLinks(model, data.links);
             }
 
+            if (payload.relationMeta) {
+                this.pm.setRelationMeta(model, payload.relationMeta);
+            }
+
             const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
 
             if (relationships) {
@@ -108,6 +112,9 @@ export class JsonDeserializer implements IJsonaDeserializer {
         if (data.relationships) {
             for (let k in data.relationships) {
                 const relation = data.relationships[k];
+                const relationPayload = {
+                    relationMeta: relation.meta,
+                };
 
                 if (Array.isArray(relation.data)) {
                     readyRelations[k] = [];
@@ -127,12 +134,12 @@ export class JsonDeserializer implements IJsonaDeserializer {
                             relationItem.type
                         );
                         readyRelations[k].push(
-                            this.buildModelByData(dataItem)
+                            this.buildModelByData(dataItem, relationPayload)
                         );
                     }
                 } else if (relation.data) {
                     let dataItem = this.buildDataFromIncludedOrData(relation.data.id, relation.data.type);
-                    readyRelations[k] = this.buildModelByData(dataItem);
+                    readyRelations[k] = this.buildModelByData(dataItem, relationPayload);
                 } else if (relation.data === null) {
                     readyRelations[k] = null;
                 }
