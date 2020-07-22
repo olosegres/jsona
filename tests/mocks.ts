@@ -680,3 +680,72 @@ export const withNullRelationsMock = {
     }],
 
 };
+
+export const resourceIdObjMetaMock = {
+
+    json: {
+        "data": [{
+            "type": "node--site_configuration",
+            "id": "f8895943-7f51-451b-bb8f-a479853f1b4b",
+            "attributes": {
+                "langcode": "en",
+                "title": "Site Configuration"
+            },
+            "relationships": {
+                "field_logo": {
+                    "data": {
+                        "type": "file--file",
+                        "id": "551ec1b9-b0c6-4649-bb7c-b6ebb09354ff",
+                        "meta": {
+                            "alt": "ACME Corp Logo",
+                            "title": "",
+                            "width": 206,
+                            "height": 278
+                        }
+                    }
+                }
+            }
+        }],
+        "included": [{
+            "type": "file--file",
+            "id": "551ec1b9-b0c6-4649-bb7c-b6ebb09354ff",
+            "attributes": {
+                "langcode": "en",
+                "uri": {
+                    "value": "public://2020-07/acmecorp-logo-colour-2x.png",
+                    "url": "http://acmecorp.oss-cn-hongkong.aliyuncs.com/s3fs-public/2020-07/acmecorp-logo-colour-2x.png"
+                },
+                "filemime": "image/png",
+                "filesize": 54952
+            }
+        }]
+    },
+
+    collection: [{
+        "type": "node--site_configuration",
+        "id": "f8895943-7f51-451b-bb8f-a479853f1b4b",
+        "langcode": "en",
+        "title": "Site Configuration",
+        "field_logo": {
+            "resourceIdObjMeta": {
+                "alt": "ACME Corp Logo",
+                "height": 278,
+                "title": "",
+                "width": 206,
+            },
+            "type": "file--file",
+            "id": "551ec1b9-b0c6-4649-bb7c-b6ebb09354ff",
+            "langcode": "en",
+            "uri": {
+                "value": "public://2020-07/acmecorp-logo-colour-2x.png",
+                "url": "http://acmecorp.oss-cn-hongkong.aliyuncs.com/s3fs-public/2020-07/acmecorp-logo-colour-2x.png"
+            },
+            "filemime": "image/png",
+            "filesize": 54952,
+        },
+        "relationshipNames": [
+            "field_logo"
+        ],
+    }],
+
+};

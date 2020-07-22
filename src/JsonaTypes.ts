@@ -12,7 +12,7 @@ export interface IJsonPropertiesMapper {
     setAttributes(model: TJsonaModel, attributes: TAnyKeyValueObject): void;
     setMeta(model: TJsonaModel, meta: TAnyKeyValueObject): void;
     setLinks(model: TJsonaModel, links: TAnyKeyValueObject): void;
-    setRelationMeta(model: TJsonaModel, relationMeta: TRelationMeta): void;
+    setResourceIdObjMeta(model: TJsonaModel, meta: TResourceIdObj): void;
     setRelationships(model: TJsonaModel, relationships: TJsonaRelationships): void;
     setRelationshipLinks(parentModel: TJsonaModel, relationName: string, links: TJsonApiLinks): void;
     setRelationshipMeta(parentModel: TJsonaModel, relationName: string, meta: TAnyKeyValueObject): void;
@@ -95,6 +95,7 @@ export type TJsonApiData = {
 export type TJsonApiRelationshipData = {
     type: string;
     id: string|number;
+    meta?: TAnyKeyValueObject
 };
 
 export type TJsonApiRelation = {
@@ -147,7 +148,7 @@ export type TJsonaModel = {
     [propertyName: string]: any
 };
 
-export type TRelationMeta = {
+export type TResourceIdObj = {
     [propertyName: string]: any
 };
 

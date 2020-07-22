@@ -17,6 +17,7 @@ import {
     reduxObjectWithCircular,
     withoutRootIdsMock,
     withNullRelationsMock,
+    resourceIdObjMetaMock,
 } from './mocks';
 
 chai.config.showDiff = true;
@@ -90,6 +91,12 @@ describe('Jsona', () => {
             const collectionWithNullRelations = jsona.deserialize({data: withNullRelationsMock.json});
             expect(collectionWithNullRelations).to.be.deep.equal(withNullRelationsMock.collection);
         });
+
+        it('should deserialize resource id object meta field into resourceIdObjMeta', () => {
+            const stuff = jsona.deserialize(resourceIdObjMetaMock.json);
+            expect(stuff).to.be.deep.equal(resourceIdObjMetaMock.collection);
+        });
+
     });
 
     describe('denormalizeReduxObject', () => {

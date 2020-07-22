@@ -5,7 +5,7 @@ import {
     TJsonApiBody,
     TJsonApiData,
     IJsonaDeserializer,
-    IDeserializeCache, TRelationMeta,
+    IDeserializeCache, TResourceIdObj,
 } from '../JsonaTypes';
 
 export class JsonDeserializer implements IJsonaDeserializer {
@@ -66,7 +66,7 @@ export class JsonDeserializer implements IJsonaDeserializer {
         return stuff;
     }
 
-    buildModelByData(data: TJsonApiData, payload: TRelationMeta = {}): TJsonaModel {
+    buildModelByData(data: TJsonApiData, resourceIdObj: TResourceIdObj = {}): TJsonaModel {
         const cachedModel = this.dc.getCachedModel(data);
 
         if (cachedModel) {
@@ -92,8 +92,8 @@ export class JsonDeserializer implements IJsonaDeserializer {
                 this.pm.setLinks(model, data.links);
             }
 
-            if (payload.relationMeta) {
-                this.pm.setRelationMeta(model, payload.relationMeta);
+            if (resourceIdObj.meta) {
+                this.pm.setResourceIdObjMeta(model, resourceIdObj.meta);
             }
 
             const relationships: null | TJsonaRelationships = this.buildRelationsByData(data, model);
@@ -112,48 +112,45 @@ export class JsonDeserializer implements IJsonaDeserializer {
         if (data.relationships) {
             for (let k in data.relationships) {
                 const relation = data.relationships[k];
-                const relationPayload = {
-                    relationMeta: relation.meta,
-                };
 
                 if (Array.isArray(relation.data)) {
                     readyRelations[k] = [];
 
-                    const relationItemsLength = relation.data.length;
-                    let relationItem;
+                    const relationDataLength = relation.data.length;
+                    let resourceIdObj;
 
-                    for (let i = 0; i < relationItemsLength; i++) {
-                        relationItem = relation.data[i];
+                    for (let i = 0; i < relationDataLength; i++) {
+                        resourceIdObj = relation.data[i];
 
-                        if (!relationItem) {
+                        if (!resourceIdObj) {
                             return;
                         }
 
                         let dataItem = this.buildDataFromIncludedOrData(
-                            relationItem.id,
-                            relationItem.type
+                            resourceIdObj.id,
+                            resourceIdObj.type
                         );
                         readyRelations[k].push(
-                            this.buildModelByData(dataItem, relationPayload)
+                            this.buildModelByData(dataItem, resourceIdObj)
                         );
                     }
                 } else if (relation.data) {
                     let dataItem = this.buildDataFromIncludedOrData(relation.data.id, relation.data.type);
-                    readyRelations[k] = this.buildModelByData(dataItem, relationPayload);
+                    readyRelations[k] = this.buildModelByData(dataItem, relation.data);
                 } else if (relation.data === null) {
                     readyRelations[k] = null;
                 }
 
                 if (relation.links) {
                     const {setRelationshipLinks} = this.pm;
-                    if (setRelationshipLinks) { // support was added in patch release
+                    if (setRelationshipLinks) {
                         setRelationshipLinks(model, k, relation.links);
                     }
                 }
 
                 if (relation.meta) {
                     const {setRelationshipMeta} = this.pm;
-                    if (setRelationshipMeta) { // support was added in patch release
+                    if (setRelationshipMeta) {
                         setRelationshipMeta(model, k, relation.meta);
                     }
                 }
