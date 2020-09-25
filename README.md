@@ -38,7 +38,7 @@ yarn add jsona
 
 ### How to use
 
-You need to instantiate Jsona ones, then use it's public methods to convert data.
+You need to instantiate Jsona once, then use its public methods to convert data.
 ```javascript
 import Jsona from 'jsona';
 const dataFormatter = new Jsona();
