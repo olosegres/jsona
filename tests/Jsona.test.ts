@@ -32,6 +32,8 @@ describe('Jsona', () => {
 
     describe('serialize', () => {
         it('should throw Error if stuff is not passed', () => {
+            expect(jsona.serialize.bind(jsona, null)).to.throw(Error);
+            expect(jsona.serialize.bind(jsona, undefined)).to.throw(Error);
             expect(jsona.serialize.bind(jsona, {stuff: null})).to.throw(Error);
         });
 
@@ -55,8 +57,8 @@ describe('Jsona', () => {
 
     describe('deserialize', () => {
         it('should throw Error if body is not passed', () => {
-            expect(jsona.serialize.bind(jsona, null)).to.throw(Error);
-            expect(jsona.serialize.bind(jsona, undefined)).to.throw(Error);
+            expect(jsona.deserialize.bind(jsona, null)).to.throw(Error);
+            expect(jsona.deserialize.bind(jsona, undefined)).to.throw(Error);
         });
 
         it('should deserialize item without included', () => {
