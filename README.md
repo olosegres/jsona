@@ -27,7 +27,7 @@ Jsona solves this problems by providing:
 ### Installation
 
 ```
-npm install jsona
+npm i jsona --save
 ```
 or
 
