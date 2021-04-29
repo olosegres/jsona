@@ -1,5 +1,8 @@
-.git
+.git/
 .gitignore
-.idea
-tests
+.idea/
 node_modules
+npm-debug.log
+tests/
+src
+typings
