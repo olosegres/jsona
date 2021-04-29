@@ -36,7 +36,7 @@
   "author": "Sergei Solo <olosegres@gmail.com>",
   "license": "MIT",
   "main": "lib/index.js",
-  "typings": "lib/index",
+  "types": "lib/index.d.ts",
   "files": [
     "src",
     "lib"
