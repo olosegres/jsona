@@ -6,7 +6,7 @@ import {
     SwitchCaseModelMapperOptionsType,
     SwitchCaseJsonMapperOptionsType,
 } from './JsonaTypes';
-import {ModelPropertiesMapper, JsonPropertiesMapper} from './';
+import {ModelPropertiesMapper, JsonPropertiesMapper} from './simplePropertyMappers';
 import {RELATIONSHIP_NAMES_PROP} from "./simplePropertyMappers";
 
 export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IModelPropertiesMapper {
