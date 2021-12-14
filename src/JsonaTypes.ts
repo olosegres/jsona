@@ -99,7 +99,7 @@ export type TJsonApiRelationshipData = {
 };
 
 export type TJsonApiRelation = {
-    data: TJsonApiRelationshipData | Array<TJsonApiRelationshipData>
+    data: TJsonApiRelationshipData | Array<TJsonApiRelationshipData> | null
     links?: TJsonApiLinks
     meta?: TAnyKeyValueObject
 };
