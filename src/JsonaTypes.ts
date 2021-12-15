@@ -1,4 +1,6 @@
 
+type AtLeastOneProperty<T, U = {[K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
+
 export interface IModelPropertiesMapper {
     getId(model: TJsonaModel): string | number;
     getType(model: TJsonaModel): string;
@@ -98,11 +100,13 @@ export type TJsonApiRelationshipData = {
     meta?: TAnyKeyValueObject
 };
 
-export type TJsonApiRelation = {
-    data: TJsonApiRelationshipData | Array<TJsonApiRelationshipData> | null
-    links?: TJsonApiLinks
-    meta?: TAnyKeyValueObject
-};
+type FullTJsonApiRelation = {
+    data: TJsonApiRelationshipData | Array<TJsonApiRelationshipData>
+    links: TJsonApiLinks
+    meta: TAnyKeyValueObject
+}
+
+export type TJsonApiRelation = AtLeastOneProperty<FullTJsonApiRelation>;
 
 export type TJsonApiLinks = {
     self: string,
