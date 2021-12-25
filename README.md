@@ -1,5 +1,5 @@
 # Jsona
-Framework agnostic, customizable library that provide data formatters to simplify work with JSON API [v1.0 specification](http://jsonapi.org/format/1.0/).
+JSON API [v1.0 specification](http://jsonapi.org/format/1.0/) serializer and deserializer for use on the server and in the browser.
 
 [![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/)
 [![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
