@@ -3,7 +3,7 @@ JSON API [v1.0 specification](http://jsonapi.org/format/1.0/) serializer and des
 
 [![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/)
 [![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
-[![dependencies](https://camo.githubusercontent.com/cdc54d1641f5e11e246a2707063ecad092c96d11/68747470733a2f2f64617669642d646d2e6f72672f6477796c2f657374612e737667)](https://www.npmjs.com/package/jsona/)
+[![dependencies](https://img.shields.io/static/v1?label=dependencies&message=none&color=success)](https://www.npmjs.com/package/jsona/)
 [![downloads](https://img.shields.io/npm/dm/jsona.svg)](https://www.npmjs.com/package/jsona/)
 
 ### What problem does it solve?
