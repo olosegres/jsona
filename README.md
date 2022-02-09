@@ -1,12 +1,15 @@
 # Jsona
 JSON API [v1.0 specification](http://jsonapi.org/format/1.0/) serializer and deserializer for use on the server and in the browser.
+* From JSON to simplified objects
+* Back from simplified objects to JSON (in according with [json:api specification](http://jsonapi.org/format/1.0/))
+* Also from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer))
 
 [![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/)
 [![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
 [![dependencies](https://img.shields.io/static/v1?label=dependencies&message=none&color=success)](https://www.npmjs.com/package/jsona/)
 [![downloads](https://img.shields.io/npm/dm/jsona.svg)](https://www.npmjs.com/package/jsona/)
 
-### What problem does it solve?
+#### What problem does it solve?
 When you work with API standardized to [json:api specification](http://jsonapi.org/format/1.0/), you're dealing with a special and optimized JSON data format in the request and response body.
 You can get data of several entities that are related to each other, but you'll receive it in array (included).
 You may need to send modified back to server (or new data) in accordance with specification.
@@ -16,13 +19,6 @@ This may puzzle you with the following questions:
 * How to get necessary entity from `included` array many times more inconvenient and optimal?
 * How to describe data from server, working with typings (TypeScript, Flow)?
 * How to send JSON to the server without manually assembling JSON in accordance with specification?
-
-Jsona solves this problems by providing:
-* converter from JSON to simplified objects (some denormalized structure, wich is easy to typify)
-* converter from simplified objects to JSON (in according with [json:api specification](http://jsonapi.org/format/1.0/))
-* converter from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer))
-
-*NOTE:* This README describes latest stable version. You can read [README for old versions 0.2.x here](README_0_2.md)
 
 ### Installation
 
@@ -189,7 +185,7 @@ Example of passing your own [propertyMappers](src/simplePropertyMappers.ts) to J
 import Jsona from 'jsona';
 import {MyModelPropertiesMapper, MyJsonPropertiesMapper} from 'myPropertyMappers';
 
-export default const dataFormatter = new Jsona({
+export const dataFormatter = new Jsona({
     modelPropertiesMapper: MyModelPropertiesMapper,
     jsonPropertiesMapper: MyJsonPropertiesMapper
 });
@@ -203,7 +199,7 @@ It possible to provide your own [IDeserializeCache](src/JsonaTypes.ts) manager:
 import Jsona from 'jsona';
 import {MyOwnDeserializeCache} from './index';
 
-export default const dataFormatter = new Jsona({
+export const dataFormatter = new Jsona({
     DeserializeCache: MyOwnDeserializeCache
 });
 ```
