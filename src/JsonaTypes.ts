@@ -110,7 +110,11 @@ export type TJsonApiRelation = AtLeastOneProperty<FullTJsonApiRelation>;
 
 export type TJsonApiLinks = {
     self: string,
-    related: string
+    related: string,
+    first?: string | null,
+    last?: string | null,
+    prev?: string | null,
+    next?: string | null,
 };
 
 export type TJsonApiRelationships = {
