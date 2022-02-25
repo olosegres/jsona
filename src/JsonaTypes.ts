@@ -1,4 +1,3 @@
-
 type AtLeastOneProperty<T, U = {[K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
 
 export interface IModelPropertiesMapper {
@@ -108,13 +107,13 @@ type FullTJsonApiRelation = {
 
 export type TJsonApiRelation = AtLeastOneProperty<FullTJsonApiRelation>;
 
+type LinkKey = "self" | "related" | "first" | "prev" | "next" | "last";
+
+// https://jsonapi.org/format/#document-links
+type LinkObjectMember = string | { href?: string; meta?: TAnyKeyValueObject } | null;
+
 export type TJsonApiLinks = {
-    self: string,
-    related: string,
-    first?: string | null,
-    last?: string | null,
-    prev?: string | null,
-    next?: string | null,
+  [key in LinkKey]?: LinkObjectMember;
 };
 
 export type TJsonApiRelationships = {
