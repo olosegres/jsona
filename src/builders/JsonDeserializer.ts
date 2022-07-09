@@ -67,7 +67,7 @@ export class JsonDeserializer implements IJsonaDeserializer {
     }
 
     buildModelByData(data: TJsonApiData, resourceIdObj: TResourceIdObj = {}): TJsonaModel {
-        const cachedModel = this.dc.getCachedModel(data);
+        const cachedModel = this.dc.getCachedModel(data, resourceIdObj);
 
         if (cachedModel) {
             return cachedModel;
@@ -75,7 +75,7 @@ export class JsonDeserializer implements IJsonaDeserializer {
 
         const model = this.pm.createModel(data.type);
 
-        this.dc.handleModel(model, data); // should be called before this.pm.setRelationships(model, relationships);
+        this.dc.handleModel(model, data, resourceIdObj); // should be called before this.pm.setRelationships(model, relationships);
 
         if (model) {
             this.pm.setId(model, data.id);

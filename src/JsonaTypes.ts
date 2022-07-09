@@ -24,9 +24,9 @@ export interface IJsonaModelBuilder {
 }
 
 export interface IDeserializeCache {
-    getCachedModel(data: TJsonApiData): TJsonaModel | null;
-    handleModel(model: TJsonaModel, data: TJsonApiData): void;
-    createCacheKey(data: TJsonApiData): string;
+    getCachedModel(data: TJsonApiData, resourceIdObject: TResourceIdObj): TJsonaModel | null;
+    handleModel(model: TJsonaModel, data: TJsonApiData, resourceIdObject: TResourceIdObj): void;
+    createCacheKey(data: TJsonApiData, resourceIdObject: TResourceIdObj): string;
 }
 
 export interface IDeserializeCacheConstructor {
@@ -156,6 +156,11 @@ export type TJsonaModel = {
 };
 
 export type TResourceIdObj = {
+    id?: string | number,
+    type?: string,
+    meta?: {
+        [propertyName: string]: any
+    },
     [propertyName: string]: any
 };
 

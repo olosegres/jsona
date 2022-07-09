@@ -20,13 +20,13 @@ export class DeserializeCache implements IDeserializeCache {
 
     protected cachedModels = {};
 
-    getCachedModel(data) {
-        const entityKey = this.createCacheKey(data);
+    getCachedModel(data, resourceIdObject) {
+        const entityKey = this.createCacheKey(data, resourceIdObject);
         return this.cachedModels[entityKey] || null;
     }
 
-    handleModel(model, data) {
-        const entityKey = this.createCacheKey(data);
+    handleModel(model, data, resourceIdObject) {
+        const entityKey = this.createCacheKey(data, resourceIdObject);
         const dataWithPayload = data.attributes || data.relationships;
 
         if (entityKey && dataWithPayload) {
@@ -34,17 +34,25 @@ export class DeserializeCache implements IDeserializeCache {
         }
     }
 
-    createCacheKey(data) {
-        if (data.type && data.id && !data.meta) {
-            return `${data.type}-${data.id}`;
+    createCacheKey(data, resourceIdObject) {
+        if (!data.id || !data.type) {
+            return; // if there is no id we should not use cache (it may happens on creating new resources)
         }
 
-        if (data.type && data.id && data.meta) {
-            const meta = jsonStringify(data.meta);
-            return `${data.type}-${data.id}-${meta}`;
-        }
+        const keyDataPart = data.meta ? (
+            `${data.type}-${data.id}-${jsonStringify(data.meta)}`
+        ) : (
+            `${data.type}-${data.id}`
+        );
 
-        return '';
+        const keyResourcePart = resourceIdObject.meta ? (
+            // resourceIdObject.meta sets to model in simplePropertyMappers.ts, so it should be used here too
+            `${resourceIdObject.type}-${resourceIdObject.id}-${jsonStringify(resourceIdObject.meta)}`
+        ) : (
+            `${resourceIdObject.type}-${resourceIdObject.id}`
+        );
+
+        return `${keyDataPart}-${keyResourcePart}`;
     }
 
 }
