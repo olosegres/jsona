@@ -18,6 +18,7 @@ import {
     withoutRootIdsMock,
     withNullRelationsMock,
     resourceIdObjMetaMock,
+    differentAttrsInDataAndIncludedMock,
 } from './mocks';
 
 chai.config.showDiff = true;
@@ -97,6 +98,11 @@ describe('Jsona', () => {
         it('should deserialize resource id object meta field into resourceIdObjMeta', () => {
             const stuff = jsona.deserialize(resourceIdObjMetaMock.json);
             expect(stuff).to.be.deep.equal(resourceIdObjMetaMock.collection);
+        });
+
+        it('should deserialize with different attrs for root object and related', () => {
+            const stuff = jsona.deserialize(differentAttrsInDataAndIncludedMock.json);
+            expect(stuff).to.be.deep.equal(differentAttrsInDataAndIncludedMock.collection);
         });
 
     });

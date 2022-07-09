@@ -381,8 +381,8 @@ const duplicateSubModel = {
 duplicateModels[0]['simpleRelation'] = duplicateSubModel;
 duplicateModels[1]['simpleRelation'] = duplicateSubModel;
 duplicateSubModel['simpleRelation2'] = [
-  duplicateModels[0],
-  duplicateModels[1],
+    duplicateModels[0],
+    duplicateModels[1],
 ];
 
 export const duplicate = {
@@ -485,7 +485,8 @@ export const reduxObject1 = {
     },
     "country": {
         "34": {"id": '34', "attributes": {"name": "Spain"}},
-        "86": {"id": '86', "attributes": {"name": "China"}}},
+        "86": {"id": '86', "attributes": {"name": "China"}}
+    },
     "specialty": {
         "1": {"id": "1", "attributes": {"title": "mycategory1"}},
         "2": {"id": "2", "attributes": {"title": "mycategory2"}}
@@ -518,7 +519,8 @@ export const reduxObject1 = {
             "attributes": {"name": "myName2", "active": true},
             "relationships": {
                 "town": {
-                    "data": {"id": '80', "type": "town"}},
+                    "data": {"id": '80', "type": "town"}
+                },
                 "specialty": {
                     "data": [
                         {"id": "1", "type": "specialty"},
@@ -607,7 +609,7 @@ export const withoutRootIdsMock = {
             type: 'work-areas',
             id: '22'
         },
-        relationshipNames: [ 'sourceLanguage', 'workArea' ]
+        relationshipNames: ['sourceLanguage', 'workArea']
     }, {
         type: 'language-knowledges',
         id: undefined,
@@ -619,7 +621,7 @@ export const withoutRootIdsMock = {
             type: 'work-areas',
             id: '22'
         },
-        relationshipNames: [ 'sourceLanguage', 'workArea' ]
+        relationshipNames: ['sourceLanguage', 'workArea']
     }],
 
 };
@@ -705,6 +707,23 @@ export const resourceIdObjMetaMock = {
                     }
                 }
             }
+        },{
+            "type": "node--site_configuration",
+            "id": "2",
+            "attributes": {
+                "title": "Site Configuration 2"
+            },
+            "relationships": {
+                "field_logo": {
+                    "data": {
+                        "type": "file--file",
+                        "id": "551ec1b9-b0c6-4649-bb7c-b6ebb09354ff",
+                        "meta": {
+                            "alt": "ACME Corp Logo 2",
+                        }
+                    }
+                }
+            }
         }],
         "included": [{
             "type": "file--file",
@@ -721,31 +740,115 @@ export const resourceIdObjMetaMock = {
         }]
     },
 
-    collection: [{
-        "type": "node--site_configuration",
-        "id": "f8895943-7f51-451b-bb8f-a479853f1b4b",
-        "langcode": "en",
-        "title": "Site Configuration",
-        "field_logo": {
-            "resourceIdObjMeta": {
-                "alt": "ACME Corp Logo",
-                "height": 278,
-                "title": "",
-                "width": 206,
-            },
-            "type": "file--file",
-            "id": "551ec1b9-b0c6-4649-bb7c-b6ebb09354ff",
+    collection: [
+        {
+            "type": "node--site_configuration",
+            "id": "f8895943-7f51-451b-bb8f-a479853f1b4b",
             "langcode": "en",
-            "uri": {
-                "value": "public://2020-07/acmecorp-logo-colour-2x.png",
-                "url": "http://acmecorp.oss-cn-hongkong.aliyuncs.com/s3fs-public/2020-07/acmecorp-logo-colour-2x.png"
+            "title": "Site Configuration",
+            "field_logo": {
+                "type": "file--file",
+                "id": "551ec1b9-b0c6-4649-bb7c-b6ebb09354ff",
+                "langcode": "en",
+                "uri": {
+                    "value": "public://2020-07/acmecorp-logo-colour-2x.png",
+                    "url": "http://acmecorp.oss-cn-hongkong.aliyuncs.com/s3fs-public/2020-07/acmecorp-logo-colour-2x.png"
+                },
+                "filemime": "image/png",
+                "filesize": 54952,
+                "resourceIdObjMeta": {
+                    "alt": "ACME Corp Logo",
+                    "title": "",
+                    "width": 206,
+                    "height": 278
+                }
             },
-            "filemime": "image/png",
-            "filesize": 54952,
+            "relationshipNames": [
+                "field_logo"
+            ]
         },
-        "relationshipNames": [
-            "field_logo"
-        ],
-    }],
+        {
+            "type": "node--site_configuration",
+            "id": "2",
+            "title": "Site Configuration 2",
+            "field_logo": {
+                "type": "file--file",
+                "id": "551ec1b9-b0c6-4649-bb7c-b6ebb09354ff",
+                "langcode": "en",
+                "uri": {
+                    "value": "public://2020-07/acmecorp-logo-colour-2x.png",
+                    "url": "http://acmecorp.oss-cn-hongkong.aliyuncs.com/s3fs-public/2020-07/acmecorp-logo-colour-2x.png"
+                },
+                "filemime": "image/png",
+                "filesize": 54952,
+                "resourceIdObjMeta": {
+                    "alt": "ACME Corp Logo 2"
+                }
+            },
+            "relationshipNames": [
+                "field_logo"
+            ]
+        }
+    ],
 
 };
+
+export const differentAttrsInDataAndIncludedMock = {
+    json: {
+        data: [{
+            "id": "1",
+            "type": "box",
+            "relationships": {"revision": {"data": {"id": "1", "type": "revision"}}}
+        }, {
+            "id": "1",
+            "type": "process",
+            "attributes": {"prop-1": "hello"},
+            "relationships": {"revision": {"data": {"id": "1", "type": "revision"}}}
+        }],
+        included: [{
+            "id": "1",
+            "type": "revision",
+            "relationships": {"link": {"data": {"id": "1", "type": "link"}}}
+        }, {
+            "id": "1",
+            "type": "link",
+            "relationships": {"process": {"data": {"id": "1", "type": "process"}}}
+        }, {
+            "id": "1",
+            "type": "process",
+            "attributes": {"prop-2": "prop2"}
+        }]
+    },
+    collection: [{
+        "type": "box",
+        "id": "1",
+        "revision": {
+            "type": "revision",
+            "id": "1",
+            "link": {
+                "type": "link",
+                "id": "1",
+                "process": {"type": "process", "id": "1", "prop-2": "prop2"},
+                "relationshipNames": ["process"]
+            },
+            "relationshipNames": ["link"]
+        },
+        "relationshipNames": ["revision"]
+    }, {
+        "type": "process",
+        "id": "1",
+        "prop-1": "hello",
+        "revision": {
+            "type": "revision",
+            "id": "1",
+            "link": {
+                "type": "link",
+                "id": "1",
+                "process": {"type": "process", "id": "1", "prop-2": "prop2"},
+                "relationshipNames": ["process"]
+            },
+            "relationshipNames": ["link"]
+        },
+        "relationshipNames": ["revision"]
+    }]
+}

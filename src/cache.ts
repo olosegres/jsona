@@ -35,24 +35,19 @@ export class DeserializeCache implements IDeserializeCache {
     }
 
     createCacheKey(data, resourceIdObject) {
-        if (!data.id || !data.type) {
-            return; // if there is no id we should not use cache (it may happens on creating new resources)
+        // resourceIdObject.meta sets to model in simplePropertyMappers.ts, so it should be used here too
+        // cache in this case probably will be redundant
+        if (!data.id || !data.type || resourceIdObject.meta) {
+            return;
         }
 
-        const keyDataPart = data.meta ? (
-            `${data.type}-${data.id}-${jsonStringify(data.meta)}`
-        ) : (
-            `${data.type}-${data.id}`
-        );
+        const resourcePart = `${resourceIdObject.type}-${resourceIdObject.id}`;
 
-        const keyResourcePart = resourceIdObject.meta ? (
-            // resourceIdObject.meta sets to model in simplePropertyMappers.ts, so it should be used here too
-            `${resourceIdObject.type}-${resourceIdObject.id}-${jsonStringify(resourceIdObject.meta)}`
-        ) : (
-            `${resourceIdObject.type}-${resourceIdObject.id}`
-        );
+        if (data.meta) {
+            return `${data.type}-${data.id}-${jsonStringify(data.meta)}-${resourcePart}`;
+        }
 
-        return `${keyDataPart}-${keyResourcePart}`;
+        return `${data.type}-${data.id}-${resourcePart}`;
     }
 
 }
