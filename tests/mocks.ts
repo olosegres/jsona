@@ -110,6 +110,32 @@ export const specialty2 = {
     }
 };
 
+export const idlessSpecialty1 = {
+    model: {
+        type: 'specialty',
+        title: 'mycategory1'
+    },
+    json: {
+        type: 'specialty',
+        attributes: {
+            title: 'mycategory1'
+        }
+    }
+};
+
+export const idlessSpecialty2 = {
+    model: {
+        type: 'specialty',
+        title: 'mycategory2'
+    },
+    json: {
+        type: 'specialty',
+        attributes: {
+            title: 'mycategory2'
+        }
+    }
+};
+
 export const user1 = {
     model: {
         type: 'user',
@@ -210,6 +236,17 @@ export const user2 = {
             town2.json
         ]
     }
+};
+
+export const userWithIdlessSpecialties = {
+    model: {
+        type: 'user',
+        id: '2',
+        name: 'myName2',
+        active: true,
+        specialty: [idlessSpecialty1.model, idlessSpecialty2.model],
+        [RELATIONSHIP_NAMES_PROP]: ['specialty']
+    },
 };
 
 export const article1 = {
