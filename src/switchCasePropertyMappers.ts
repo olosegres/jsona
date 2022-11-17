@@ -137,7 +137,7 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
         Object.keys(meta).forEach((propName) => {
             const regex = new RegExp(`${this.switchChar}([a-z0-9])`, 'g');
             const camelName = propName.replace(regex, g => g[1].toUpperCase());
-            model.meta[camelName] = meta[propName];
+            model.meta[camelName] = this.convertCase(meta[propName]);
         });
     }
 
