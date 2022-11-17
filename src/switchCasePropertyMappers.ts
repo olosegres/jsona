@@ -11,6 +11,9 @@ import {
     JsonPropertiesMapper,
     RELATIONSHIP_NAMES_PROP,
 } from './simplePropertyMappers';
+import {
+    isPlainObject
+} from './utils';
 
 export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IModelPropertiesMapper {
 
@@ -120,7 +123,7 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
         Object.keys(attributes).forEach((propName) => {
             const regex = new RegExp(`${this.switchChar}([a-z0-9])`, 'g');
             const camelName = propName.replace(regex, g => g[1].toUpperCase());
-            model[camelName] = attributes[propName];
+            model[camelName] = this.convertCase(attributes[propName]);
         });
     }
 
@@ -156,5 +159,18 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
                 model[RELATIONSHIP_NAMES_PROP][i] = camelName;
             }
         });
+    }
+
+    convertCase(attributes) {
+        if(!isPlainObject(attributes)) return attributes;
+
+        const converted = {};
+        Object.entries(attributes).forEach(([propName, value]) => {
+            const regex = new RegExp(`${this.switchChar}([a-z0-9])`, 'g');
+            const camelName = propName.replace(regex, g => g[1].toUpperCase());
+            converted[camelName] = isPlainObject(value) ? this.convertCase(value): value;
+        });
+
+        return converted;
     }
 }

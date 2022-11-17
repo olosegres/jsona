@@ -128,6 +128,12 @@ describe('switchCasePropertyMappers', () => {
                 foo: 3,
                 foo_bar: 5,
                 'foo-234': 234,
+                nestedFooBar: { 
+                    nestedFooBar: 1
+                },
+                'nested-bar-foo': { 
+                    'nested-bar-foo': 2
+                },
             };
             propertiesMapper.setAttributes(model, testAttributes);
 
@@ -138,6 +144,8 @@ describe('switchCasePropertyMappers', () => {
             expect(model['foo']).to.be.equal(3);
             expect(model['foo_bar']).to.be.equal(5);
             expect(model['foo234']).to.be.equal(234);
+            expect(model['nestedFooBar']).to.be.deep.equal({ nestedFooBar: 1 })
+            expect(model['nestedBarFoo']).to.be.deep.equal({ nestedBarFoo: 2 })
         });
 
         it(`should transform kebabized json's relationship names to camel case`, () => {
@@ -212,6 +220,9 @@ describe('switchCasePropertyMappers', () => {
                 foo: 3,
                 'foo-bar': 5,
                 foo_234: 234,
+                nested_foo_bar: {
+                    nested_foo_bar: 123
+                }
             };
             propertiesMapper.setAttributes(model, testAttributes);
 
@@ -222,6 +233,7 @@ describe('switchCasePropertyMappers', () => {
             expect(model['foo']).to.be.equal(3);
             expect(model['foo-bar']).to.be.equal(5);
             expect(model['foo234']).to.be.equal(234);
+            expect(model['nestedFooBar']).to.be.deep.equal({ nestedFooBar: 123 })
         });
 
         it(`can be configured to transform snaked json's relationship names to camel case`, () => {
