@@ -84,7 +84,7 @@ export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IMod
         const converted = {};
         Object.entries(attributes).forEach(([propName, value]) => {
             const kebabName = propName.replace(/([a-z][A-Z0-9])/g, g => g[0] + this.switchChar + g[1].toLowerCase());
-            converted[kebabName] = value;
+            converted[kebabName] = isPlainObject(value) ? this.convertCase(value): value;
         })
 
         return converted;

@@ -23,6 +23,11 @@ describe('switchCasePropertyMappers', () => {
                 foo234: 234,
                 nestedFooBar: {
                     nestedFooBar: 1
+                },
+                deepNestedFooBar: {
+                    deepNestedFooBar: {
+                        deepNestedFooBar: 1
+                    }
                 }
             };
             const kebabAttributes = propertiesMapper.getAttributes(testModel);
@@ -34,6 +39,7 @@ describe('switchCasePropertyMappers', () => {
             expect(kebabAttributes['foo_bar']).to.be.equal(5);
             expect(kebabAttributes['foo-234']).to.be.equal(234);
             expect(kebabAttributes['nested-foo-bar']).to.be.deep.equal({ 'nested-foo-bar': 1 })
+            expect(kebabAttributes['deep-nested-foo-bar']).to.be.deep.equal({ 'deep-nested-foo-bar': { 'deep-nested-foo-bar': 1 } })
         });
 
         it(`should transform camelized model's relationship names to kebab case`, () => {
@@ -230,6 +236,11 @@ describe('switchCasePropertyMappers', () => {
                 foo_234: 234,
                 nested_foo_bar: {
                     nested_foo_bar: 123
+                },
+                deep_nested_foo_bar: {
+                    deep_nested_foo_bar: {
+                        deep_nested_foo_bar: 123
+                    }
                 }
             };
             propertiesMapper.setAttributes(model, testAttributes);
@@ -241,7 +252,8 @@ describe('switchCasePropertyMappers', () => {
             expect(model['foo']).to.be.equal(3);
             expect(model['foo-bar']).to.be.equal(5);
             expect(model['foo234']).to.be.equal(234);
-            expect(model['nestedFooBar']).to.be.deep.equal({ nestedFooBar: 123 })
+            expect(model['nestedFooBar']).to.be.deep.equal({ nestedFooBar: 123 });
+            expect(model['deepNestedFooBar']).to.be.deep.equal({ deepNestedFooBar: {deepNestedFooBar: 123 }});
         });
 
         it(`can be configured to transform snaked json's relationship names to camel case`, () => {
