@@ -58,7 +58,7 @@ export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IMod
         const kebabAttributes = {};
         Object.keys(camelCasedAttributes).forEach((name) => {
             const kebabName = name.replace(/([a-z][A-Z0-9])/g, g => g[0] + this.switchChar + g[1].toLowerCase());
-            kebabAttributes[kebabName] = camelCasedAttributes[name];
+            kebabAttributes[kebabName] = this.convertCase(camelCasedAttributes[name]);
         });
         return kebabAttributes;
     }
@@ -73,9 +73,21 @@ export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IMod
         const kebabRelationships = {};
         Object.keys(camelCasedRelationships).forEach((name) => {
             const kebabName = name.replace(/([a-z][A-Z0-9])/g, g => g[0] + this.switchChar + g[1].toLowerCase());
-            kebabRelationships[kebabName] = camelCasedRelationships[name];
+            kebabRelationships[kebabName] = this.convertCase(camelCasedRelationships[name]);
         });
         return kebabRelationships;
+    }
+
+    private convertCase(attributes) {
+        if(!isPlainObject(attributes)) return attributes;
+
+        const converted = {};
+        Object.entries(attributes).forEach(([propName, value]) => {
+            const kebabName = propName.replace(/([a-z][A-Z0-9])/g, g => g[0] + this.switchChar + g[1].toLowerCase());
+            converted[kebabName] = value;
+        })
+
+        return converted;
     }
 }
 
