@@ -173,7 +173,7 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
         });
     }
 
-    convertCase(attributes) {
+    private convertCase(attributes: any) {
         if(!isPlainObject(attributes)) return attributes;
 
         const converted = {};
