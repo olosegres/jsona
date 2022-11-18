@@ -79,7 +79,7 @@ export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IMod
             const converted = {};
             Object.entries(stuff).forEach(([propName, value]) => {
                 const kebabName = this.convertFromCamelCaseString(propName);
-                converted[kebabName] = isPlainObject(value) ? this.convertFromCamelCase(value): value;
+                converted[kebabName] = this.convertFromCamelCase(value);
             })
             return converted;
         }
@@ -173,7 +173,7 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
             const converted = {};
             Object.entries(stuff).forEach(([propName, value]) => {
                 const camelName = this.convertToCamelCaseString(propName);
-                converted[camelName] = isPlainObject(value) ? this.convertToCamelCase(value): value;
+                converted[camelName] = this.convertToCamelCase(value);
             });
             return converted;
         }
