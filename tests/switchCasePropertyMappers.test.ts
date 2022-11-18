@@ -26,6 +26,11 @@ describe('switchCasePropertyMappers', () => {
                         nestedFooBar: 1
                     }
                 },
+                arrayNestedFooBar: {
+                    nestedFooBar: [
+                        { nestedFooBar: 1 }, { nestedFooBar: 2 }, { nestedFooBar: 3 }
+                    ]
+                }
             };
             const kebabAttributes = propertiesMapper.getAttributes(testModel);
             expect(kebabAttributes['foo-bar']).to.be.equal(1);
@@ -35,7 +40,8 @@ describe('switchCasePropertyMappers', () => {
             expect(kebabAttributes['foo']).to.be.equal(3);
             expect(kebabAttributes['foo_bar']).to.be.equal(5);
             expect(kebabAttributes['foo-234']).to.be.equal(234);
-            expect(kebabAttributes['nested-foo-bar']).to.be.deep.equal({ 'nested-foo-bar': { 'nested-foo-bar': 1 } })
+            expect(kebabAttributes['nested-foo-bar']).to.be.deep.equal({ 'nested-foo-bar': { 'nested-foo-bar': 1 } });
+            expect(kebabAttributes['array-nested-foo-bar']).to.be.deep.equal({ 'nested-foo-bar': [{ 'nested-foo-bar': 1 }, { 'nested-foo-bar': 2 }, { 'nested-foo-bar': 3 }] });
         });
 
         it(`should transform camelized model's relationship names to kebab case`, () => {
@@ -122,7 +128,7 @@ describe('switchCasePropertyMappers', () => {
             expect(snakeAttributes.foo).to.be.equal(3);
             expect(snakeAttributes['foo-bar']).to.be.equal(5);
             expect(snakeAttributes.foo_234).to.be.equal(234);
-            expect(snakeAttributes['nested_foo_bar']).to.be.deep.equal({ 'nested_foo_bar': { 'nested_foo_bar': 1 } })
+            expect(snakeAttributes['nested_foo_bar']).to.be.deep.equal({ 'nested_foo_bar': { 'nested_foo_bar': 1 } });
         });
     });
 
@@ -150,6 +156,9 @@ describe('switchCasePropertyMappers', () => {
                         'nested-bar-foo': 2
                     }
                 },
+                'array-nested-bar-foo': { 
+                    'nested-bar-foo': [{ 'nested-bar-foo': 2 }, { 'nested-bar-foo': 3 }, { 'nested-bar-foo': 4 }]
+                },
             };
             propertiesMapper.setAttributes(model, testAttributes);
 
@@ -160,8 +169,9 @@ describe('switchCasePropertyMappers', () => {
             expect(model['foo']).to.be.equal(3);
             expect(model['foo_bar']).to.be.equal(5);
             expect(model['foo234']).to.be.equal(234);
-            expect(model['nestedFooBar']).to.be.deep.equal({ nestedFooBar: { nestedFooBar: 1 } })
-            expect(model['nestedBarFoo']).to.be.deep.equal({ nestedBarFoo: { nestedBarFoo: 2 } })
+            expect(model['nestedFooBar']).to.be.deep.equal({ nestedFooBar: { nestedFooBar: 1 } });
+            expect(model['nestedBarFoo']).to.be.deep.equal({ nestedBarFoo: { nestedBarFoo: 2 } });
+            expect(model['arrayNestedBarFoo']).to.be.deep.equal({ nestedBarFoo: [{ nestedBarFoo: 2 }, { nestedBarFoo: 3 }, { nestedBarFoo: 4 }] });
         });
 
         it(`should transform kebabized json's relationship names to camel case`, () => {
