@@ -78,7 +78,7 @@ export class SwitchCaseModelMapper extends ModelPropertiesMapper implements IMod
         return kebabRelationships;
     }
 
-    private convertCase(attributes) {
+    private convertCase(attributes: unknown) {
         if(!isPlainObject(attributes)) return attributes;
 
         const converted = {};
@@ -173,7 +173,7 @@ export class SwitchCaseJsonMapper extends JsonPropertiesMapper implements IJsonP
         });
     }
 
-    private convertCase(attributes: any) {
+    private convertCase(attributes: unknown) {
         if(!isPlainObject(attributes)) return attributes;
 
         const converted = {};

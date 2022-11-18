@@ -35,7 +35,7 @@ export function jsonParse(stringified: string): Object {
 }
 
 // https://github.com/30-seconds/30-seconds-of-code/blob/master/snippets/isPlainObject.md
-export const isPlainObject = (val) => !!val && typeof val === 'object' && val.constructor === Object;
+export const isPlainObject = (val: unknown): val is Object => !!val && typeof val === 'object' && val.constructor === Object;
 
 // https://github.com/30-seconds/30-seconds-of-code/blob/master/snippets/transform.md
 export const transform = (obj, fn, acc) => Object.keys(obj).reduce((a, k) => fn(a, obj[k], k, obj), acc);
