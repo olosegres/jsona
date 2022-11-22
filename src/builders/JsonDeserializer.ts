@@ -123,7 +123,7 @@ export class JsonDeserializer implements IJsonaDeserializer {
                         resourceIdObj = relation.data[i];
 
                         if (!resourceIdObj) {
-                            return;
+                            continue;
                         }
 
                         let dataItem = this.buildDataFromIncludedOrData(
