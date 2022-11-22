@@ -38,7 +38,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "dependencies": {
     "tslib": "^2.4.1"
