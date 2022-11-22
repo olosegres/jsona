@@ -19,6 +19,7 @@ import {
     withNullRelationsMock,
     resourceIdObjMetaMock,
     differentAttrsInDataAndIncludedMock,
+    circularWithMeta,
 } from './mocks';
 
 chai.config.showDiff = true;
@@ -80,6 +81,11 @@ describe('Jsona', () => {
             expect(recursiveItem).to.be.deep.equal(circular.model);
         });
 
+        it('should deserialize json with meta & circular relationships', () => {
+            const recursiveItem = jsona.deserialize(circularWithMeta.json);
+            expect(recursiveItem).to.be.deep.equal(circularWithMeta.model);
+        });
+
         it('should deserialize json with duplicate relationships', () => {
             const duplicateItem = jsona.deserialize(duplicate.json, { preferNestedDataFromData: true });
             expect(duplicateItem).to.be.deep.equal(duplicate.model);
@@ -101,6 +107,11 @@ describe('Jsona', () => {
         });
 
         it('should deserialize with different attrs for root object and related', () => {
+            const stuff = jsona.deserialize(differentAttrsInDataAndIncludedMock.json);
+            expect(stuff).to.be.deep.equal(differentAttrsInDataAndIncludedMock.collection);
+        });
+
+        it('should new', () => {
             const stuff = jsona.deserialize(differentAttrsInDataAndIncludedMock.json);
             expect(stuff).to.be.deep.equal(differentAttrsInDataAndIncludedMock.collection);
         });

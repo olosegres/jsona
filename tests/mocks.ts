@@ -353,6 +353,72 @@ export const circular = {
     },
 };
 
+const circularWithMetaRootModel = {
+    type: 'model',
+    id: '1',
+    relationshipNames: ['simpleRelation'],
+};
+
+const circularWithMetaRootNestedModel = {
+    type: 'model',
+    id: '1',
+    resourceIdObjMeta: {
+        foo2: 'bar2',
+    },
+    relationshipNames: ['simpleRelation'],
+};
+
+const circularWithMetaSubmodel = {
+    type: 'subModel',
+    id: '1',
+    resourceIdObjMeta: {
+        foo: 'bar',
+    },
+    relationshipNames: ['circularRelation'],
+};
+
+circularWithMetaRootModel['simpleRelation'] = circularWithMetaSubmodel;
+circularWithMetaRootNestedModel['simpleRelation'] = circularWithMetaSubmodel;
+circularWithMetaSubmodel['circularRelation'] = circularWithMetaRootNestedModel;
+
+export const circularWithMeta = {
+    model: circularWithMetaRootModel,
+    json: {
+        "data": {
+            "type": "model",
+            "id": "1",
+            "relationships": {
+                "simpleRelation": {
+                    "data": {
+                        "type": "subModel",
+                        "id": "1",
+                        "meta": {
+                            "foo": "bar"
+                        }
+                    }
+                },
+            }
+        },
+        "included": [
+            {
+                "type": "subModel",
+                "id": "1",
+                "relationships": {
+                    "circularRelation": {
+                        "data": {
+                            "type": "model",
+                            "id": "1",
+                            "meta": {
+                                "foo2": "bar2"
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    },
+};
+
 const duplicateModels = [
     {
         type: 'model',
