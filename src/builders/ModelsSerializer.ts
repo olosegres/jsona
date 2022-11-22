@@ -16,9 +16,11 @@ export class ModelsSerializer implements IModelsSerializer {
     protected propertiesMapper: IModelPropertiesMapper;
     protected stuff: TJsonaModel | Array<TJsonaModel>;
     protected includeNamesTree: TJsonaNormalizedIncludeNamesTree;
+    private buildIncludedIndex: number;
 
     constructor(propertiesMapper?: IModelPropertiesMapper) {
         propertiesMapper && this.setPropertiesMapper(propertiesMapper);
+        this.buildIncludedIndex = 0;
     }
 
     setPropertiesMapper(propertiesMapper: IModelPropertiesMapper) {
@@ -84,21 +86,19 @@ export class ModelsSerializer implements IModelsSerializer {
         }
 
         if (Object.keys(uniqueIncluded).length) {
-            body['included'] = [];
-            const includeUniqueKeys = Object.keys(uniqueIncluded);
-            includeUniqueKeys.forEach((k) => {
-                body['included'].push(uniqueIncluded[k]);
-            });
+            body['included'] = Object.values(uniqueIncluded);
         }
 
         return body;
     }
 
     buildDataByModel(model: TJsonaModel | null): TJsonApiData {
-        const data = {
-            id: this.propertiesMapper.getId(model),
-            type: this.propertiesMapper.getType(model),
-            attributes: this.propertiesMapper.getAttributes(model),
+        const id = this.propertiesMapper.getId(model);
+        const type = this.propertiesMapper.getType(model);
+        const attributes = this.propertiesMapper.getAttributes(model);
+        const data = { type,
+            ...(typeof id !== 'undefined' ? { id } : {}),
+            ...(typeof attributes !== 'undefined' ? { attributes } : {}),
         };
 
         if (typeof data.type !== 'string' || !data.type) {
@@ -115,6 +115,16 @@ export class ModelsSerializer implements IModelsSerializer {
         return data;
     }
 
+    buildResourceObjectPart(relation: TJsonaModel) {
+        const id = this.propertiesMapper.getId(relation);
+        const type = this.propertiesMapper.getType(relation);
+
+        return {
+            type,
+            ...(typeof id === 'undefined' ? {} : { id }),
+        };
+    }
+
     buildRelationshipsByModel(model: TJsonaModel) {
         const relations = this.propertiesMapper.getRelationships(model);
 
@@ -129,21 +139,17 @@ export class ModelsSerializer implements IModelsSerializer {
 
             if (Array.isArray(relation)) {
                 const relationshipData = [];
-                const relationLength = relation.length;
 
-                for (let i = 0; i < relationLength; i++) {
-                    const item = {
-                        id: this.propertiesMapper.getId(relation[i]),
-                        type: this.propertiesMapper.getType(relation[i])
-                    };
+                for (const relationItem of relation) {
+                    const relationshipDataItem = this.buildResourceObjectPart(relationItem);
 
-                    if (item.id && item.type) {
-                        relationshipData.push(item);
+                    if ('type' in relationshipDataItem) {
+                        relationshipData.push(relationshipDataItem);
                     } else {
                         console.error(
-                            `Can't create data item[${i}] for relationship ${k},
+                            `Can't create data item for relationship ${k},
                             it doesn't have 'id' or 'type', it was skipped`,
-                            relation[i]
+                            relationItem
                         );
                     }
                 }
@@ -152,12 +158,9 @@ export class ModelsSerializer implements IModelsSerializer {
                     data: relationshipData
                 };
             } else if (relation) {
-                const item = {
-                    id: this.propertiesMapper.getId(relation),
-                    type: this.propertiesMapper.getType(relation)
-                };
+                const item = this.buildResourceObjectPart(relation);
 
-                if (item.type) {
+                if ('type' in item) {
                     relationships[k] = {
                         data: item
                     };
@@ -218,10 +221,16 @@ export class ModelsSerializer implements IModelsSerializer {
         subIncludeTree: TJsonaNormalizedIncludeNamesTree,
         builtIncluded: TJsonaUniqueIncluded
     ) {
-        const includeKey = this.propertiesMapper.getType(relationModel) + this.propertiesMapper.getId(relationModel);
+        const id = this.propertiesMapper.getId(relationModel);
+        const type = this.propertiesMapper.getType(relationModel);
+        let includeKey = type + id;
 
-        if (!builtIncluded[includeKey]) {
+        if (!id || !builtIncluded[includeKey]) {
             // create data by current entity if such included is not yet created
+            if (includeKey in builtIncluded) {
+                includeKey += this.buildIncludedIndex;
+                this.buildIncludedIndex += 1;
+            }
             builtIncluded[includeKey] = this.buildDataByModel(relationModel);
 
             if (subIncludeTree) {

@@ -60,8 +60,8 @@ class Jsona {
      * serialize
      * Creates JSON, compatible with json:api specification from Jsona model(s).
      */
-    serialize(
-        {stuff, includeNames}: {
+    serialize({
+                  stuff, includeNames}: {
             stuff: TJsonaModel | Array<TJsonaModel>,
             includeNames?: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree
         }

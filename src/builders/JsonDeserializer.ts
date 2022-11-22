@@ -66,7 +66,7 @@ export class JsonDeserializer implements IJsonaDeserializer {
         return stuff;
     }
 
-    buildModelByData(data: TJsonApiData, resourceIdObj: TResourceIdObj = {}): TJsonaModel {
+    buildModelByData(data: TJsonApiData, resourceIdObj?: TResourceIdObj): TJsonaModel {
         const cachedModel = this.dc.getCachedModel(data, resourceIdObj);
 
         if (cachedModel) {
@@ -92,7 +92,7 @@ export class JsonDeserializer implements IJsonaDeserializer {
                 this.pm.setLinks(model, data.links);
             }
 
-            if (resourceIdObj.meta) {
+            if (resourceIdObj?.meta) {
                 this.pm.setResourceIdObjMeta(model, resourceIdObj.meta);
             }
 

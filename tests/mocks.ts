@@ -244,8 +244,8 @@ export const userWithIdlessSpecialties = {
         id: '2',
         name: 'myName2',
         active: true,
-        specialty: [idlessSpecialty1.model, idlessSpecialty2.model],
-        [RELATIONSHIP_NAMES_PROP]: ['specialty']
+        specialtyWithoutIds: [idlessSpecialty1.model, idlessSpecialty2.model],
+        [RELATIONSHIP_NAMES_PROP]: ['specialtyWithoutIds']
     },
 };
 

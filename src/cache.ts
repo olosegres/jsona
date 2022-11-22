@@ -1,5 +1,5 @@
 import {
-    IDeserializeCache, TAnyKeyValueObject
+    IDeserializeCache, TAnyKeyValueObject, TJsonaModel, TJsonApiData, TResourceIdObj
 } from './JsonaTypes';
 
 
@@ -20,12 +20,12 @@ export class DeserializeCache implements IDeserializeCache {
 
     protected cachedModels = {};
 
-    getCachedModel(data, resourceIdObject) {
+    getCachedModel(data:TJsonApiData, resourceIdObject: TResourceIdObj) {
         const entityKey = this.createCacheKey(data, resourceIdObject);
         return this.cachedModels[entityKey] || null;
     }
 
-    handleModel(model, data, resourceIdObject) {
+    handleModel(model: TJsonaModel, data: TJsonApiData, resourceIdObject: TResourceIdObj) {
         const entityKey = this.createCacheKey(data, resourceIdObject);
         const dataWithPayload = data.attributes || data.relationships;
 
@@ -34,16 +34,16 @@ export class DeserializeCache implements IDeserializeCache {
         }
     }
 
-    createCacheKey(data, resourceIdObject) {
+    createCacheKey(data, resourceIdObject?: TResourceIdObj) {
         // resourceIdObject.meta sets to model in simplePropertyMappers.ts, so it should be used here too
         // cache in this case probably will be redundant
         if (!data.id || !data.type) {
             return;
         }
 
-        let resourcePart = `${resourceIdObject.type}-${resourceIdObject.id}`;
+        let resourcePart = resourceIdObject ? `${resourceIdObject.type}-${resourceIdObject.id}` : '';
 
-        if (resourceIdObject.meta) {
+        if (resourceIdObject?.meta) {
             resourcePart += `-${jsonStringify(resourceIdObject.meta)}`;
         }
 

@@ -5,9 +5,20 @@
         "module": "commonjs",
         "declaration": true,
         "sourceMap": true,
-        "outDir": "lib/"
+        "outDir": "lib/",
+        "strict": false,
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "skipLibCheck": true
     },
     "files": [
         "./src/index.ts"
-    ]
+    ],
+    "lib": [
+        "es6",
+        "dom"
+    ],
+    "include": ["./src"]
 }

@@ -55,7 +55,7 @@ describe('Jsona', () => {
         });
 
         it('should build json with collection, with included resources that do not have ids', () => {
-            const jsonBody = jsona.serialize({stuff: userWithIdlessSpecialties.model, includeNames: ['specialty']});
+            const jsonBody = jsona.serialize({stuff: userWithIdlessSpecialties.model, includeNames: ['specialtyWithoutIds']});
             expect(jsonBody.included).to.be.deep.equal([idlessSpecialty1.json, idlessSpecialty2.json]);
         });
 
