@@ -45,26 +45,26 @@ export interface IJsonaDeserializer extends IJsonaModelBuilder {
 }
 
 export interface IJsonDeserializerConstructor {
-    new(propertiesMapper: IJsonPropertiesMapper, deserializeCache: IDeserializeCache, options);
+    new(propertiesMapper: IJsonPropertiesMapper, deserializeCache: IDeserializeCache, options?: TDeserializeOptions): IJsonaDeserializer;
 }
 
 export interface IModelsSerializer {
-    setPropertiesMapper(propertiesMapper: IModelPropertiesMapper);
-    setStuff(stuff);
-    setIncludeNames(includeNames: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree);
+    setPropertiesMapper(propertiesMapper: IModelPropertiesMapper): void;
+    setStuff(stuff:  TJsonaModel | TJsonaModel[]): void;
+    setIncludeNames(includeNames: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree): void;
     build(): TJsonApiBody;
     buildDataByModel(model: TJsonaModel | null): TJsonApiData;
-    buildRelationshipsByModel(model: TJsonaModel);
+    buildRelationshipsByModel(model: TJsonaModel): TJsonaRelationshipDataItem[] | TJsonaModel | TJsonaRelationshipBuild;
     buildIncludedByModel(
-        model: TJsonaModel,
-        includeTree: TJsonaNormalizedIncludeNamesTree,
-        builtIncluded: TJsonaUniqueIncluded
+      model: TJsonaModel,
+      includeTree: TJsonaNormalizedIncludeNamesTree,
+      builtIncluded: TJsonaUniqueIncluded
     ): void;
     buildIncludedItem(
-        relationModel: TJsonaModel,
-        subIncludeTree: TJsonaNormalizedIncludeNamesTree,
-        builtIncluded: TJsonaUniqueIncluded
-    );
+      relationModel: TJsonaModel,
+      subIncludeTree: TJsonaNormalizedIncludeNamesTree,
+      builtIncluded: TJsonaUniqueIncluded
+    ): void;
 }
 
 export interface IModelsSerializerConstructor {
@@ -113,7 +113,7 @@ type LinkKey = "self" | "related" | "first" | "prev" | "next" | "last";
 type LinkObjectMember = string | { href?: string; meta?: TAnyKeyValueObject } | null;
 
 export type TJsonApiLinks = {
-  [key in LinkKey]?: LinkObjectMember;
+    [key in LinkKey]?: LinkObjectMember;
 };
 
 export type TJsonApiRelationships = {
@@ -154,6 +154,11 @@ export type TJsonaNormalizedIncludeNamesTree = {
 export type TJsonaModel = {
     [propertyName: string]: any
 };
+
+export type TJsonaRelationshipDataItem = {
+    id?: number | string,
+    type: string;
+}
 
 export type TResourceIdObj = {
     id?: string | number,

@@ -6,7 +6,8 @@ import {
     TJsonaNormalizedIncludeNamesTree,
     TJsonaUniqueIncluded,
     IModelPropertiesMapper,
-    IModelsSerializer
+    IModelsSerializer,
+    TJsonaRelationshipDataItem,
 } from '../JsonaTypes';
 
 import {createIncludeNamesTree} from '../utils';
@@ -27,7 +28,7 @@ export class ModelsSerializer implements IModelsSerializer {
         this.propertiesMapper = propertiesMapper;
     }
 
-    setStuff(stuff) {
+    setStuff(stuff: TJsonaModel | TJsonaModel[]) {
         this.stuff = stuff;
     }
 
@@ -61,13 +62,13 @@ export class ModelsSerializer implements IModelsSerializer {
 
             for (let i = 0; i < collectionLength; i++) {
                 data.push(
-                    this.buildDataByModel(stuff[i])
+                  this.buildDataByModel(stuff[i])
                 );
 
                 this.buildIncludedByModel(
-                    stuff[i],
-                    this.includeNamesTree,
-                    uniqueIncluded
+                  stuff[i],
+                  this.includeNamesTree,
+                  uniqueIncluded
                 );
             }
 
@@ -77,9 +78,9 @@ export class ModelsSerializer implements IModelsSerializer {
             body['data'] = this.buildDataByModel(stuff);
 
             this.buildIncludedByModel(
-                stuff,
-                this.includeNamesTree,
-                uniqueIncluded
+              stuff,
+              this.includeNamesTree,
+              uniqueIncluded
             );
         } else if (stuff === null) {
             body['data'] = null;
@@ -115,7 +116,7 @@ export class ModelsSerializer implements IModelsSerializer {
         return data;
     }
 
-    buildResourceObjectPart(relation: TJsonaModel) {
+    buildResourceObjectPart(relation: TJsonaModel): TJsonaRelationshipDataItem {
         const id = this.propertiesMapper.getId(relation);
         const type = this.propertiesMapper.getType(relation);
 
@@ -147,9 +148,9 @@ export class ModelsSerializer implements IModelsSerializer {
                         relationshipData.push(relationshipDataItem);
                     } else {
                         console.error(
-                            `Can't create data item for relationship ${k},
+                          `Can't create data item for relationship ${k},
                             it doesn't have 'id' or 'type', it was skipped`,
-                            relationItem
+                          relationItem
                         );
                     }
                 }
@@ -166,8 +167,8 @@ export class ModelsSerializer implements IModelsSerializer {
                     };
                 } else {
                     console.error(
-                        `Can't create data for relationship ${k}, it doesn't have 'type', it was skipped`,
-                        relation
+                      `Can't create data for relationship ${k}, it doesn't have 'type', it was skipped`,
+                      relation
                     );
                 }
             } else {
@@ -181,9 +182,9 @@ export class ModelsSerializer implements IModelsSerializer {
     }
 
     buildIncludedByModel(
-        model: TJsonaModel,
-        includeTree: TJsonaNormalizedIncludeNamesTree,
-        builtIncluded: TJsonaUniqueIncluded = {}
+      model: TJsonaModel,
+      includeTree: TJsonaNormalizedIncludeNamesTree,
+      builtIncluded: TJsonaUniqueIncluded = {}
     ): void {
         if (!includeTree || !Object.keys(includeTree).length) {
             return;
@@ -217,9 +218,9 @@ export class ModelsSerializer implements IModelsSerializer {
     }
 
     buildIncludedItem(
-        relationModel: TJsonaModel,
-        subIncludeTree: TJsonaNormalizedIncludeNamesTree,
-        builtIncluded: TJsonaUniqueIncluded
+      relationModel: TJsonaModel,
+      subIncludeTree: TJsonaNormalizedIncludeNamesTree,
+      builtIncluded: TJsonaUniqueIncluded
     ) {
         const id = this.propertiesMapper.getId(relationModel);
         const type = this.propertiesMapper.getType(relationModel);
