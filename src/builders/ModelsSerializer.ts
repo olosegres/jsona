@@ -7,7 +7,6 @@ import {
     TJsonaUniqueIncluded,
     IModelPropertiesMapper,
     IModelsSerializer,
-    TJsonaRelationshipDataItem,
 } from '../JsonaTypes';
 
 import {createIncludeNamesTree} from '../utils';
@@ -116,7 +115,7 @@ export class ModelsSerializer implements IModelsSerializer {
         return data;
     }
 
-    buildResourceObjectPart(relation: TJsonaModel): TJsonaRelationshipDataItem {
+    buildResourceObjectPart(relation: TJsonaModel) {
         const id = this.propertiesMapper.getId(relation);
         const type = this.propertiesMapper.getType(relation);
 

@@ -54,7 +54,7 @@ export interface IModelsSerializer {
     setIncludeNames(includeNames: TJsonaDenormalizedIncludeNames | TJsonaNormalizedIncludeNamesTree): void;
     build(): TJsonApiBody;
     buildDataByModel(model: TJsonaModel | null): TJsonApiData;
-    buildRelationshipsByModel(model: TJsonaModel): TJsonaRelationshipDataItem[] | TJsonaModel | TJsonaRelationshipBuild;
+    buildRelationshipsByModel(model: TJsonaModel): TJsonaRelationship;
     buildIncludedByModel(
       model: TJsonaModel,
       includeTree: TJsonaNormalizedIncludeNamesTree,
@@ -155,11 +155,6 @@ export type TJsonaModel = {
     [propertyName: string]: any
 };
 
-export type TJsonaRelationshipDataItem = {
-    id?: number | string,
-    type: string;
-}
-
 export type TResourceIdObj = {
     id?: string | number,
     type: string,
@@ -168,8 +163,9 @@ export type TResourceIdObj = {
 };
 
 export type TJsonaRelationshipBuild = () => (TJsonaModel | Array<TJsonaModel>);
+export type TJsonaRelationship = TJsonaRelationshipBuild | TJsonaModel | Array<TJsonaModel>;
 export type TJsonaRelationships = {
-    [relationName: string]: TJsonaRelationshipBuild | TJsonaModel | Array<TJsonaModel>
+    [relationName: string]: TJsonaRelationship
 };
 
 export type TReduxObject = {

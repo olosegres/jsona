@@ -5,7 +5,8 @@ import {
     TJsonApiBody,
     TJsonApiData,
     IJsonaDeserializer,
-    IDeserializeCache, TResourceIdObj,
+    IDeserializeCache,
+    TResourceIdObj,
 } from '../JsonaTypes';
 
 export class JsonDeserializer implements IJsonaDeserializer {
