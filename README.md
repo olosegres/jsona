@@ -5,7 +5,6 @@ JSON API [v1.0 specification](http://jsonapi.org/format/1.0/) serializer and des
 * Also from "reduxObject" to simplified objects (`reduxObject` is a result object of [json-api-normalizer](https://github.com/yury-dymov/json-api-normalizer))
 
 [![NPM](https://img.shields.io/npm/v/jsona.svg)](https://www.npmjs.com/package/jsona/)
-[![Build Status](https://travis-ci.org/olosegres/jsona.svg?branch=master)](https://travis-ci.org/olosegres/jsona)
 [![dependencies](https://img.shields.io/static/v1?label=dependencies&message=none&color=success)](https://www.npmjs.com/package/jsona/)
 [![downloads](https://img.shields.io/npm/dm/jsona.svg)](https://www.npmjs.com/package/jsona/)
 
