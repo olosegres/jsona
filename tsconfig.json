@@ -1,24 +1,28 @@
 {
-    "version": "1.6.2",
     "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
+        "target": "ES2015",
+        "module": "ES2015",
         "declaration": true,
         "sourceMap": true,
-        "outDir": "lib/",
+        "sourceRoot": "src",
+        "outDir": "lib",
         "strict": false,
         "removeComments": true,
         "allowSyntheticDefaultImports": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "importHelpers": true,
         "skipLibCheck": true
     },
-    "files": [
-        "./src/index.ts"
+    "exclude": [
+        "node_modules",
+        "lib"
+    ],
+    "include": [
+        "src/**/*",
+        "tests/**/*"
     ],
     "lib": [
         "es6",
         "dom"
-    ],
-    "include": ["./src"]
+    ]
 }

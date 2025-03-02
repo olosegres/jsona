@@ -1,7 +1,7 @@
 {
   "name": "jsona",
-  "description": "Provide data formatters (data model builder & json builder) to work with JSON API specification v1.0 in your JavaScript / TypeScript code",
   "version": "1.12.1",
+  "description": "Provide data formatters (data model builder & json builder) to work with JSON API specification v1.0 in your JavaScript / TypeScript code",
   "keywords": [
     "json-api",
     "jsonapi",
@@ -25,40 +25,46 @@
     "graphql alternative",
     "json-api-normalizer"
   ],
+  "homepage": "https://github.com/olosegres/jsona#readme",
+  "bugs": {
+    "url": "https://github.com/olosegres/jsona/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/olosegres/jsona"
   },
-  "bugs": {
-    "url": "https://github.com/olosegres/jsona/issues"
-  },
-  "homepage": "https://github.com/olosegres/jsona#readme",
-  "author": "Sergei Solo <olosegres@gmail.com>",
   "license": "MIT",
+  "author": "Sergei Solo <olosegres@gmail.com>",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "default": "./lib/index.js"
+    }
+  },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib",
     "src"
   ],
-  "dependencies": {
-    "tslib": "^2.4.1"
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "rollup --config rollup.config.js",
+    "clean": "rm -rf ./lib/*",
+    "test": "env NODE_ENV=test node --import tsx --test tests/**/*.test.*",
+    "preversion": "npm run build && npm test"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.4",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^12.11.5",
-    "chai": "^4.3.4",
-    "mocha": "^10.1.0",
-    "ts-mocha": "^8.0.0",
-    "typescript": "^4.9.3"
-  },
-  "scripts": {
-    "clean": "rm -rf ./lib/*",
-    "build": "./node_modules/.bin/tsc",
-    "prebuild": "npm run clean",
-    "preversion": "npm run build && npm test",
-    "test-build": "tsc --p tsconfig.test.json",
-    "test": "npm run test-build && env NODE_ENV=test ts-mocha ./**/*.test.ts"
+    "@rollup/plugin-typescript": "12.1.2",
+    "@types/chai": "^5.0.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.8",
+    "chai": "^5.2.0",
+    "rollup": "^4.34.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
   }
 }
