@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import {expect} from 'chai';
+import {describe, test} from 'node:test';
 import ReduxObjectDenormalizer from "../src/builders/ReduxObjectDenormalizer";
 import {JsonPropertiesMapper} from "../src/simplePropertyMappers";
 
@@ -19,12 +20,12 @@ describe('ReduxObjectDenormalizer', () => {
     let builder;
     let propertiesMapper;
 
-    it('should instantiate without errors', () => {
+    test('should instantiate without errors', () => {
         propertiesMapper = new JsonPropertiesMapper();
         builder = new ReduxObjectDenormalizer(propertiesMapper);
     });
 
-    it('should have public setters', () => {
+    test('should have public setters', () => {
         expect(typeof builder.setReduxObject).to.be.equal('function');
         expect(typeof builder.setEntityType).to.be.equal('function');
         expect(typeof builder.setEntityIds).to.be.equal('function');
@@ -33,33 +34,33 @@ describe('ReduxObjectDenormalizer', () => {
 
     describe('build', () => {
 
-        it('should throw Error if propertiesMapper is not set', () => {
+        test('should throw Error if propertiesMapper is not set', () => {
             builder = new ReduxObjectDenormalizer(null);
             const build = builder.build.bind(builder);
             expect(build).to.throw(Error, 'propertiesMapper');
         });
 
-        it('should throw Error if reduxObject is not set', () => {
+        test('should throw Error if reduxObject is not set', () => {
             builder.setPropertiesMapper(propertiesMapper);
             const build = builder.build.bind(builder);
             expect(build).to.throw(Error, 'reduxObject');
         });
 
-        it('should throw Error if entityType is not set', () => {
+        test('should throw Error if entityType is not set', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject({});
             const build = builder.build.bind(builder);
             expect(build).to.throw(Error, 'entityType');
         });
 
-        it('should return null if no needed type in ReduxObject', () => {
+        test('should return null if no needed type in ReduxObject', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject({});
             builder.setEntityType('myEntity');
             expect(builder.build()).to.be.equal(null);
         });
 
-        it('should return null if no needed id in ReduxObject', () => {
+        test('should return null if no needed id in ReduxObject', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setEntityType('town');
@@ -67,14 +68,14 @@ describe('ReduxObjectDenormalizer', () => {
             expect(builder.build()).to.be.equal(null);
         });
 
-        it('should return null if there is empty object for some type in ReduxObject', () => {
+        test('should return null if there is empty object for some type in ReduxObject', () => {
             builder = new ReduxObjectDenormalizer(propertiesMapper);
             builder.setReduxObject({town: {}});
             builder.setEntityType('town');
             expect(builder.build()).to.be.equal(null);
         });
 
-        it('should return one model with correct number type of id', () => {
+        test('should return one model with correct number type of id', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setEntityType('article');
@@ -83,7 +84,7 @@ describe('ReduxObjectDenormalizer', () => {
             expect(builder.build()).to.be.deep.equal(article1.model);
         });
 
-        it('should return collection of models', () => {
+        test('should return collection of models', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setEntityType('specialty');
@@ -91,7 +92,7 @@ describe('ReduxObjectDenormalizer', () => {
             expect(builder.build()).to.be.deep.equal([specialty1.model, specialty2.model]);
         });
 
-        it('should return collection of one model with multiple relations', () => {
+        test('should return collection of one model with multiple relations', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setEntityType('user');
@@ -102,13 +103,13 @@ describe('ReduxObjectDenormalizer', () => {
 
 
     describe('buildModel', () => {
-        it('should return null if no such type in reduxObject', () => {
+        test('should return null if no such type in reduxObject', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject({});
             expect(builder.buildModel('user', '123')).to.be.equal(null);
         });
 
-        it('should return null if no such id in reduxObject', () => {
+        test('should return null if no such id in reduxObject', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject({user: {}});
             expect(builder.buildModel('user', '123')).to.be.equal(null);
@@ -116,7 +117,7 @@ describe('ReduxObjectDenormalizer', () => {
     });
 
     describe('buildRelationships', () => {
-        it('should return null', () => {
+        test('should return null', () => {
             const model = {};
             expect(builder.buildRelationships()).to.be.equal(null);
             expect(builder.buildRelationships({})).to.be.equal(null);
@@ -124,7 +125,7 @@ describe('ReduxObjectDenormalizer', () => {
             expect(builder.buildRelationships(model, {someRelation: {data: null}})).to.be.equal(null);
         });
 
-        it('should return relations with builders', () => {
+        test('should return relations with builders', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setReturnBuilderInRelations(true);
@@ -134,7 +135,7 @@ describe('ReduxObjectDenormalizer', () => {
             expect(relations1.country()).to.be.deep.equal(country2.model);
         });
 
-        it('should return relations without builders', () => {
+        test('should return relations without builders', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setReturnBuilderInRelations(false);
@@ -146,7 +147,7 @@ describe('ReduxObjectDenormalizer', () => {
 
     describe('buildRelationModels', () => {
 
-        it('should return null', () => {
+        test('should return null', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setReturnBuilderInRelations(false);
@@ -155,7 +156,7 @@ describe('ReduxObjectDenormalizer', () => {
             expect(builtModel).to.be.equal(null);
         });
 
-        it('should return one model', () => {
+        test('should return one model', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setReturnBuilderInRelations(false);
@@ -164,7 +165,7 @@ describe('ReduxObjectDenormalizer', () => {
             expect(builtModel).to.be.deep.equal(country2.model);
         });
 
-        it('should return collection of models', () => {
+        test('should return collection of models', () => {
             builder.setPropertiesMapper(propertiesMapper);
             builder.setReduxObject(reduxObject1);
             builder.setReturnBuilderInRelations(false);

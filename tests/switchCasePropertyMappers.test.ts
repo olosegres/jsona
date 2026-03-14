@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import {expect} from 'chai';
+import {describe, test} from 'node:test';
 import {SwitchCaseJsonMapper, SwitchCaseModelMapper} from "../src/switchCasePropertyMappers";
 import {RELATIONSHIP_NAMES_PROP} from "../src/simplePropertyMappers";
 import Jsona from '../src';
@@ -11,7 +12,7 @@ describe('switchCasePropertyMappers', () => {
     describe('SwitchCaseModelMapper', () => {
         let propertiesMapper;
 
-        it(`should transform camelized model's attribute names to kebab case`, () => {
+        test(`should transform camelized model's attribute names to kebab case`, () => {
             propertiesMapper = new SwitchCaseModelMapper();
             const testModel = {
                 fooBar: 1,
@@ -44,7 +45,7 @@ describe('switchCasePropertyMappers', () => {
             expect(kebabAttributes['array-nested-foo-bar']).to.be.deep.equal({ 'nested-foo-bar': [{ 'nested-foo-bar': 1 }, { 'nested-foo-bar': 2 }, { 'nested-foo-bar': 3 }] });
         });
 
-        it(`should transform camelized model's relationship names to kebab case`, () => {
+        test(`should transform camelized model's relationship names to kebab case`, () => {
             propertiesMapper = new SwitchCaseModelMapper();
             const relationOne = {};
             const relation2 = {};
@@ -60,7 +61,7 @@ describe('switchCasePropertyMappers', () => {
             expect(kebabRelationshipNames.indexOf('relation-2') !== -1).to.be.true;
         });
 
-        it(`should transform camelized model's relationship attributes to kebab case`, () => {
+        test(`should transform camelized model's relationship attributes to kebab case`, () => {
             const relationOne = { type: 'relatedModel', id: 1, relatedCamelizedAttr: true };
             const testModel = { type: 'testModel', id: 1, relationOne, [RELATIONSHIP_NAMES_PROP]: ['relationOne'] };
 
@@ -74,7 +75,7 @@ describe('switchCasePropertyMappers', () => {
             expect(json.included[0].attributes['related-camelized-attr']).to.be.true;
         });
 
-        it(`can be configured to transform camelized model's relationship names to snake case`, () => {
+        test(`can be configured to transform camelized model's relationship names to snake case`, () => {
             propertiesMapper = new SwitchCaseModelMapper({ switchChar: '_'});
             const relationOne = {};
             const relation2 = {};
@@ -90,7 +91,7 @@ describe('switchCasePropertyMappers', () => {
             expect(snakeRelationshipNames.indexOf('relation_2') !== -1).to.be.true;
         });
 
-        it(`can be configured to transform camelized model's relationship attributes to snake case`, () => {
+        test(`can be configured to transform camelized model's relationship attributes to snake case`, () => {
             const relationOne = { type: 'relatedModel', id: 1, relatedCamelizedAttr: true };
             const testModel = { type: 'testModel', id: 1, relationOne, [RELATIONSHIP_NAMES_PROP]: ['relationOne'] };
 
@@ -104,7 +105,7 @@ describe('switchCasePropertyMappers', () => {
             expect(json.included[0].attributes['related_camelized_attr']).to.be.true;
         });
 
-        it(`can be configured to transform camelized model's attribute names to snake case`, () => {
+        test(`can be configured to transform camelized model's attribute names to snake case`, () => {
             propertiesMapper = new SwitchCaseModelMapper({switchChar: '_'});
             const testModel = {
                 fooBar: 1,
@@ -115,8 +116,8 @@ describe('switchCasePropertyMappers', () => {
                 'foo-bar': 5,
                 foo234: 234,
                 nestedFooBar: {
-                    nestedFooBar: { 
-                        nestedFooBar: 1. 
+                    nestedFooBar: {
+                        nestedFooBar: 1.
                     }
                 }
             };
@@ -135,7 +136,7 @@ describe('switchCasePropertyMappers', () => {
     describe('SwitchCaseJsonMapper', () => {
         let propertiesMapper;
 
-        it(`should transform kebabized json's attribute names to camel case`, () => {
+        test(`should transform kebabized json's attribute names to camel case`, () => {
             propertiesMapper = new SwitchCaseJsonMapper();
             const model = {};
             const testAttributes = {
@@ -146,17 +147,17 @@ describe('switchCasePropertyMappers', () => {
                 foo: 3,
                 foo_bar: 5,
                 'foo-234': 234,
-                nestedFooBar: { 
+                nestedFooBar: {
                     nestedFooBar: {
                         nestedFooBar: 1
                     }
                 },
-                'nested-bar-foo': { 
+                'nested-bar-foo': {
                     'nested-bar-foo': {
                         'nested-bar-foo': 2
                     }
                 },
-                'array-nested-bar-foo': { 
+                'array-nested-bar-foo': {
                     'nested-bar-foo': [{ 'nested-bar-foo': 2 }, { 'nested-bar-foo': 3 }, { 'nested-bar-foo': 4 }]
                 },
             };
@@ -174,7 +175,7 @@ describe('switchCasePropertyMappers', () => {
             expect(model['arrayNestedBarFoo']).to.be.deep.equal({ nestedBarFoo: [{ nestedBarFoo: 2 }, { nestedBarFoo: 3 }, { nestedBarFoo: 4 }] });
         });
 
-        it(`should transform kebabized json's relationship names to camel case`, () => {
+        test(`should transform kebabized json's relationship names to camel case`, () => {
             propertiesMapper = new SwitchCaseJsonMapper();
             const model = propertiesMapper.createModel('testModelType');
             const relation1 = {some: 'relation'};
@@ -195,7 +196,7 @@ describe('switchCasePropertyMappers', () => {
             expect(model.relation3).to.be.equal(123);
         });
 
-        it(`should transform kebabized json's relationship attributes to camel case`, () => {
+        test(`should transform kebabized json's relationship attributes to camel case`, () => {
             propertiesMapper = new SwitchCaseModelMapper();
 
             type TestModelType = {
@@ -235,7 +236,7 @@ describe('switchCasePropertyMappers', () => {
             expect(model.relation1.kebabAttr1).to.be.true;
         });
 
-        it(`can be configured to transform snake case json's attribute names to camel case`, () => {
+        test(`can be configured to transform snake case json's attribute names to camel case`, () => {
                 propertiesMapper = new SwitchCaseJsonMapper({switchChar: '_'});
             const model = {};
             const testAttributes = {
@@ -264,7 +265,7 @@ describe('switchCasePropertyMappers', () => {
             expect(model['nestedFooBar']).to.be.deep.equal({ nestedFooBar: { nestedFooBar: 123 } });
         });
 
-        it(`can be configured to transform snaked json's relationship names to camel case`, () => {
+        test(`can be configured to transform snaked json's relationship names to camel case`, () => {
             propertiesMapper = new SwitchCaseJsonMapper({switchChar: '_'});
             const model = propertiesMapper.createModel('testModelType');
             const relation1 = {some: 'relation'};
@@ -285,7 +286,7 @@ describe('switchCasePropertyMappers', () => {
             expect(model.relation3).to.be.equal(123);
         });
 
-        it(`should transform kebabized json's relationship attributes to camel case`, () => {
+        test(`should transform kebabized json's relationship attributes to camel case`, () => {
             propertiesMapper = new SwitchCaseModelMapper({switchChar: '_'});
 
             type TestModelType = {
@@ -326,7 +327,7 @@ describe('switchCasePropertyMappers', () => {
         });
 
 
-        it(`should transform kebabized json's meta names to camel case`, () => {
+        test(`should transform kebabized json's meta names to camel case`, () => {
             propertiesMapper = new SwitchCaseJsonMapper({ camelizeMeta: true });
             const model = { meta: {} };
             const testMeta = {
@@ -345,7 +346,7 @@ describe('switchCasePropertyMappers', () => {
             expect(model.meta['foo234']).to.be.equal(234);
         });
 
-        it(`should not transform kebabized json's meta names to camel case`, () => {
+        test(`should not transform kebabized json's meta names to camel case`, () => {
             propertiesMapper = new SwitchCaseJsonMapper();
             const model = { meta: {} };
             const testMeta = {

@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import {expect} from 'chai';
+import {describe, test} from 'node:test';
 import Jsona from '../src';
 
 import {
@@ -31,52 +32,52 @@ chai.config.truncateThreshold = 0;
 describe('Jsona', () => {
     const jsona = new Jsona();
 
-    it('should instantiate with fallback property mappers', () => {
+    test('should instantiate with fallback property mappers', () => {
         let jsona = new Jsona();
     });
 
     describe('serialize', () => {
-        it('should throw Error if stuff is not passed', () => {
+        test('should throw Error if stuff is not passed', () => {
             expect(jsona.serialize.bind(jsona, null)).to.throw(Error);
             expect(jsona.serialize.bind(jsona, undefined)).to.throw(Error);
             expect(jsona.serialize.bind(jsona, {stuff: null})).to.throw(Error);
         });
 
-        it('should build json with item, without included', () => {
+        test('should build json with item, without included', () => {
             const jsonBody = jsona.serialize({stuff: town1.model});
             expect(jsonBody.data).to.be.deep.equal(town1.json);
             expect(jsonBody.included).to.be.equal(undefined);
         });
 
-        it('should build json with collection, with included', () => {
+        test('should build json with collection, with included', () => {
             const jsonBody = jsona.serialize({stuff: user2.model, includeNames: ['specialty', 'town.country']});
             expect(jsonBody.data).to.be.deep.equal(user2.json);
             expect(jsonBody.included).to.be.deep.equal([specialty1.json, specialty2.json, town2.json, country2.json]);
         });
 
-        it('should build json with collection, with included resources that do not have ids', () => {
+        test('should build json with collection, with included resources that do not have ids', () => {
             const jsonBody = jsona.serialize({stuff: userWithIdlessSpecialties.model, includeNames: ['specialtyWithoutIds']});
             expect(jsonBody.included).to.be.deep.equal([idlessSpecialty1.json, idlessSpecialty2.json]);
         });
 
-        it('should build json and save null relationships', () => {
+        test('should build json and save null relationships', () => {
             const jsonBody = jsona.serialize({stuff: withNullRelationsMock.collection});
             expect(jsonBody.data).to.be.deep.equal(withNullRelationsMock.json);
         });
     });
 
     describe('deserialize', () => {
-        it('should throw Error if body is not passed', () => {
+        test('should throw Error if body is not passed', () => {
             expect(jsona.deserialize.bind(jsona, null)).to.throw(Error);
             expect(jsona.deserialize.bind(jsona, undefined)).to.throw(Error);
         });
 
-        it('should deserialize item without included', () => {
+        test('should deserialize item without included', () => {
             const userModel = jsona.deserialize({data: user2.json});
             expect(userModel).to.be.deep.equal(user2.modelWithoutIncluded);
         });
 
-        it('should deserialize collection with included', () => {
+        test('should deserialize collection with included', () => {
             const townsCollection = jsona.deserialize({
                 data: [town1.json, town2.json],
                 included: [country1.json, country2.json]
@@ -84,42 +85,42 @@ describe('Jsona', () => {
             expect(townsCollection).to.be.deep.equal([town1.model, town2.model]);
         });
 
-        it('should deserialize json with circular relationships', () => {
+        test('should deserialize json with circular relationships', () => {
             const recursiveItem = jsona.deserialize(circular.json);
             expect(recursiveItem).to.be.deep.equal(circular.model);
         });
 
-        it('should deserialize json with meta & circular relationships', () => {
+        test('should deserialize json with meta & circular relationships', () => {
             const recursiveItem = jsona.deserialize(circularWithMeta.json);
             expect(recursiveItem).to.be.deep.equal(circularWithMeta.model);
         });
 
-        it('should deserialize json with duplicate relationships', () => {
+        test('should deserialize json with duplicate relationships', () => {
             const duplicateItem = jsona.deserialize(duplicate.json, { preferNestedDataFromData: true });
             expect(duplicateItem).to.be.deep.equal(duplicate.model);
         });
 
-        it('should deserialize json with data without root ids', () => {
+        test('should deserialize json with data without root ids', () => {
             const collectionWithoutRootIds = jsona.deserialize({data: withoutRootIdsMock.json});
             expect(collectionWithoutRootIds).to.be.deep.equal(withoutRootIdsMock.collection);
         });
 
-        it('should deserialize json and save null relationships', () => {
+        test('should deserialize json and save null relationships', () => {
             const collectionWithNullRelations = jsona.deserialize({data: withNullRelationsMock.json});
             expect(collectionWithNullRelations).to.be.deep.equal(withNullRelationsMock.collection);
         });
 
-        it('should deserialize resource id object meta field into resourceIdObjMeta', () => {
+        test('should deserialize resource id object meta field into resourceIdObjMeta', () => {
             const stuff = jsona.deserialize(resourceIdObjMetaMock.json);
             expect(stuff).to.be.deep.equal(resourceIdObjMetaMock.collection);
         });
 
-        it('should deserialize with different attrs for root object and related', () => {
+        test('should deserialize with different attrs for root object and related', () => {
             const stuff = jsona.deserialize(differentAttrsInDataAndIncludedMock.json);
             expect(stuff).to.be.deep.equal(differentAttrsInDataAndIncludedMock.collection);
         });
 
-        it('should new', () => {
+        test('should new', () => {
             const stuff = jsona.deserialize(differentAttrsInDataAndIncludedMock.json);
             expect(stuff).to.be.deep.equal(differentAttrsInDataAndIncludedMock.collection);
         });
@@ -128,21 +129,21 @@ describe('Jsona', () => {
 
     describe('denormalizeReduxObject', () => {
 
-        it('should throw Error if reduxObject is not passed', () => {
+        test('should throw Error if reduxObject is not passed', () => {
             const denormalizeReduxObject = jsona.denormalizeReduxObject.bind(jsona, {
                 reduxObject: null,
             });
             expect(denormalizeReduxObject).to.throw(Error, 'reduxObject');
         });
 
-        it('should throw Error if entityType is not passed', () => {
+        test('should throw Error if entityType is not passed', () => {
             const denormalizeReduxObject = jsona.denormalizeReduxObject.bind(jsona, {
                 reduxObject: {},
             });
             expect(denormalizeReduxObject).to.throw(Error, 'entityType');
         });
 
-        it('should return null if no such entityType in reduxObject', () => {
+        test('should return null if no such entityType in reduxObject', () => {
             const model = jsona.denormalizeReduxObject({
                 reduxObject: {},
                 entityType: 'myEntity'
@@ -150,7 +151,7 @@ describe('Jsona', () => {
             expect(model).to.be.equal(null);
         });
 
-        it('should return null if no such entityId in reduxObject', () => {
+        test('should return null if no such entityId in reduxObject', () => {
             const model = jsona.denormalizeReduxObject({
                 reduxObject: reduxObject1,
                 entityType: 'article',
@@ -159,7 +160,7 @@ describe('Jsona', () => {
             expect(model).to.be.equal(null);
         });
 
-        it('should return collection of models if entityIds is Array', () => {
+        test('should return collection of models if entityIds is Array', () => {
             const models = jsona.denormalizeReduxObject({
                 reduxObject: reduxObject1,
                 returnBuilderInRelations: false,
@@ -170,7 +171,7 @@ describe('Jsona', () => {
             expect(models).to.be.deep.equal([town1.model, town2.model]);
         });
 
-        it('should return collection of models if entityIds is not passed', () => {
+        test('should return collection of models if entityIds is not passed', () => {
             const models = jsona.denormalizeReduxObject({
                 reduxObject: reduxObject1,
                 returnBuilderInRelations: false,
@@ -181,7 +182,7 @@ describe('Jsona', () => {
         });
 
 
-        it('should denormalize json with circular relationships', () => {
+        test('should denormalize json with circular relationships', () => {
             const model = jsona.denormalizeReduxObject({
                 reduxObject: reduxObjectWithCircular,
                 returnBuilderInRelations: false,
@@ -191,7 +192,7 @@ describe('Jsona', () => {
             expect(model).to.be.deep.equal(circular.model);
         });
 
-        it('should denormalize model with relationships', () => {
+        test('should denormalize model with relationships', () => {
             const model1 = jsona.denormalizeReduxObject({
                 reduxObject: reduxObject1,
                 returnBuilderInRelations: false,
@@ -208,7 +209,7 @@ describe('Jsona', () => {
             expect(model2['country']).to.be.deep.equal(country1.model);
         });
 
-        it('should allow to set relationships before denormalization', () => {
+        test('should allow to set relationships before denormalization', () => {
             const model = jsona.denormalizeReduxObject({
                 reduxObject: reduxObject1,
                 returnBuilderInRelations: true,

@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import {expect} from 'chai';
+import {describe, test} from 'node:test';
 import ModelsSerializer from "../src/builders/ModelsSerializer";
 import {ModelPropertiesMapper} from "../src/simplePropertyMappers";
 
@@ -24,39 +25,39 @@ describe('ModelsSerializer', () => {
     let builder;
     let propertiesMapper;
 
-    it('should throw Error if jsonPropertiesMapper is not passed', () => {
+    test('should throw Error if jsonPropertiesMapper is not passed', () => {
         builder = new ModelsSerializer();
         builder.setStuff(user2.model);
         expect(builder.build.bind(builder)).to.throw(Error, 'propertiesMapper');
     });
 
-    it('should instantiate without errors', () => {
+    test('should instantiate without errors', () => {
         propertiesMapper = new ModelPropertiesMapper();
         builder = new ModelsSerializer(propertiesMapper);
         expect(builder).to.be.an.instanceof(ModelsSerializer);
     });
 
-    it('should handle one model in setStuff', () => {
+    test('should handle one model in setStuff', () => {
         builder.setStuff(user2.model);
         expect(builder.stuff).to.be.deep.equal(user2.model);
     });
 
-    it('should handle collection of models in setStuff', () => {
+    test('should handle collection of models in setStuff', () => {
         builder.setStuff([user2.model, user1.model]);
         expect(builder.stuff).to.be.deep.equal([user2.model, user1.model]);
     });
 
-    it('should setIncludeNames with convertation to TJsonaNormalizedIncludeNamesTree', () => {
+    test('should setIncludeNames with convertation to TJsonaNormalizedIncludeNamesTree', () => {
         builder.setIncludeNames(includeNames1.denormalized);
         expect(builder.includeNamesTree).to.be.deep.equal(includeNames1.normalized);
     });
 
-    it('should setIncludeNames as they are', () => {
+    test('should setIncludeNames as they are', () => {
         builder.setIncludeNames(includeNames1.normalized);
         expect(builder.includeNamesTree).to.be.deep.equal(includeNames1.normalized);
     });
 
-    it('should build correct json with one data-item, without included', () => {
+    test('should build correct json with one data-item, without included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
         builder.setStuff(article1.model);
@@ -64,7 +65,7 @@ describe('ModelsSerializer', () => {
         expect(json).to.be.deep.equal({data: article1.json});
     });
 
-    it('should build correct json with one data-item, with included', () => {
+    test('should build correct json with one data-item, with included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
         builder.setStuff(user2.model);
@@ -73,7 +74,7 @@ describe('ModelsSerializer', () => {
         expect(json).to.be.deep.equal({data: user2.json, included: user2.included.townOnly});
     });
 
-    it('should build correct json with collection of data items, with included', () => {
+    test('should build correct json with collection of data items, with included', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
         builder.setStuff([article1.model, article2.model]);
@@ -104,7 +105,7 @@ describe('ModelsSerializer', () => {
 
     });
 
-    it('should build json with null data for nulled relation', () => {
+    test('should build json with null data for nulled relation', () => {
         builder = new ModelsSerializer(propertiesMapper);
 
         builder.setStuff(articleWithoutAuthor.model);
